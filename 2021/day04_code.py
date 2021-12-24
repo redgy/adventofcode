@@ -10,12 +10,15 @@ class MarkedCard:
         to_string = '------------------\n'
         for row in self.grid:
             to_string += '|'
-            for col in row:
-                mark_string = 'X' if col else 'O'
+            for column in row:
+                mark_string = 'X' if column else 'O'
                 to_string += f'{mark_string:>3}'
             to_string += ' |\n'
         to_string += '------------------'
         return to_string
+
+    def mark_cell(self, row, column):
+        self.grid[row][column] = True
 
     def is_row_complete(self, row):
         number_of_marked_cells = 0
@@ -30,6 +33,15 @@ class MarkedCard:
             if self.grid[row][column]:
                 number_of_marked_cells +=1
         return number_of_marked_cells == 5
+
+    def has_bingo(self):
+        for x in range(5):
+            if self.is_row_complete(x):
+                return True
+            if self.is_column_complete(x):
+                return True
+        return False
+
 
 class BingoCard:
     def __init__(self, row_data):
@@ -47,11 +59,20 @@ class BingoCard:
         to_string = '------------------\n'
         for row in self.grid:
             to_string += '|'
-            for col in row:
-                to_string += f'{col:>3}'
+            for column in row:
+                to_string += f'{column:>3}'
             to_string += ' |\n'
         to_string += '------------------'
         return to_string
+
+    def mark_number(self, number):
+        for row, row_data in enumerate(self.grid):
+            for column, column_data in enumerate(row_data):
+                value = self.grid[row][column]
+                if value == number:
+                    self.marked_card.mark_cell(row, column)
+                    if self.marked_card.has_bingo():
+                        self.bingo = True
 
 
 class SimulateBingo:
@@ -61,12 +82,19 @@ class SimulateBingo:
         for card in cards_data:
             self.cards.append(BingoCard(card))
 
+    def call_numbers(self):
+        for number in self.bingo_numbers:
+            for card in self.cards:
+                card.mark_number(number)
+                if card.bingo:
+                    break
+
 
 class InputData:
     def __init__(self):
         self.raw_data = None
         self._parse_file()
-        self.numbers_data = self.raw_data[0]
+        self.numbers_data = self._parse_number_data(self.raw_data[0])
         self.cards_data = self._parse_card_data(self.raw_data[1:])
 
     def _parse_file(self):
@@ -75,6 +103,9 @@ class InputData:
             raw_data = [x.strip() for x in raw_data]
             raw_data = [x for x in raw_data if x]
         self.raw_data = raw_data
+
+    def _parse_number_data(self, raw_data):
+        return [int(x) for x in raw_data.split(',')]
 
     def _parse_card_data(self, raw_data):
         data = []
@@ -91,6 +122,7 @@ class InputData:
 def main():
     data = InputData()
     simulate = SimulateBingo(data.numbers_data, data.cards_data)
+    simulate.call_numbers()
     for card in simulate.cards:
         print(f'{card.marked_card}')
     # bingo = Bingo()
