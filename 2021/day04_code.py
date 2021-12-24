@@ -3,60 +3,38 @@ INPUT_FILEPATH="test_input.txt"
 
 class Board:
     def __init__(self, row_data):
-        self.row1 = [(x, False) for x in row_data[0]]
-        self.row2 = [(x, False) for x in row_data[1]]
-        self.row3 = [(x, False) for x in row_data[2]]
-        self.row4 = [(x, False) for x in row_data[3]]
-        self.row5 = [(x, False) for x in row_data[4]]
-        self.col1 = self._set_columns(0)
-        self.col2 = self._set_columns(1)
-        self.col3 = self._set_columns(2)
-        self.col4 = self._set_columns(3)
-        self.col5 = self._set_columns(4)
+        self.grid = [[(x, False) for x in row_data[0]],
+            [(x, False) for x in row_data[1]],
+            [(x, False) for x in row_data[2]],
+            [(x, False) for x in row_data[3]],
+            [(x, False) for x in row_data[4]]
+        ]
         self.bingo = False
 
-    def _set_columns(self, index):
-        column = [(self.row1[index], False),
-                  (self.row2[index], False),
-                  (self.row3[index], False),
-                  (self.row4[index], False),
-                  (self.row5[index], False)]
-        return column
-
     def __str__(self):
-        return (f'{self.row1}\n'
-                f'{self.row2}\n'
-                f'{self.row3}\n'
-                f'{self.row4}\n'
-                f'{self.row5}')
-
-    def _check_row_or_column(self, rc_array):
-        for (num, flag) in rc_array:
-            if not flag:
-                return False
-        return True
+        to_string = ''
+        for row in self.grid:
+            for col in row:
+                to_string += f'{col} '
+            to_string += '\n'
+        return to_string
 
     def check_bingo(self):
-        if self._check_row_or_column(self.row1):
-            self.bingo = True
-        if self._check_row_or_column(self.row2):
-            self.bingo = True
-        if self._check_row_or_column(self.row3):
-            self.bingo = True
-        if self._check_row_or_column(self.row4):
-            self.bingo = True
-        if self._check_row_or_column(self.row5):
-            self.bingo = True
-        if self._check_col_or_column(self.col1):
-            self.bingo = True
-        if self._check_col_or_column(self.col2):
-            self.bingo = True
-        if self._check_col_or_column(self.col3):
-            self.bingo = True
-        if self._check_col_or_column(self.col4):
-            self.bingo = True
-        if self._check_col_or_column(self.col5):
-            self.bingo = True
+        for row in self.grid:
+            num_marked = 0
+            for (num, flag) in row:
+                if flag:
+                    num_marked += 1
+            if num_marked == 5:
+                self.bingo = True
+
+    def mark_number(self, number):
+        print(f'[!!] Calling {number}')
+        for row in self.grid:
+            for (num, flag) in row:
+                print(f'  |-> {num}')
+                if num == number:
+                    flag = True
 
 class Bingo:
     def __init__(self):
@@ -87,10 +65,17 @@ class Bingo:
             raw_data = [x for x in raw_data if x]
         return raw_data
 
+    def call_numbers(self):
+        for num in self.bingo_numbers:
+            self.board1.mark_number(num)
+            self.board2.mark_number(num)
+            self.board3.mark_number(num)
+
 
 def main():
     bingo = Bingo()
-    # print(bingo.board1)
+    bingo.call_numbers()
+    print(bingo.board1)
 
 
 main()
