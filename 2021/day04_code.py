@@ -1,6 +1,6 @@
 INPUT_FILEPATH="day04_input.txt"
-INPUT_FILEPATH="test_input.txt"
-
+# INPUT_FILEPATH="test_input.txt"
+# Answer is around 11k
 class Board:
     def __init__(self, row_data):
         self.grid = [[(x, False) for x in row_data[0]],
@@ -20,21 +20,19 @@ class Board:
             to_string += '\n'
         return to_string
 
+    def check_array(self, matrix):
+        for row in matrix:
+            num_marked = 0
+            for (num, flag) in row:
+                if flag:
+                    num_marked += 1
+            if num_marked == 5:
+                self.bingo = True
+
     def check_bingo(self):
-        for row in self.grid:
-            num_marked = 0
-            for (num, flag) in row:
-                if flag:
-                    num_marked += 1
-            if num_marked == 5:
-                self.bingo = True
-        for row in self.grid_transposed:
-            num_marked = 0
-            for (num, flag) in row:
-                if flag:
-                    num_marked += 1
-            if num_marked == 5:
-                self.bingo = True
+        self.check_array(self.grid)
+        if not self.bingo:
+            self.check_array(self.grid_transposed)
 
     def mark_number(self, number):
         for row, data in enumerate(self.grid):
@@ -42,22 +40,34 @@ class Board:
                 if num == number:
                     self.grid[row][col] = (num, True)
                     break
+        # if number == 24:
+        #     print(f'[!!] {self}')
         self.check_bingo()
+
+    def calculate_total(self):
+        total = 0
+        for row in self.grid:
+            for (num, flag) in row:
+                if not flag:
+                    total += num
+        return total
 
 class Bingo:
     def __init__(self):
         self.bingo_numbers = []
-        self.board1 = None
-        self.board2 = None
-        self.board3 = None
+        self.boards = []
         self.init_boards()
 
     def init_boards(self):
         raw_data = self._parse_file()
         self.bingo_numbers = [int(x) for x in raw_data[0].split(',')]
-        self.board1 = Board(self._clean_row_data(raw_data[1:6]))
-        self.board2 = Board(self._clean_row_data(raw_data[6:11]))
-        self.board3 = Board(self._clean_row_data(raw_data[11:16]))
+        number_of_boards = int((len(raw_data))/5)
+        start = 1
+        for x in range(number_of_boards):
+            end = start+5
+            clean_data = self._clean_row_data(raw_data[start:end])
+            self.boards.append(Board(clean_data))
+            start = end
 
     def _clean_row_data(self, raw_data):
         clean_data = []
@@ -74,31 +84,20 @@ class Bingo:
         return raw_data
 
     def call_numbers(self):
+        num_called = []
         for num in self.bingo_numbers:
-            self.board1.mark_number(num)
-            self.board2.mark_number(num)
-            self.board3.mark_number(num)
-            if self.board1.bingo:
-                print(f'[!!] Board 1 BINGO')
-                break
-            if self.board2.bingo:
-                print(f'[!!] Board 2 BINGO')
-                break
-            if self.board3.bingo:
-                print(f'[!!] Board 3 BINGO')
-                break
+            num_called.append(num)
+            for index, board in enumerate(self.boards, start=1):
+                board.mark_number(num)
+                if board.bingo:
+                    print(f'[!!] Numbers called: {num_called}')
+                    return index, board.calculate_total() * num
 
 
 def main():
     bingo = Bingo()
-    # bingo.call_numbers()
-    # print(f'{bingo.bingo_numbers}')
-    # print(f'{bingo.board3}')
-    # print(f'{bingo.board1}\n',
-    #       '--------------------------------------\n',
-    #       f'{bingo.board2}\n',
-    #       '--------------------------------------\n',
-    #       f'{bingo.board3}')
-
+    board, product = bingo.call_numbers()
+    print(f'[!!] Board #{board} BINGO')
+    print(f'[!!] Product of winning board: {product}')
 
 main()
