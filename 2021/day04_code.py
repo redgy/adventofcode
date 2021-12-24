@@ -4,7 +4,18 @@ INPUT_FILEPATH="test_input.txt"
 class MarkedCard:
     def __init__(self):
         for x in range(5):
-            self.grid = [[False for x in range(5)]]
+            self.grid = [[False for x in range(5)] for x in range(5)]
+
+    def __str__(self):
+        to_string = '------------------\n'
+        for row in self.grid:
+            to_string += '|'
+            for col in row:
+                mark_string = 'X' if col else 'O'
+                to_string += f'{mark_string:>3}'
+            to_string += ' |\n'
+        to_string += '------------------'
+        return to_string
 
     def is_row_complete(self, row):
         number_of_marked_cells = 0
@@ -30,15 +41,16 @@ class BingoCard:
             [x for x in row_data[3]],
             [x for x in row_data[4]]
         ]
-        self.grid_transposed = [list(i) for i in zip(*self.grid)]
         self.bingo = False
 
     def __str__(self):
-        to_string = ''
+        to_string = '------------------\n'
         for row in self.grid:
+            to_string += '|'
             for col in row:
-                to_string += f'{col} '
-            to_string += '\n'
+                to_string += f'{col:>3}'
+            to_string += ' |\n'
+        to_string += '------------------'
         return to_string
 
     def check_array(self, matrix):
@@ -78,7 +90,6 @@ class SimulateBingo:
         for card in cards_data:
             self.cards.append(BingoCard(card))
 
-
 class InputData:
     def __init__(self):
         self.raw_data = None
@@ -106,7 +117,9 @@ class InputData:
 
 def main():
     data = InputData()
-    print(f'>> {data.cards_data}')
+    simulate = SimulateBingo(data.numbers_data, data.cards_data)
+    for card in simulate.cards:
+        print(f'{card.marked_card}')
     # bingo = Bingo()
     # card, product = bingo.call_numbers()
     # print(f'[!!] Card #{card} BINGO')
