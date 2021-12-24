@@ -53,6 +53,9 @@ class BingoCard:
             [x for x in row_data[4]]
         ]
         self.bingo = False
+        self.bingo_numbers = []
+        self.winning_product = -1
+        self.winning_number = -1
 
     def __str__(self):
         to_string = '------------------\n'
@@ -65,6 +68,7 @@ class BingoCard:
         return to_string
 
     def mark_number(self, number):
+        self.bingo_numbers.append(number)
         for row, row_data in enumerate(self.grid):
             for column, column_data in enumerate(row_data):
                 value = self.grid[row][column]
@@ -74,16 +78,14 @@ class BingoCard:
                         self.bingo = True
 
     def calculate_product(self, winning_number):
-        print(self)
-        print(self.marked_card)
         total_sum = 0
         for row, row_data in enumerate(self.grid):
             for column, column_data in enumerate(row_data):
                 if not self.marked_card.grid[row][column]:
                     value = self.grid[row][column]
                     total_sum += value
-        print(f'>>> BINGO ON {winning_number}!!!')
-        return total_sum * winning_number
+        self.winning_number = winning_number
+        self.winning_product = total_sum * winning_number
 
 
 class SimulateBingo:
@@ -106,7 +108,8 @@ class SimulateBingo:
 
     def record_win(self, winning_number, card):
         if not self.win_log[card.card_number]:
-            self.win_log[card.card_number] = card.calculate_product(winning_number)
+            card.calculate_product(winning_number)
+            self.win_log[card.card_number] = card
             self.win_log['last_winner'] = card.card_number
 
     def get_winner(self):
@@ -146,7 +149,12 @@ class InputData:
 def main():
     data = InputData()
     simulate = SimulateBingo(data.numbers_data, data.cards_data)
-    winning_product = simulate.call_numbers()
-    print(f' -- Product: {winning_product}')
+    winning_card = simulate.call_numbers()
+    print(f'Called the following numbers: {winning_card.bingo_numbers}')
+    print(winning_card)
+    print(winning_card.marked_card)
+    print(f'>>> BINGO ON {winning_card.winning_number}')
+    print(f' -- Card Number: {winning_card.card_number}')
+    print(f' -- Product: {winning_card.winning_product}')
 
 main()
