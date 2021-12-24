@@ -9,6 +9,7 @@ class Board:
             [(x, False) for x in row_data[3]],
             [(x, False) for x in row_data[4]]
         ]
+        self.grid_transposed = [list(i) for i in zip(*self.grid)]
         self.bingo = False
 
     def __str__(self):
@@ -27,14 +28,21 @@ class Board:
                     num_marked += 1
             if num_marked == 5:
                 self.bingo = True
+        for row in self.grid_transposed:
+            num_marked = 0
+            for (num, flag) in row:
+                if flag:
+                    num_marked += 1
+            if num_marked == 5:
+                self.bingo = True
 
     def mark_number(self, number):
-        print(f'[!!] Calling {number}')
-        for row in self.grid:
-            for (num, flag) in row:
-                print(f'  |-> {num}')
+        for row, data in enumerate(self.grid):
+            for col, (num, flag) in enumerate(data):
                 if num == number:
-                    flag = True
+                    self.grid[row][col] = (num, True)
+                    break
+        self.check_bingo()
 
 class Bingo:
     def __init__(self):
@@ -46,7 +54,7 @@ class Bingo:
 
     def init_boards(self):
         raw_data = self._parse_file()
-        self.bingo_numbers = raw_data[0]
+        self.bingo_numbers = [int(x) for x in raw_data[0].split(',')]
         self.board1 = Board(self._clean_row_data(raw_data[1:6]))
         self.board2 = Board(self._clean_row_data(raw_data[6:11]))
         self.board3 = Board(self._clean_row_data(raw_data[11:16]))
@@ -70,12 +78,27 @@ class Bingo:
             self.board1.mark_number(num)
             self.board2.mark_number(num)
             self.board3.mark_number(num)
+            if self.board1.bingo:
+                print(f'[!!] Board 1 BINGO')
+                break
+            if self.board2.bingo:
+                print(f'[!!] Board 2 BINGO')
+                break
+            if self.board3.bingo:
+                print(f'[!!] Board 3 BINGO')
+                break
 
 
 def main():
     bingo = Bingo()
-    bingo.call_numbers()
-    print(bingo.board1)
+    # bingo.call_numbers()
+    # print(f'{bingo.bingo_numbers}')
+    # print(f'{bingo.board3}')
+    # print(f'{bingo.board1}\n',
+    #       '--------------------------------------\n',
+    #       f'{bingo.board2}\n',
+    #       '--------------------------------------\n',
+    #       f'{bingo.board3}')
 
 
 main()
