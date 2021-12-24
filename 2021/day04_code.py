@@ -1,7 +1,7 @@
 INPUT_FILEPATH="day04_input.txt"
 INPUT_FILEPATH="test_input.txt"
 # Answer is around 11k
-class MarkedBoard:
+class MarkedCard:
     def __init__(self):
         for x in range(5):
             self.grid = [[False for x in range(5)]]
@@ -20,9 +20,9 @@ class MarkedBoard:
                 number_of_marked_cells +=1
         return number_of_marked_cells == 5
 
-class NumberBoard:
+class BingoCard:
     def __init__(self, row_data):
-        self.marked_board = MarkedBoard()
+        self.marked_card = MarkedCard()
         self.grid = [
             [x for x in row_data[0]],
             [x for x in row_data[1]],
@@ -71,12 +71,20 @@ class NumberBoard:
                     total += num
         return total
 
+class SimulateBingo:
+    def __init__(self, bingo_numbers, cards_data):
+        self.bingo_numbers = bingo_numbers
+        self.cards = []
+        for card in cards_data:
+            self.cards.append(BingoCard(card))
+
+
 class InputData:
     def __init__(self):
         self.raw_data = None
         self._parse_file()
         self.numbers_data = self.raw_data[0]
-        self.boards_data = self._parse_board_data(self.raw_data[1:])
+        self.cards_data = self._parse_card_data(self.raw_data[1:])
 
     def _parse_file(self):
         with open(INPUT_FILEPATH, 'r') as f:
@@ -85,23 +93,23 @@ class InputData:
             raw_data = [x for x in raw_data if x]
         self.raw_data = raw_data
 
-    def _parse_board_data(self, raw_data):
+    def _parse_card_data(self, raw_data):
         data = []
-        boards = []
+        cards = []
         for row in raw_data:
             entry = [int(x) for x in row.split(' ') if x]
             data.append(entry)
             if len(data) == 5:
-                boards.append(data)
+                cards.append(data)
                 data = []
-        return boards
+        return cards
 
 def main():
     data = InputData()
-    print(f'>> {data.boards_data}')
+    print(f'>> {data.cards_data}')
     # bingo = Bingo()
-    # board, product = bingo.call_numbers()
-    # print(f'[!!] Board #{board} BINGO')
-    # print(f'[!!] Product of winning board: {product}')
+    # card, product = bingo.call_numbers()
+    # print(f'[!!] Card #{card} BINGO')
+    # print(f'[!!] Product of winning card: {product}')
 
 main()
