@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day05_input.txt"
-INPUT_FILEPATH="test_input.txt"
 class Point:
     def __init__(self, x, y):
         self.x = int(x)
