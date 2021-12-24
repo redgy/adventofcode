@@ -1,5 +1,5 @@
 INPUT_FILEPATH="day04_input.txt"
-# INPUT_FILEPATH="test_input.txt"
+INPUT_FILEPATH="test_input.txt"
 # Answer is around 11k
 class MarkedBoard:
     def __init__(self):
@@ -22,11 +22,13 @@ class MarkedBoard:
 
 class NumberBoard:
     def __init__(self, row_data):
-        self.grid = [[(x, False) for x in row_data[0]],
-            [(x, False) for x in row_data[1]],
-            [(x, False) for x in row_data[2]],
-            [(x, False) for x in row_data[3]],
-            [(x, False) for x in row_data[4]]
+        self.marked_board = MarkedBoard()
+        self.grid = [
+            [x for x in row_data[0]],
+            [x for x in row_data[1]],
+            [x for x in row_data[2]],
+            [x for x in row_data[3]],
+            [x for x in row_data[4]]
         ]
         self.grid_transposed = [list(i) for i in zip(*self.grid)]
         self.bingo = False
@@ -59,8 +61,6 @@ class NumberBoard:
                 if num == number:
                     self.grid[row][col] = (num, True)
                     break
-        # if number == 24:
-        #     print(f'[!!] {self}')
         self.check_bingo()
 
     def calculate_total(self):
@@ -71,47 +71,12 @@ class NumberBoard:
                     total += num
         return total
 
-class Bingo:
-    def __init__(self):
-        self.bingo_numbers = []
-        self.boards = []
-        self.init_boards()
-
-    def init_boards(self):
-        raw_data = self._parse_file()
-        self.bingo_numbers = [int(x) for x in raw_data[0].split(',')]
-        number_of_boards = int((len(raw_data))/5)
-        start = 1
-        for x in range(number_of_boards):
-            end = start+5
-            clean_data = self._clean_row_data(raw_data[start:end])
-            self.boards.append(Board(clean_data))
-            start = end
-
-    def _clean_row_data(self, raw_data):
-        clean_data = []
-        for row in raw_data:
-            split_data = row.split(' ')
-            clean_data.append([int(x) for x in split_data if x])
-        return clean_data
-
-    def call_numbers(self):
-        num_called = []
-        for num in self.bingo_numbers:
-            num_called.append(num)
-            for index, board in enumerate(self.boards, start=1):
-                board.mark_number(num)
-                if board.bingo:
-                    print(f'[!!] Numbers called: {num_called}')
-                    return index, board.calculate_total() * num
-
-
 class InputData:
     def __init__(self):
         self.raw_data = None
         self._parse_file()
         self.numbers_data = self.raw_data[0]
-        self.boards_data = self.raw_data[1:]
+        self.boards_data = self._parse_board_data(self.raw_data[1:])
 
     def _parse_file(self):
         with open(INPUT_FILEPATH, 'r') as f:
@@ -120,9 +85,20 @@ class InputData:
             raw_data = [x for x in raw_data if x]
         self.raw_data = raw_data
 
+    def _parse_board_data(self, raw_data):
+        data = []
+        boards = []
+        for row in raw_data:
+            entry = [int(x) for x in row.split(' ') if x]
+            data.append(entry)
+            if len(data) == 5:
+                boards.append(data)
+                data = []
+        return boards
+
 def main():
     data = InputData()
-    print(f'[!!] {data.boards_data}')
+    print(f'>> {data.boards_data}')
     # bingo = Bingo()
     # board, product = bingo.call_numbers()
     # print(f'[!!] Board #{board} BINGO')
