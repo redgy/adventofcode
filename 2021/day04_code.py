@@ -1,7 +1,26 @@
 INPUT_FILEPATH="day04_input.txt"
 # INPUT_FILEPATH="test_input.txt"
 # Answer is around 11k
-class Board:
+class MarkedBoard:
+    def __init__(self):
+        for x in range(5):
+            self.grid = [[False for x in range(5)]]
+
+    def is_row_complete(self, row):
+        number_of_marked_cells = 0
+        for column in range(5):
+            if self.grid[row][column]:
+                number_of_marked_cells +=1
+        return number_of_marked_cells == 5
+
+    def is_column_complete(self, column):
+        number_of_marked_cells = 0
+        for row in range(5):
+            if self.grid[row][column]:
+                number_of_marked_cells +=1
+        return number_of_marked_cells == 5
+
+class NumberBoard:
     def __init__(self, row_data):
         self.grid = [[(x, False) for x in row_data[0]],
             [(x, False) for x in row_data[1]],
