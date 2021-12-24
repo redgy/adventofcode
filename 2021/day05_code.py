@@ -1,8 +1,22 @@
 INPUT_FILEPATH="day05_input.txt"
+# INPUT_FILEPATH="test_input.txt"
 class Point:
     def __init__(self, x, y):
         self.x = int(x)
         self.y = int(y)
+
+    def __str__(self):
+        return f'({self.x}, {self.y})'
+
+    def __eq__(self, other_point):
+        if(isinstance(other_point, Point)):
+            return self.x == other_point.x and self.y == other_point.y
+        return false
+
+    def calculate_midpoint(self, other_point):
+        x = (self.x + other_point.x) / 2
+        y = (self.y + other_point.y) / 2
+        return Point(x, y)
 
 
 class Line:
@@ -13,9 +27,13 @@ class Line:
         self.is_horizontal = self.start.y == self.end.y
         self.x_diff = abs(self.start.x - self.end.x) + 1
         self.y_diff = abs(self.start.y - self.end.y) + 1
+        self.midpoint = self.get_midpoint()
 
     def __str__(self):
         return f'({self.start.x:>3}, {self.start.y:>3}), ({self.end.x:>3}, {self.end.y:>3})'
+
+    def get_midpoint(self):
+        return self.start.calculate_midpoint(self.end)
 
 
 class Grid:
@@ -46,27 +64,24 @@ class Grid:
 
     def place_lines(self):
         for line in self.lines:
-            is_valid = line.is_horizontal or line.is_vertical
-            if is_valid:
-                self.mark_line(line)
+            self.mark_line(line)
 
     def mark_line(self, line):
-        if line.is_horizontal:
-            if line.start.x < line.end.x:
-                start_point = line.start
-            else:
-                start_point = line.end
-            for x in range(line.x_diff):
-                self.update_cell(start_point.x, start_point.y)
-                start_point.x += 1
-        elif line.is_vertical:
-            if line.start.y < line.end.y:
-                start_point = line.start
-            else:
-                start_point = line.end
-            for y in range(line.y_diff):
-                self.update_cell(start_point.x, start_point.y)
-                start_point.y += 1
+        if line.is_horizontal or line.is_vertical:
+            self.update_cell(line.start.x, line.start.y)
+            self.update_cell(line.end.x, line.end.y)
+            self.mark_midpoint(line.start, line.midpoint, line.end)
+
+    def mark_midpoint(self, start, midpoint, end):
+        if midpoint == start or midpoint == end:
+            return
+        self.update_cell(midpoint.x, midpoint.y)
+
+        left_midpoint = start.calculate_midpoint(midpoint)
+        self.mark_midpoint(start, left_midpoint, midpoint)
+
+        right_midpoint = midpoint.calculate_midpoint(end)
+        self.mark_midpoint(midpoint, right_midpoint, end)
 
     def update_cell(self, x, y):
         cell_value = self.grid[x][y]
@@ -124,6 +139,7 @@ def main():
     data = InputData()
     vents = Vents(data.line_data)
     number_of_danger_points = vents.get_danger_areas()
+    # print(vents.grid)
     print(f'Found {number_of_danger_points} danger points')
 
 
