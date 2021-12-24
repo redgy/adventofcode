@@ -1,6 +1,4 @@
 INPUT_FILEPATH="day04_input.txt"
-INPUT_FILEPATH="test_input.txt"
-# Answer is around 11k
 class MarkedCard:
     def __init__(self):
         for x in range(5):
@@ -74,6 +72,15 @@ class BingoCard:
                     if self.marked_card.has_bingo():
                         self.bingo = True
 
+    def calculate_product(self, winning_number):
+        print(self.marked_card)
+        total_sum = 0
+        for row, row_data in enumerate(self.grid):
+            for column, column_data in enumerate(row_data):
+                if not self.marked_card.grid[row][column]:
+                    value = self.grid[row][column]
+                    total_sum += value
+        return total_sum * winning_number
 
 class SimulateBingo:
     def __init__(self, bingo_numbers, cards_data):
@@ -87,7 +94,7 @@ class SimulateBingo:
             for card in self.cards:
                 card.mark_number(number)
                 if card.bingo:
-                    break
+                    return card.calculate_product(number)
 
 
 class InputData:
@@ -122,12 +129,7 @@ class InputData:
 def main():
     data = InputData()
     simulate = SimulateBingo(data.numbers_data, data.cards_data)
-    simulate.call_numbers()
-    for card in simulate.cards:
-        print(f'{card.marked_card}')
-    # bingo = Bingo()
-    # card, product = bingo.call_numbers()
-    # print(f'[!!] Card #{card} BINGO')
-    # print(f'[!!] Product of winning card: {product}')
+    winning_product = simulate.call_numbers()
+    print(f'>>> BINGO!! Product: {winning_product}')
 
 main()
