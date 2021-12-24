@@ -42,7 +42,8 @@ class MarkedCard:
 
 
 class BingoCard:
-    def __init__(self, row_data):
+    def __init__(self, card_number, row_data):
+        self.card_number = card_number
         self.marked_card = MarkedCard()
         self.grid = [
             [x for x in row_data[0]],
@@ -73,6 +74,7 @@ class BingoCard:
                         self.bingo = True
 
     def calculate_product(self, winning_number):
+        print(self)
         print(self.marked_card)
         total_sum = 0
         for row, row_data in enumerate(self.grid):
@@ -80,21 +82,36 @@ class BingoCard:
                 if not self.marked_card.grid[row][column]:
                     value = self.grid[row][column]
                     total_sum += value
+        print(f'>>> BINGO ON {winning_number}!!!')
         return total_sum * winning_number
+
 
 class SimulateBingo:
     def __init__(self, bingo_numbers, cards_data):
         self.bingo_numbers = bingo_numbers
         self.cards = []
-        for card in cards_data:
-            self.cards.append(BingoCard(card))
+        for card_number, card_data in enumerate(cards_data):
+            self.cards.append(BingoCard(card_number, card_data))
+        self.win_log = {x:{} for x in range(len(self.cards))}
 
     def call_numbers(self):
-        for number in self.bingo_numbers:
+        recent_win = -1
+        for bingo_number in self.bingo_numbers:
             for card in self.cards:
-                card.mark_number(number)
+                if not card.bingo:
+                    card.mark_number(bingo_number)
                 if card.bingo:
-                    return card.calculate_product(number)
+                    self.record_win(bingo_number, card)
+        return self.get_winner()
+
+    def record_win(self, winning_number, card):
+        if not self.win_log[card.card_number]:
+            self.win_log[card.card_number] = card.calculate_product(winning_number)
+            self.win_log['last_winner'] = card.card_number
+
+    def get_winner(self):
+        winning_card_number = self.win_log['last_winner']
+        return self.win_log[winning_card_number]
 
 
 class InputData:
@@ -130,6 +147,6 @@ def main():
     data = InputData()
     simulate = SimulateBingo(data.numbers_data, data.cards_data)
     winning_product = simulate.call_numbers()
-    print(f'>>> BINGO!! Product: {winning_product}')
+    print(f' -- Product: {winning_product}')
 
 main()
