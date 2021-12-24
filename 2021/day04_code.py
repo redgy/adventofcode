@@ -76,13 +76,6 @@ class Bingo:
             clean_data.append([int(x) for x in split_data if x])
         return clean_data
 
-    def _parse_file(self):
-        with open(INPUT_FILEPATH, 'r') as f:
-            raw_data = f.readlines()
-            raw_data = [x.strip() for x in raw_data]
-            raw_data = [x for x in raw_data if x]
-        return raw_data
-
     def call_numbers(self):
         num_called = []
         for num in self.bingo_numbers:
@@ -94,10 +87,26 @@ class Bingo:
                     return index, board.calculate_total() * num
 
 
+class InputData:
+    def __init__(self):
+        self.raw_data = None
+        self._parse_file()
+        self.numbers_data = self.raw_data[0]
+        self.boards_data = self.raw_data[1:]
+
+    def _parse_file(self):
+        with open(INPUT_FILEPATH, 'r') as f:
+            raw_data = f.readlines()
+            raw_data = [x.strip() for x in raw_data]
+            raw_data = [x for x in raw_data if x]
+        self.raw_data = raw_data
+
 def main():
-    bingo = Bingo()
-    board, product = bingo.call_numbers()
-    print(f'[!!] Board #{board} BINGO')
-    print(f'[!!] Product of winning board: {product}')
+    data = InputData()
+    print(f'[!!] {data.boards_data}')
+    # bingo = Bingo()
+    # board, product = bingo.call_numbers()
+    # print(f'[!!] Board #{board} BINGO')
+    # print(f'[!!] Product of winning board: {product}')
 
 main()
