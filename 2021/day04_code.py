@@ -53,35 +53,6 @@ class BingoCard:
         to_string += '------------------'
         return to_string
 
-    def check_array(self, matrix):
-        for row in matrix:
-            num_marked = 0
-            for (num, flag) in row:
-                if flag:
-                    num_marked += 1
-            if num_marked == 5:
-                self.bingo = True
-
-    def check_bingo(self):
-        self.check_array(self.grid)
-        if not self.bingo:
-            self.check_array(self.grid_transposed)
-
-    def mark_number(self, number):
-        for row, data in enumerate(self.grid):
-            for col, (num, flag) in enumerate(data):
-                if num == number:
-                    self.grid[row][col] = (num, True)
-                    break
-        self.check_bingo()
-
-    def calculate_total(self):
-        total = 0
-        for row in self.grid:
-            for (num, flag) in row:
-                if not flag:
-                    total += num
-        return total
 
 class SimulateBingo:
     def __init__(self, bingo_numbers, cards_data):
@@ -89,6 +60,7 @@ class SimulateBingo:
         self.cards = []
         for card in cards_data:
             self.cards.append(BingoCard(card))
+
 
 class InputData:
     def __init__(self):
@@ -114,6 +86,7 @@ class InputData:
                 cards.append(data)
                 data = []
         return cards
+
 
 def main():
     data = InputData()
