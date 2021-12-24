@@ -1,5 +1,5 @@
 INPUT_FILEPATH="day05_input.txt"
-# INPUT_FILEPATH="test_input.txt"
+INPUT_FILEPATH="test_input.txt"
 class Point:
     def __init__(self, x, y):
         self.x = int(x)
@@ -14,18 +14,46 @@ class Line:
     def __str__(self):
         return f'({self.start.x:>3}, {self.start.y:>3}), ({self.end.x:>3}, {self.end.y:>3})'
 
+
+class Grid:
+    def __init__(self, lines):
+        self.lines = lines
+        self.max = self._determine_max()
+        self.grid = [['.' for x in range(self.max)] for x in range(self.max)]
+        print(self)
+
+    def __str__(self):
+        to_string = ''
+        for row in self.grid:
+            for col in row:
+                to_string += (f'{col}')
+            to_string += ('\n')
+        to_string += '-----------------------------------'
+        return to_string
+
+    def _determine_max(self):
+        curr_max = 1
+        for line in self.lines:
+            curr_max = self._compare_max(curr_max, line.start)
+            curr_max = self._compare_max(curr_max, line.end)
+        return curr_max
+
+    def _compare_max(self, curr_max, point):
+        number = point.x if point.x > point.y else point.y
+        return number if number > curr_max else curr_max
+
 class Vents:
     def __init__(self, line_data):
-        self.max = 0
         self.lines = []
         self.add_lines(line_data)
+        self.grid = Grid(self.lines)
 
     def add_lines(self, line_data):
         for data in line_data:
             points_array = data.split(':')
             start_data = points_array[0].split(',')
             end_data = points_array[1].split(',')
-            print(Line(start_data, end_data))
+            self.lines.append(Line(start_data, end_data))
 
 class InputData:
     def __init__(self):
