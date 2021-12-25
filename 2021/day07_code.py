@@ -1,5 +1,30 @@
 INPUT_FILEPATH="day07_input.txt"
 INPUT_FILEPATH="test_input.txt"
+class Crab:
+    def __init__(self, position):
+        self.starting_position = position
+        self.position = position
+        self.fuel = 0
+
+    def reset(self):
+        """Reset position and fuel"""
+
+        self.position = self.starting_position
+        self.fuel = 0
+
+    def step(self, num_steps):
+        """Step in a direction (negative number will go left)"""
+
+        self.position += num_steps
+        self.fuel += abs(num_steps)
+
+    def move_to(self, position):
+        """Move to expected position and determine fuel"""
+
+        num_steps = position - self.position
+        self.step(num_steps)
+
+
 class InputData:
     def __init__(self):
         self.clean_data = None
