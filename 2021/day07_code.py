@@ -6,6 +6,9 @@ class Crab:
         self.position = position
         self.fuel = 0
 
+    def __str__(self):
+        return f'[{self.position}]: {self.fuel}'
+
     def reset(self):
         """Reset position and fuel"""
 
@@ -25,6 +28,11 @@ class Crab:
         self.step(num_steps)
 
 
+class SimulateAlignment:
+    def __init__(self, data):
+        self.crabs = [Crab(x) for x in data]
+
+
 class InputData:
     def __init__(self):
         self.clean_data = None
@@ -38,7 +46,9 @@ class InputData:
 
 def main():
     data = InputData()
-    print(data.clean_data)
+    simulate = SimulateAlignment(data.clean_data)
+    for crab in simulate.crabs:
+        print(crab)
 
 
 main()
