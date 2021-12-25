@@ -1,5 +1,12 @@
 INPUT_FILEPATH="day06_input.txt"
 INPUT_FILEPATH="test_input.txt"
+class Lantern:
+    def __init__(self, timer=6, is_new=True):
+        self.is_new = is_new
+        if is_new:
+            timer = 8
+        self.timer = timer
+
 class InputData:
     def __init__(self):
         self.clean_data = None
