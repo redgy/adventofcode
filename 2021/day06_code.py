@@ -1,3 +1,6 @@
+import collections
+
+
 INPUT_FILEPATH="day06_input.txt"
 class Lantern:
     def __init__(self, timer=6, is_new=False):
@@ -45,11 +48,6 @@ class SimulateLanterns:
                 self.lanterns.append(Lantern(is_new=True))
         # self._print_lanterns(number_of_days)
 
-    def reset_simulation(self):
-        """Reset simulation back to initial state"""
-
-        self.lanterns = [Lantern(timer=x) for x in data]
-
     def get_total_lanterns(self):
         """Returns total number of lanterns in simulation"""
 
@@ -58,7 +56,16 @@ class SimulateLanterns:
 
 class SimpleSimulater:
     def __init__(self, data):
+        self.array = collections.deque([0 for x in range(9)])
+        for x in data:
+            self.array[x] += 1
 
+    def simulate_days(self, number_of_days):
+        """Simulate number of days by left shifting"""
+
+        for day in range(number_of_days):
+            self.array.rotate(-1)
+            self.array[6] += self.array[8]
 
 
 class InputData:
@@ -80,6 +87,8 @@ def main():
     print(f'[!!] Total Lanterns (I): {number_of_lanterns}')
 
     part_two = SimpleSimulater(data.clean_data)
+    part_two.simulate_days(256)
+    print(f'[!!] Total Lanterns (II): {sum(part_two.array)}')
 
 
 main()
