@@ -1,5 +1,5 @@
 INPUT_FILEPATH="day07_input.txt"
-INPUT_FILEPATH="test_input.txt"
+# INPUT_FILEPATH="test_input.txt"
 class Crab:
     def __init__(self, position):
         self.starting_position = position
@@ -30,7 +30,44 @@ class Crab:
 
 class SimulateAlignment:
     def __init__(self, data):
+        self.array_length = max(data) + 1
         self.crabs = [Crab(x) for x in data]
+        self.total_fuel = 0
+
+    def move_all_to(self, position):
+        """Move all crabs to position"""
+
+        for crab in self.crabs:
+            crab.move_to(position)
+            self.total_fuel += crab.fuel
+
+    def reset_crabs(self):
+        [crab.reset() for crab in self.crabs]
+        self.total_fuel = 0
+
+    def _find_min(self, arr):
+        """Find minimum value in array and return index"""
+
+        min_values = 0, arr[0]
+        for index, value in enumerate(arr):
+            min_value = min_values[1]
+            if value < min_value:
+                min_values = index, value
+        return min_values
+
+    def get_least_consumption(self):
+        """Align crabs to position and determine which will have the least consumption
+
+        :returns: Tuple (fuel, position)
+        """
+
+        fuel_consumption = [-1 for x in range(self.array_length)]
+        for x in range(self.array_length):
+            position = x
+            self.move_all_to(position)
+            fuel_consumption[position] = self.total_fuel
+            self.reset_crabs()
+        return self._find_min(fuel_consumption)
 
 
 class InputData:
@@ -47,8 +84,8 @@ class InputData:
 def main():
     data = InputData()
     simulate = SimulateAlignment(data.clean_data)
-    for crab in simulate.crabs:
-        print(crab)
+    position, min_fuel = simulate.get_least_consumption()
+    print(f'[!!] Least fuel consumption: Position ({position}) with {min_fuel} fuel')
 
 
 main()
