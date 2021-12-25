@@ -54,6 +54,7 @@ class InputData:
             split_data = line.split('|')
             wire_data = split_data[0].strip()
             number_display = split_data[1].strip()
+            wire_data = wire_data.split(' ')
             to_add = (wire_data, number_display)
             self.input_data.append(to_add)
 
