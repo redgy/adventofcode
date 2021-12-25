@@ -1,6 +1,5 @@
 INPUT_FILEPATH="day06_input.txt"
-INPUT_FILEPATH="test_input.txt"
-NUMBER_OF_DAYS=5
+NUMBER_OF_DAYS=18
 class Lantern:
     def __init__(self, timer=6, is_new=False):
         self.is_new = is_new
@@ -14,14 +13,10 @@ class Lantern:
         return to_string
 
     def decrement(self):
-        """Decrement timer with some logic depending on if lantern is new"""
-
-        if self.is_new:
-            self.is_new = False  # So next time it will decrement
-        else:
-            self.timer -= 1
-            if self.timer < 0:
-                self.timer = 6
+        self.timer -= 1
+        if self.timer < 0:
+            self.timer = 6
+            self.is_new = False
 
 
 class SimulaterLanterns:
@@ -42,10 +37,14 @@ class SimulaterLanterns:
 
         for x in range(number_of_days):
             self._print_lanterns(x)
+            number_of_new_lanterns = 0
             for lantern in self.lanterns:
                 lantern.decrement()
-                if lantern.timer == 0:
-                    self.lanterns.append(Lantern(is_new=True))
+                if lantern.timer == 6 and not lantern.is_new:
+                    number_of_new_lanterns += 1
+            for new_lantern in range(number_of_new_lanterns):
+                self.lanterns.append(Lantern(is_new=True))
+        self._print_lanterns(number_of_days)
 
     def reset_simulation(self):
         """Reset simulation back to initial state"""
@@ -74,7 +73,7 @@ def main():
     simulator = SimulaterLanterns(data.clean_data)
     simulator.simulate_days(NUMBER_OF_DAYS)
     number_of_lanterns = simulator.get_total_lanterns()
-    print(f'[!!] After {NUMBER_OF_DAYS} days, total number of lanterns: {number_of_lanterns}')
+    print(f'[!!] Total Lanterns: {number_of_lanterns}')
 
 
 main()
