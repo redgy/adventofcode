@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day06_input.txt"
-NUMBER_OF_DAYS=18
 class Lantern:
     def __init__(self, timer=6, is_new=False):
         self.is_new = is_new
@@ -19,7 +18,7 @@ class Lantern:
             self.is_new = False
 
 
-class SimulaterLanterns:
+class SimulateLanterns:
     def __init__(self, data):
         self.data = data
         self.lanterns = [Lantern(timer=x) for x in data]
@@ -36,7 +35,7 @@ class SimulaterLanterns:
         """Simulates life of lanterns after a number of days"""
 
         for x in range(number_of_days):
-            self._print_lanterns(x)
+            # self._print_lanterns(x)
             number_of_new_lanterns = 0
             for lantern in self.lanterns:
                 lantern.decrement()
@@ -44,7 +43,7 @@ class SimulaterLanterns:
                     number_of_new_lanterns += 1
             for new_lantern in range(number_of_new_lanterns):
                 self.lanterns.append(Lantern(is_new=True))
-        self._print_lanterns(number_of_days)
+        # self._print_lanterns(number_of_days)
 
     def reset_simulation(self):
         """Reset simulation back to initial state"""
@@ -55,6 +54,11 @@ class SimulaterLanterns:
         """Returns total number of lanterns in simulation"""
 
         return len(self.lanterns)
+
+
+class SimpleSimulater:
+    def __init__(self, data):
+
 
 
 class InputData:
@@ -70,10 +74,12 @@ class InputData:
 
 def main():
     data = InputData()
-    simulator = SimulaterLanterns(data.clean_data)
-    simulator.simulate_days(NUMBER_OF_DAYS)
-    number_of_lanterns = simulator.get_total_lanterns()
-    print(f'[!!] Total Lanterns: {number_of_lanterns}')
+    part_one = SimulateLanterns(data.clean_data)
+    part_one.simulate_days(80)
+    number_of_lanterns = part_one.get_total_lanterns()
+    print(f'[!!] Total Lanterns (I): {number_of_lanterns}')
+
+    part_two = SimpleSimulater(data.clean_data)
 
 
 main()
