@@ -1,21 +1,27 @@
 INPUT_FILEPATH="day08_input.txt"
 INPUT_FILEPATH="test_input.txt"
+MAP_WIRES= {
+    1: 2,
+    4: 4,
+    7: 3,
+    8: 7
+}
 class UniqueDigit:
     # 1, 4, 7, 8
-    def __init__(self, number, wires=None):
+    def __init__(self, number, wires=''):
         if number == 1:
-            self.unique_wires = 2
+            self.unique_wires = MAP_WIRES[1]
         elif number == 4:
-            self.unique_wires = 4
+            self.unique_wires = MAP_WIRES[4]
         elif number == 7:
-            self.unique_wires = 3
+            self.unique_wires = MAP_WIRES[7]
         elif number == 8:
-            self.unique_wires = 7
+            self.unique_wires = MAP_WIRES[8]
         else:
             raise ValueError(f'{number} is not a unique digit')
         self.number = number
-        if wires:
-            self.wires = self.set_wires(wires)
+        self.wires = self.set_wires(wires) if wires else ''
+        print(self)
 
     def __str__(self):
         return f'[{self.number}]: {self.wires}'
@@ -25,20 +31,38 @@ class UniqueDigit:
 
         if len(wires) != self.unique_wires:
             raise ValueError(f'{wires} is the incorrect length of {self.unique_wires}')
-        self.wires = wires
+        return wires
 
 
 class DebugDisplay:
     def __init__(self, data):
         self.data = data
-        self.one = UniqueDigit(1)
-        self.four = UniqueDigit(4)
-        self.seven = UniqueDigit(7)
-        self.eight = UniqueDigit(8)
+        self.one = None
+        self.four = None
+        self.seven = None
+        self.eight = None
+
+    def _is_unique_digits_initialized(self):
+        return self.one and self.four and self.seven and self.eight
 
     def get_wires(self):
-        for key in self.data:
-            print(key)
+        for line in self.data:
+            if self._is_unique_digits_initialized():
+                break
+            wire_array = line[0]
+            self.set_unique_digit(wire_array)
+            print(wire_array)
+
+    def set_unique_digit(self, wire_array):
+        for wire in wire_array:
+            if len(wire) == MAP_WIRES[1]:
+                self.one = UniqueDigit(1, wire)
+            elif len(wire) == MAP_WIRES[4]:
+                self.four = UniqueDigit(4, wire)
+            elif len(wire) == MAP_WIRES[7]:
+                self.seven = UniqueDigit(7, wire)
+            elif len(wire) == MAP_WIRES[8]:
+                self.eight = UniqueDigit(8, wire)
 
 class InputData:
     def __init__(self):
