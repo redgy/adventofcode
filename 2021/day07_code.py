@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day07_input.txt"
-# INPUT_FILEPATH="test_input.txt"
 class Crab:
     def __init__(self, position):
         self.starting_position = position
@@ -19,7 +18,9 @@ class Crab:
         """Step in a direction (negative number will go left)"""
 
         self.position += num_steps
-        self.fuel += abs(num_steps)
+        N = abs(num_steps)  # Use the sum of consecutive numbers formula
+        fuel_consumed = int(N * ((1+N)/2))
+        self.fuel += fuel_consumed
 
     def move_to(self, position):
         """Move to expected position and determine fuel"""
