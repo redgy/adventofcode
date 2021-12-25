@@ -2,9 +2,7 @@ INPUT_FILEPATH="day08_input.txt"
 INPUT_FILEPATH="test_input.txt"
 class UniqueDigit:
     # 1, 4, 7, 8
-    def __init__(self, number):
-        self.wires = None
-        self.number = number
+    def __init__(self, number, wires=None):
         if number == 1:
             self.unique_wires = 2
         elif number == 4:
@@ -13,7 +11,11 @@ class UniqueDigit:
             self.unique_wires = 3
         elif number == 8:
             self.unique_wires = 7
-        raise ValueError(f'{number} is not a unique digit')
+        else:
+            raise ValueError(f'{number} is not a unique digit')
+        self.number = number
+        if wires:
+            self.wires = self.set_wires(wires)
 
     def __str__(self):
         return f'[{self.number}]: {self.wires}'
@@ -29,12 +31,19 @@ class UniqueDigit:
 class DebugDisplay:
     def __init__(self, data):
         self.data = data
+        self.one = UniqueDigit(1)
+        self.four = UniqueDigit(4)
+        self.seven = UniqueDigit(7)
+        self.eight = UniqueDigit(8)
 
+    def get_wires(self):
+        for key in self.data:
+            print(key)
 
 class InputData:
     def __init__(self):
         self.raw_data = None
-        self.input_data = {}
+        self.input_data = []
         self._parse_file()
 
     def _parse_file(self):
@@ -45,12 +54,14 @@ class InputData:
             split_data = line.split('|')
             wire_data = split_data[0].strip()
             number_display = split_data[1].strip()
-            self.input_data[wire_data] = number_display
+            to_add = (wire_data, number_display)
+            self.input_data.append(to_add)
 
 
 def main():
     data = InputData()
-    print(f'[!!] {data.input_data}')
+    debug = DebugDisplay(data.input_data)
+    debug.get_wires()
 
 
 main()
