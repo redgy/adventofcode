@@ -44,15 +44,25 @@ class DebugDisplay:
     def _is_unique_digits_initialized(self):
         return self.one and self.four and self.seven and self.eight
 
+    def get_unique_digit_occurrences(self):
+        count = 0
+        unique_pattern_array = MAP_WIRES.values()
+        for line in self.data:
+            digit_array = line[1]
+            for digit in digit_array:
+                if len(digit) in unique_pattern_array:
+                    count += 1
+        return count
+
     def get_signal_patterns(self):
         for line in self.data:
-            if self._is_unique_digits_initialized():
+            if self._is_unique_patterns_initialized():
                 break
             signal_patterns = line[0]
-            self.set_unique_digit(signal_patterns)
+            self.set_unique_pattern(signal_patterns)
             print(signal_patterns)
 
-    def set_unique_digit(self, signal_patterns):
+    def set_unique_pattern(self, signal_patterns):
         for signal_pattern in signal_patterns:
             if len(signal_pattern) == MAP_WIRES[1]:
                 self.one = UniqueDigit(1, signal_pattern)
@@ -76,8 +86,9 @@ class InputData:
         for line in self.raw_data:
             split_data = line.split('|')
             signal_patterns = split_data[0].strip()
-            digit_output = split_data[1].strip()
             signal_patterns = signal_patterns.split(' ')
+            digit_output = split_data[1].strip()
+            digit_output = digit_output.split(' ')
             to_add = (signal_patterns, digit_output)
             self.input_data.append(to_add)
 
@@ -85,7 +96,8 @@ class InputData:
 def main():
     data = InputData()
     debug = DebugDisplay(data.input_data)
-    debug.get_signal_patterns()
+    count = debug.get_unique_digit_occurrences()
+    print(f'[!!] Unique digit count: {count}')
 
 
 main()
