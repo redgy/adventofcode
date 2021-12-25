@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day05_input.txt"
-INPUT_FILEPATH="test_input.txt"
 class Point:
     def __init__(self, x, y):
         self.x = int(x)
@@ -88,9 +87,16 @@ class Grid:
         if line.is_horizontal or line.is_vertical:
             self.update_cell(line.start.x, line.start.y)
             self.update_cell(line.end.x, line.end.y)
-            self.mark_midpoints(line.start, line.midpoint, line.end, 0)
+            self.mark_midpoints(line.start, line.midpoint, line.end)
         else:  # Diagonal at 45 degrees
-            self._determine_direction(line.start, line.end)
+            x_direction, y_direction = self._determine_direction(line.start, line.end)
+            traverse_range = abs(line.start.x - line.end.x) + 1
+            x_value = line.start.x
+            y_value = line.start.y
+            for x in range(traverse_range):
+                self.update_cell(x_value, y_value)
+                x_value += x_direction
+                y_value += y_direction
 
     def _determine_direction(self, start, end):
         """Which direction the diagonal should go
@@ -102,7 +108,7 @@ class Grid:
 
         x_dir = 1 if start.x < end.x else -1
         y_dir = 1 if start.y < end.y else -1
-        return (x_dir, y_dir)
+        return x_dir, y_dir
 
     def mark_midpoints(self, start, midpoint, end):
         """Recursive method that will mark midpoints of a line
@@ -116,10 +122,9 @@ class Grid:
             return
         self.update_cell(midpoint.x, midpoint.y)
         left_midpoint = start.calculate_midpoint(midpoint)
-        self.mark_midpoints(start, left_midpoint, midpoint, index+1)
-
+        self.mark_midpoints(start, left_midpoint, midpoint)
         right_midpoint = midpoint.calculate_midpoint(end)
-        self.mark_midpoints(midpoint, right_midpoint, end, index+1)
+        self.mark_midpoints(midpoint, right_midpoint, end)
 
     def update_cell(self, x, y):
         """Updates cell in grid by incrementing value at cell value
@@ -196,7 +201,6 @@ def main():
     data = InputData()
     vents = Vents(data.line_data)
     number_of_danger_points = vents.get_danger_areas()
-    print(vents.grid)
     print(f'Found {number_of_danger_points} danger points')
 
 
