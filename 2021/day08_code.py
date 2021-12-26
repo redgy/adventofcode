@@ -17,11 +17,12 @@ class SignalPattern:
     def __str__(self):
         return self.str
 
-    def __contains__(self, other):
+    def contains(self, other):
         for pattern_bit in other.code:
             if not pattern_bit in self.code:
                 return False
         return True
+
 
 class DigitalNumber:
     def __init__(self, number, signal_pattern):
@@ -74,16 +75,21 @@ class DebugDisplay:
         for line in self.data:
             signal_pattern_strings = line[0]
             self.set_pattern(signal_pattern_strings)
+            self.reset_numbers()
             break
 
     def set_pattern(self, signal_pattern_strings):
         for signal_pattern_str in signal_pattern_strings:
             signal_pattern = SignalPattern(signal_pattern_str)
-            self._set_pattern(signal_pattern)
+            self._set_unique_patterns(signal_pattern)
+            # Get unique patterns first
+
+        for signal_pattern_str in signal_pattern_strings:
+            signal_pattern = SignalPattern(signal_pattern_str)
             self._set_pattern_for_length_of_five(signal_pattern)
             self._set_pattern_for_length_of_six(signal_pattern)
 
-    def _set_pattern(self, signal_pattern):
+    def _set_unique_patterns(self, signal_pattern):
         """Set unique pattern for 1, 4, 7, 8"""
 
         length_of_code = signal_pattern.length
@@ -100,8 +106,12 @@ class DebugDisplay:
         """Set pattern for 2, 3, 5"""
 
         if signal_pattern.length == 5:
-            # 5 does not contain 7
+            # Number 5 of code length 5 is the only one that contains 7's code
+            if signal_pattern.contains(self.seven.signal_pattern):
+                self.five = DigitalNumber(5, signal_pattern)
+            print('-----5-----')
             print(signal_pattern)
+            print(signal_pattern.contains(self.seven.signal_pattern))
             pass
 
     def _set_pattern_for_length_of_six(self, signal_pattern):
