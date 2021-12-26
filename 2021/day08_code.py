@@ -125,19 +125,19 @@ class DebugDisplay:
     def _set_pattern_for_zero_and_nine(self, signal_pattern):
         if signal_pattern.length == 6:
             # Number 0 does not contain 5's code
-            if not signal_pattern.contains(self.zero.signal_pattern):
+            if not signal_pattern.contains(self.five.signal_pattern):
                 self.zero = DigitalNumber(0, signal_pattern)
             # Number 9 contains both 5 and 7's code
-            if signal_pattern.contains(self.five.signal_pattern) and signal_pattern.contains(self.seven.code):
-                self.seven = DigitalNumber(7, signal_pattern)
+            if signal_pattern.contains(self.five.signal_pattern) and signal_pattern.contains(self.seven.signal_pattern):
+                self.nine = DigitalNumber(9, signal_pattern)
 
     def _set_pattern_for_two_and_three(self, signal_pattern):
         if signal_pattern.length == 5:
             # Number 3 will be found by checking number 9 contains 3's code
-            if not self.nine.signal_pattern(signal_pattern):
+            if not self.nine.signal_pattern.contains(signal_pattern):
                 self.three = DigitalNumber(3, signal_pattern)
             # Number 2 will be found by checking number 8 contains 2's code
-            if not self.eight.signal_pattern(signal_pattern):
+            if not self.eight.signal_pattern.contains(signal_pattern):
                 self.two = DigitalNumber(2, signal_pattern)
 
 
