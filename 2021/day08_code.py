@@ -28,7 +28,6 @@ class DigitalNumber:
     def __init__(self, number, signal_pattern):
         self.number = number
         self.signal_pattern = signal_pattern if signal_pattern else ''
-        # print(self)
 
     def __str__(self):
         return f'[{self.number}]: {self.signal_pattern}'
@@ -70,34 +69,88 @@ class DebugDisplay:
                     count += 1
         return count
 
+    def _print_digits(self):
+        print(self.zero)
+        print(self.one)
+        print(self.two)
+        print(self.three)
+        print(self.four)
+        print(self.five)
+        print(self.six)
+        print(self.seven)
+        print(self.eight)
+        print(self.nine)
+
+    def _decode_pattern(self, signal_pattern):
+        if signal_pattern == self.zero.signal_pattern:
+            return self.zero.number
+        if signal_pattern == self.one.signal_pattern:
+            return self.one.number
+        if signal_pattern == self.two.signal_pattern:
+            return self.two.number
+        if signal_pattern == self.three.signal_pattern:
+            return self.three.number
+        if signal_pattern == self.four.signal_pattern:
+            return self.four.number
+        if signal_pattern == self.five.signal_pattern:
+            return self.five.number
+        if signal_pattern == self.six.signal_pattern:
+            return self.six.number
+        if signal_pattern == self.seven.signal_pattern:
+            return self.seven.number
+        if signal_pattern == self.eight.signal_pattern:
+            return self.eight.number
+        if signal_pattern == self.nine.signal_pattern:
+            return self.nine.number
+        raise RuntimeError('Did we finish deduction?')
+
     def get_digital_output(self):
         digital_outputs = []
         for line in self.data:
-            signal_pattern_strings = line[0]
+            signal_pattern_strings = [SignalPattern(x).str for x in line[0]]
             self.set_pattern(signal_pattern_strings)
+            self._print_digits()
+            encoded_outputs = line[1]
+            for encoded_output in encoded_outputs:
+                encoded_pattern = SignalPattern(encoded_output)
+                decoded_digit = self._decode_pattern(encoded_pattern)
+                print(decoded_digit)
             self.reset_numbers()
             break
 
     def set_pattern(self, signal_pattern_strings):
-        # Get unique patterns first
-        for signal_pattern_str in signal_pattern_strings:
-            signal_pattern = SignalPattern(signal_pattern_str)
+        # Get unique patterns first (1, 4, 7, 8)
+        for pattern_string in signal_pattern_strings:
+            signal_pattern = SignalPattern(pattern_string)
             self._set_unique_patterns(signal_pattern)
+        signal_pattern_strings.remove(self.one.signal_pattern.str)
+        signal_pattern_strings.remove(self.four.signal_pattern.str)
+        signal_pattern_strings.remove(self.seven.signal_pattern.str)
+        signal_pattern_strings.remove(self.eight.signal_pattern.str)
 
         # Next numbers that can be deduced are 5, 6
-        for signal_pattern_str in signal_pattern_strings:
-            signal_pattern = SignalPattern(signal_pattern_str)
+        for pattern_string in signal_pattern_strings:
+            signal_pattern = SignalPattern(pattern_string)
             self._set_pattern_for_five_and_six(signal_pattern)
+        signal_pattern_strings.remove(self.five.signal_pattern.str)
+        signal_pattern_strings.remove(self.six.signal_pattern.str)
 
         # Next numbers that can be deduced are 0, 9
-        for signal_pattern_str in signal_pattern_strings:
-            signal_pattern = SignalPattern(signal_pattern_str)
+        for pattern_string in signal_pattern_strings:
+            signal_pattern = SignalPattern(pattern_string)
             self._set_pattern_for_zero_and_nine(signal_pattern)
+        signal_pattern_strings.remove(self.zero.signal_pattern.str)
+        signal_pattern_strings.remove(self.nine.signal_pattern.str)
 
-        # Next numbers that can be deduced are 2, 3
-        for signal_pattern_str in signal_pattern_strings:
-            signal_pattern = SignalPattern(signal_pattern_str)
-            self._set_pattern_for_two_and_three(signal_pattern)
+        # Last numbers to be deduced are 2, 3
+        for pattern_string in signal_pattern_strings:
+            signal_pattern = SignalPattern(pattern_string)
+            # Number 3 will be found by checking number 9 contains 3's code
+            if not self.nine.signal_pattern.contains(signal_pattern):
+                self.three = DigitalNumber(3, signal_pattern)
+            # Number 2 is the remaining one
+            else:
+                self.two = DigitalNumber(2, signal_pattern)
 
     def _set_unique_patterns(self, signal_pattern):
         """Set unique pattern for 1, 4, 7, 8"""
@@ -130,15 +183,6 @@ class DebugDisplay:
             # Number 9 contains both 5 and 7's code
             if signal_pattern.contains(self.five.signal_pattern) and signal_pattern.contains(self.seven.signal_pattern):
                 self.nine = DigitalNumber(9, signal_pattern)
-
-    def _set_pattern_for_two_and_three(self, signal_pattern):
-        if signal_pattern.length == 5:
-            # Number 3 will be found by checking number 9 contains 3's code
-            if not self.nine.signal_pattern.contains(signal_pattern):
-                self.three = DigitalNumber(3, signal_pattern)
-            # Number 2 will be found by checking number 8 contains 2's code
-            if not self.eight.signal_pattern.contains(signal_pattern):
-                self.two = DigitalNumber(2, signal_pattern)
 
 
 class InputData:
