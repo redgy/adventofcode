@@ -79,15 +79,25 @@ class DebugDisplay:
             break
 
     def set_pattern(self, signal_pattern_strings):
+        # Get unique patterns first
         for signal_pattern_str in signal_pattern_strings:
             signal_pattern = SignalPattern(signal_pattern_str)
             self._set_unique_patterns(signal_pattern)
-            # Get unique patterns first
 
+        # Next numbers that can be deduced are 5, 6
         for signal_pattern_str in signal_pattern_strings:
             signal_pattern = SignalPattern(signal_pattern_str)
-            self._set_pattern_for_length_of_five(signal_pattern)
-            self._set_pattern_for_length_of_six(signal_pattern)
+            self._set_pattern_for_five_and_six(signal_pattern)
+
+        # Next numbers that can be deduced are 0, 9
+        for signal_pattern_str in signal_pattern_strings:
+            signal_pattern = SignalPattern(signal_pattern_str)
+            self._set_pattern_for_zero_and_nine(signal_pattern)
+
+        # Next numbers that can be deduced are 2, 3
+        for signal_pattern_str in signal_pattern_strings:
+            signal_pattern = SignalPattern(signal_pattern_str)
+            self._set_pattern_for_two_and_three(signal_pattern)
 
     def _set_unique_patterns(self, signal_pattern):
         """Set unique pattern for 1, 4, 7, 8"""
@@ -102,23 +112,34 @@ class DebugDisplay:
         elif length_of_code == MAP_PATTERNS[8]:
             self.eight = DigitalNumber(8, signal_pattern)
 
-    def _set_pattern_for_length_of_five(self, signal_pattern):
-        """Set pattern for 2, 3, 5"""
-
+    def _set_pattern_for_five_and_six(self, signal_pattern):
         if signal_pattern.length == 5:
-            # Number 5 of code length 5 is the only one that contains 7's code
+            # Number 5 is the only code length 5 that contains 7's code
             if signal_pattern.contains(self.seven.signal_pattern):
                 self.five = DigitalNumber(5, signal_pattern)
-            print('-----5-----')
-            print(signal_pattern)
-            print(signal_pattern.contains(self.seven.signal_pattern))
-            pass
+        elif signal_pattern.length == 6:
+            # Number 6 is the only one code length 6 that does not contain 7's code
+            if not signal_pattern.contains(self.seven.signal_pattern):
+                self.six = DigitalNumber(6, signal_pattern)
 
-    def _set_pattern_for_length_of_six(self, signal_pattern):
-        """Set pattern for 0, 6, 9"""
-
+    def _set_pattern_for_zero_and_nine(self, signal_pattern):
         if signal_pattern.length == 6:
-            pass
+            # Number 0 does not contain 5's code
+            if not signal_pattern.contains(self.zero.signal_pattern):
+                self.zero = DigitalNumber(0, signal_pattern)
+            # Number 9 contains both 5 and 7's code
+            if signal_pattern.contains(self.five.signal_pattern) and signal_pattern.contains(self.seven.code):
+                self.seven = DigitalNumber(7, signal_pattern)
+
+    def _set_pattern_for_two_and_three(self, signal_pattern):
+        if signal_pattern.length == 5:
+            # Number 3 will be found by checking number 9 contains 3's code
+            if not self.nine.signal_pattern(signal_pattern):
+                self.three = DigitalNumber(3, signal_pattern)
+            # Number 2 will be found by checking number 8 contains 2's code
+            if not self.eight.signal_pattern(signal_pattern):
+                self.two = DigitalNumber(2, signal_pattern)
+
 
 class InputData:
     def __init__(self):
