@@ -77,20 +77,38 @@ class DebugDisplay:
             print(signal_patterns)
             break
 
-    def set_unique_pattern(self, signal_patterns):
+    def set_pattern(self, signal_patterns):
         for signal_pattern in signal_patterns:
-            if len(signal_pattern) == MAP_PATTERNS[1]:
-                self.one = UniqueDigit(1, signal_pattern)
-            elif len(signal_pattern) == MAP_PATTERNS[4]:
-                self.four = UniqueDigit(4, signal_pattern)
-            elif len(signal_pattern) == MAP_PATTERNS[7]:
-                self.seven = UniqueDigit(7, signal_pattern)
-            elif len(signal_pattern) == MAP_PATTERNS[8]:
-                self.eight = UniqueDigit(8, signal_pattern)
-            elif len(signal_pattern) == 5:  # 2, 3, 5
-                pass
-            elif len(signal_pattern) == 6:  # 0, 6, 9
-                pass
+            self._set_unique_pattern(signal_pattern)
+            self._set_pattern_for_length_of_five(signal_pattern)
+            self._set_pattern_for_length_of_six(signal_pattern)
+
+    def _set_unique_pattern(self, signal_pattern):
+        """Set unique pattern for 1, 4, 7, 8"""
+
+        length_of_code = len(signal_pattern)
+        if length_of_code == MAP_PATTERNS[1]:
+            self.one = DigitalNumber(1, signal_pattern)
+        elif length_of_code == MAP_PATTERNS[4]:
+            self.four = DigitalNumber(4, signal_pattern)
+        elif length_of_code == MAP_PATTERNS[7]:
+            self.seven = DigitalNumber(7, signal_pattern)
+        elif length_of_code == MAP_PATTERNS[8]:
+            self.eight = DigitalNumber(8, signal_pattern)
+
+    def _set_pattern_for_length_of_five(self, signal_pattern):
+        """Set pattern for 2, 3, 5"""
+
+        length_of_code = len(signal_pattern)
+        if length_of_code == 5:
+            pass
+
+    def _set_pattern_for_length_of_six(self, signal_pattern):
+        """Set pattern for 0, 6, 9"""
+
+        length_of_code = len(signal_pattern)
+        if length_of_code == 6:
+            pass
 
 class InputData:
     def __init__(self):
