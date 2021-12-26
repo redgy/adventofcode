@@ -6,31 +6,31 @@ MAP_PATTERNS= {
     7: 3,
     8: 7
 }
-class DigitalNumber:
-    def __init__(self, number, signal_pattern=''):
-        self.number = number
-        self.length_of_code = len(signal_pattern)
-        self.signal_pattern = self.set_signal_pattern(signal_pattern) if signal_pattern else ''
-        print(self)
+class SignalPattern:
+    def __init__(self, signal_pattern_str):
+        pattern_as_list = list(signal_pattern_str)
+        pattern_as_list.sort()
+        self.code = pattern_as_list
+        self.str = ''.join(self.code)
+        self.length = len(self.code)
 
     def __str__(self):
-        return f'[{self.number}]: {self.signal_pattern}'
+        return self.str
 
     def __contains__(self, other):
-        """Does number contains pattern from other number"""
-        for pattern_bit in other.signal_pattern:
-            if not pattern_bit in self.signal_pattern:
+        for pattern_bit in other.code:
+            if not pattern_bit in self.code:
                 return False
         return True
 
-    def set_signal_pattern(self, signal_pattern):
-        """Set signal_pattern for digit, e.g. 1=>ab"""
+class DigitalNumber:
+    def __init__(self, number, signal_pattern):
+        self.number = number
+        self.signal_pattern = signal_pattern if signal_pattern else ''
+        # print(self)
 
-        if len(signal_pattern) != self.num_unique_signal_pattern:
-            raise ValueError(f'{signal_pattern} is the incorrect length of {self.num_unique_signal_pattern}')
-        pattern_list = list(signal_pattern)
-        pattern_list.sort()
-        return pattern_list
+    def __str__(self):
+        return f'[{self.number}]: {self.signal_pattern}'
 
 
 class DebugDisplay:
@@ -72,13 +72,13 @@ class DebugDisplay:
     def get_digital_output(self):
         digital_outputs = []
         for line in self.data:
-            signal_patterns = line[0]
-            self.set_pattern(signal_patterns)
-            print(signal_patterns)
+            signal_pattern_strings = line[0]
+            self.set_pattern(signal_pattern_strings)
             break
 
-    def set_pattern(self, signal_patterns):
-        for signal_pattern in signal_patterns:
+    def set_pattern(self, signal_pattern_strings):
+        for signal_pattern_str in signal_pattern_strings:
+            signal_pattern = SignalPattern(signal_pattern_str)
             self._set_pattern(signal_pattern)
             self._set_pattern_for_length_of_five(signal_pattern)
             self._set_pattern_for_length_of_six(signal_pattern)
@@ -86,7 +86,7 @@ class DebugDisplay:
     def _set_pattern(self, signal_pattern):
         """Set unique pattern for 1, 4, 7, 8"""
 
-        length_of_code = len(signal_pattern)
+        length_of_code = signal_pattern.length
         if length_of_code == MAP_PATTERNS[1]:
             self.one = DigitalNumber(1, signal_pattern)
         elif length_of_code == MAP_PATTERNS[4]:
@@ -99,16 +99,15 @@ class DebugDisplay:
     def _set_pattern_for_length_of_five(self, signal_pattern):
         """Set pattern for 2, 3, 5"""
 
-        length_of_code = len(signal_pattern)
-        if length_of_code == 5:
+        if signal_pattern.length == 5:
+            # 5 does not contain 7
             print(signal_pattern)
             pass
 
     def _set_pattern_for_length_of_six(self, signal_pattern):
         """Set pattern for 0, 6, 9"""
 
-        length_of_code = len(signal_pattern)
-        if length_of_code == 6:
+        if signal_pattern.length == 6:
             pass
 
 class InputData:
