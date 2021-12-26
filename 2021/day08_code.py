@@ -73,17 +73,17 @@ class DebugDisplay:
         digital_outputs = []
         for line in self.data:
             signal_patterns = line[0]
-            self.set_unique_pattern(signal_patterns)
+            self.set_pattern(signal_patterns)
             print(signal_patterns)
             break
 
     def set_pattern(self, signal_patterns):
         for signal_pattern in signal_patterns:
-            self._set_unique_pattern(signal_pattern)
+            self._set_pattern(signal_pattern)
             self._set_pattern_for_length_of_five(signal_pattern)
             self._set_pattern_for_length_of_six(signal_pattern)
 
-    def _set_unique_pattern(self, signal_pattern):
+    def _set_pattern(self, signal_pattern):
         """Set unique pattern for 1, 4, 7, 8"""
 
         length_of_code = len(signal_pattern)
@@ -101,6 +101,7 @@ class DebugDisplay:
 
         length_of_code = len(signal_pattern)
         if length_of_code == 5:
+            print(signal_pattern)
             pass
 
     def _set_pattern_for_length_of_six(self, signal_pattern):
@@ -134,6 +135,7 @@ def main():
     data = InputData()
     debug = DebugDisplay(data.input_data)
     count = debug.get_unique_digit_occurrences()
+    debug.get_digital_output()
     print(f'[!!] Unique digit count: {count}')
 
 
