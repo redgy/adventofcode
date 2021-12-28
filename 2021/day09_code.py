@@ -94,7 +94,7 @@ class FloorMap:
             row = cell_tuple[0]
             col = cell_tuple[1]
             other_height = self.floor_map[row][col].height
-            if other_height < height:
+            if other_height <= height:
                 return True
         return False
 
