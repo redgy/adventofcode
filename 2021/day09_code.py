@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day09_input.txt"
-INPUT_FILEPATH="test_input.txt"
 class Cell:
     def __init__(self, height, x, y, max_x, max_y):
         self.height = int(height)
@@ -63,7 +62,9 @@ class FloorMap:
         self.num_cols = len(single_row)
         self.num_rows = num_lines
         self.floor_map = [[None for x in range(self.num_cols)] for x in range(self.num_rows)]
+        self.low_point_cells = []
         self._populate_floor_map(list_data)
+        self._set_low_points()
 
     def _populate_floor_map(self, data):
         for row, row_list in enumerate(data):
@@ -71,7 +72,7 @@ class FloorMap:
                 new_cell = Cell(value, row, col, self.num_rows, self.num_cols)
                 self.floor_map[row][col] = new_cell
 
-    def set_low_points(self):
+    def _set_low_points(self):
         for row in range(self.num_rows):
             for col in range(self.num_cols):
                 current_cell = self.floor_map[row][col]
@@ -86,7 +87,7 @@ class FloorMap:
         if is_min:
             cell.is_low_point = True
             cell.risk_level = cell.height+1
-            print(cell)
+            self.low_point_cells.append(cell)
 
     def _is_other_cell_lower(self, height, cell_tuple):
         if cell_tuple:
@@ -107,6 +108,12 @@ class FloorMap:
             to_string += '\n'
         to_string += '------------------------------------------------------------------------'
         return to_string
+
+    def get_sum_of_risk_levels(self):
+        total = 0
+        for cell in self.low_point_cells:
+            total += cell.risk_level
+        return total
 
 
 class InputData:
@@ -129,7 +136,8 @@ class InputData:
 def main():
     data = InputData()
     floor_map = FloorMap(data.list_data, data.num_lines)
-    floor_map.set_low_points()
+    sum_of_risk_levels = floor_map.get_sum_of_risk_levels()
+    print(f'[!!] Sum of risk levels: {sum_of_risk_levels}')
 
 
 main()
