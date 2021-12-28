@@ -135,7 +135,9 @@ class FloorMap:
             row = single_coord[0]
             col = single_coord[1]
             adjacent_cell = self.floor_map[row][col]
-            if adjacent_cell.height == current_cell.height+1 and adjacent_cell.height != 9:
+            is_one_bigger = (adjacent_cell.height == current_cell.height+1)
+            is_not_nine = adjacent_cell.height != 9
+            if is_one_bigger and is_not_nine:
                 location_list.append(adjacent_cell)
                 self._find_basin_recursively(adjacent_cell, location_list)
         return location_list
