@@ -56,6 +56,18 @@ class Cell:
         return is_x_valid and is_y_valid
 
 
+class Basin:
+    def __init__(self, low_point_cell, location_list):
+        self.low_point_cell = low_point_cell
+        self.location_list = list(set(location_list))
+        self.size = len(self.location_list)
+
+    def __str__(self):
+        to_str = f'{self.low_point_cell}--{self.size}--> '
+        for location in self.location_list:
+            to_str += f'({location.x}, {location.y}) '
+        return to_str
+
 class FloorMap:
     def __init__(self, list_data, num_lines):
         single_row = list_data[0]
@@ -63,8 +75,10 @@ class FloorMap:
         self.num_rows = num_lines
         self.floor_map = [[None for x in range(self.num_cols)] for x in range(self.num_rows)]
         self.low_point_cells = []
+        self.basins = []
         self._populate_floor_map(list_data)
         self._set_low_points()
+        self._find_basins()
 
     def _populate_floor_map(self, data):
         for row, row_list in enumerate(data):
@@ -109,11 +123,39 @@ class FloorMap:
         to_string += '------------------------------------------------------------------------'
         return to_string
 
+    def _find_basins(self):
+        for low_point_cell in self.low_point_cells:
+            location_list = self._find_basin_recursively(low_point_cell, [low_point_cell])
+            new_basin = Basin(low_point_cell, location_list)
+            self.basins.append(new_basin)
+
+    def _find_basin_recursively(self, current_cell, location_list):
+        coords_list = current_cell.get_adjacent_cells_coords_list()
+        for single_coord in coords_list:
+            row = single_coord[0]
+            col = single_coord[1]
+            adjacent_cell = self.floor_map[row][col]
+            if adjacent_cell.height == current_cell.height+1 and adjacent_cell.height != 9:
+                location_list.append(adjacent_cell)
+                self._find_basin_recursively(adjacent_cell, location_list)
+        return location_list
+
     def get_sum_of_risk_levels(self):
         total = 0
         for cell in self.low_point_cells:
             total += cell.risk_level
         return total
+
+    def get_product_of_top_three_basins(self):
+        size_array = [x.size for x in self.basins]
+        product = 1
+        for x in range(3):
+            top = max(size_array)
+            print(top)
+            product *= top
+            size_array.remove(max(size_array))
+        return product
+# 113, 107, 105, 1269555
 
 
 class InputData:
@@ -137,7 +179,9 @@ def main():
     data = InputData()
     floor_map = FloorMap(data.list_data, data.num_lines)
     sum_of_risk_levels = floor_map.get_sum_of_risk_levels()
-    print(f'[!!] Sum of risk levels: {sum_of_risk_levels}')
+    print(f'[!!] Sum of risk levels: {sum_of_risk_levels}')  # End part I
+    product_of_top_three_basins = floor_map.get_product_of_top_three_basins()
+    print(f'[!!] Product of basin sizes: {product_of_top_three_basins}')  # End part II
 
 
 main()
