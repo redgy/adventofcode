@@ -39,15 +39,49 @@ class Cell:
             adjacent_cells.append(self.down)
         return adjacent_cells
 
+    def set_left(self, cell):
+        self.left = cell
+
+    def set_right(self, cell):
+        self.right = cell
+
+    def set_up(self, cell):
+        self.up = cell
+
+    def set_down(self, cell):
+        self.down = cell
+
+
 class FloorMap:
-    def __init__(self, data):
-        self.length = len(data[0])
+    def __init__(self, row_data, num_lines):
+        self.x_length = len(row_data[0])
+        self.y_length = num_lines
+        self.floor_map = [[None for x in range(self.x_length)] for x in range(self.y_length)]
+        self._populate_floor_map(row_data)
+
+    def _populate_floor_map(self, data):
+        for row, row_list in enumerate(data):
+            for col, value in enumerate(row_list):
+                new_cell = Cell(row, col, value)
+                self.floor_map[row][col] = new_cell
+
+    def __str__(self):
+        to_string = ''
+        for row in self.floor_map:
+            for col in row:
+                if col is None:
+                    col = '*'
+                to_string += f'{col} '
+            to_string += '\n'
+        to_string += '------------------------------------------------------------------------'
+        return to_string
 
 
 class InputData:
     def __init__(self):
         self.raw_data = None
         self.row_data = None
+        self.num_lines = 0
         self.input_data = []
         self._parse_file()
 
@@ -56,14 +90,15 @@ class InputData:
             raw_data = f.readlines()
         self.raw_data = [x.strip() for x in raw_data]
         self.row_data = [list(x) for x in self.raw_data]
+        for row in self.row_data:
+            self.num_lines += 1
 
 
 def main():
     data = InputData()
-    for row, row_list in enumerate(data.row_data):
-        for col, value in enumerate(row_list):
-            new_cell = Cell(row, col, value)
-            print(new_cell)
+    floor_map = FloorMap(data.row_data, data.num_lines)
+    to_string = floor_map
+    print(to_string)
 
 
 main()
