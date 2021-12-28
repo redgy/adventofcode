@@ -1,15 +1,18 @@
 INPUT_FILEPATH="day09_input.txt"
 INPUT_FILEPATH="test_input.txt"
 class Cell:
-    def __init__(self, x, y, height, left=None, right=None, up=None, down=None):
+    def __init__(self, height, x, y, max_x, max_y):
+        self.height = height
         self.x = x
         self.y = y
-        self.height = height
-        self.is_low_point = None
-        self.left = left
-        self.right = right
-        self.up = up
-        self.down = down
+        self.max_x = max_x
+        self.max_y = max_y
+        self.is_low_point = False
+        self.left = None
+        self.right = None
+        self.up = None
+        self.down = None
+        self._init_adjacent_cells()
 
     def __str__(self):
         to_string = (f'[{self.x}, {self.y}]: {self.height}')
@@ -17,15 +20,8 @@ class Cell:
             to_string += ' (L)'
         return to_string
 
-    def is_low_point(self):
-        is_low_point = True
-        if self.is_low_point is None:
-            adjacent_cells = self.get_adjacent_cells()
-            for cell in adjacent_cells:
-                if self.height > cell.height:
-                    is_low_point = False
-            self.is_low_point = is_low_point
-        return self.is_low_point
+    def set_is_low_point(self, new_value):
+        self.is_low_point = new_value
 
     def get_adjacent_cells(self):
         adjacent_cells = []
@@ -39,17 +35,28 @@ class Cell:
             adjacent_cells.append(self.down)
         return adjacent_cells
 
-    def set_left(self, cell):
-        self.left = cell
+    def set_left(self, x, y):
+        self.left = (x, y) if self.is_cell_valid(x, y) else None
 
-    def set_right(self, cell):
-        self.right = cell
+    def set_right(self, x, y):
+        self.right = (x, y) if self.is_cell_valid(x, y) else None
 
-    def set_up(self, cell):
-        self.up = cell
+    def set_up(self, x, y):
+        self.up = (x, y) if self.is_cell_valid(x, y) else None
 
-    def set_down(self, cell):
-        self.down = cell
+    def set_down(self, x, y):
+        self.down = (x, y) if self.is_cell_valid(x, y) else None
+
+    def _init_adjacent_cells(self):
+        self.set_left(self.x, self.y-1)
+        self.set_right(self.x, self.y+1)
+        self.set_up(self.x-1, self.y)
+        self.set_down(self.x+1, self.y)
+
+    def is_cell_valid(self, x, y):
+        is_x_valid = (x >=0 and x < self.max_x)
+        is_y_valid = (y >= 0 and y < self.max_y)
+        return is_x_valid and is_y_valid
 
 
 class FloorMap:
@@ -62,7 +69,7 @@ class FloorMap:
     def _populate_floor_map(self, data):
         for row, row_list in enumerate(data):
             for col, value in enumerate(row_list):
-                new_cell = Cell(row, col, value)
+                new_cell = Cell(value, row, col, self.x_length, self.y_length)
                 self.floor_map[row][col] = new_cell
 
     def __str__(self):
