@@ -2,7 +2,7 @@ INPUT_FILEPATH="day09_input.txt"
 INPUT_FILEPATH="test_input.txt"
 class Cell:
     def __init__(self, height, x, y, max_x, max_y):
-        self.height = height
+        self.height = int(height)
         self.x = x
         self.y = y
         self.max_x = max_x
@@ -18,7 +18,7 @@ class Cell:
     def __str__(self):
         to_string = (f'[{self.x}, {self.y}]: {self.height}')
         if self.is_low_point:
-            to_string += ' (L)'
+            to_string += f' ({self.risk_level})'
         return to_string
 
     def get_adjacent_cells_coords_list(self):
@@ -78,17 +78,14 @@ class FloorMap:
                 self._set_cells_low_point(current_cell)
 
     def _set_cells_low_point(self, cell):
-        adjacent_cell_coords = cell.get_adjacent_cell_coords()
+        coords_list = cell.get_adjacent_cells_coords_list()
         is_min = True
-        for adjacent_cell in adjacent_cell_coords:
-            if self._is_other_cell_lower(cell.height, adjacent_cell.height):
+        for single_coords in coords_list:
+            if self._is_other_cell_lower(cell.height, single_coords):
                 is_min = False
-        # is_left_lower = self._is_other_cell_lower(cell.height, cell.left)
-        # is_right_lower = self._is_other_cell_lower(cell.height, cell.right)
-        # is_up_lower = self._is_other_cell_lower(cell.height, cell.up)
-        # is_down_lower = self._is_other_cell_lower(cell.height, cell.down)
-        # is_min = (not is_left_lower and not is_right_lower and not is_up_lower and not is_down_lower)
         if is_min:
+            cell.is_low_point = True
+            cell.risk_level = cell.height+1
             print(cell)
 
     def _is_other_cell_lower(self, height, cell_tuple):
