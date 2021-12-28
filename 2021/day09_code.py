@@ -8,10 +8,11 @@ class Cell:
         self.max_x = max_x
         self.max_y = max_y
         self.is_low_point = False
-        self.left = None
-        self.right = None
-        self.up = None
-        self.down = None
+        self.risk_level = 0
+        self.left_coords = None
+        self.right_coords = None
+        self.up_coords = None
+        self.down_coords = None
         self._init_adjacent_cells()
 
     def __str__(self):
@@ -20,57 +21,84 @@ class Cell:
             to_string += ' (L)'
         return to_string
 
-    def set_is_low_point(self, new_value):
-        self.is_low_point = new_value
+    def get_adjacent_cells_coords_list(self):
+        adjacent_cells_coords_list = []
+        if self.left_coords:
+            adjacent_cells_coords_list.append(self.left_coords)
+        if self.right_coords:
+            adjacent_cells_coords_list.append(self.right_coords)
+        if self.up_coords:
+            adjacent_cells_coords_list.append(self.up_coords)
+        if self.down_coords:
+            adjacent_cells_coords_list.append(self.down_coords)
+        return adjacent_cells_coords_list
 
-    def get_adjacent_cells(self):
-        adjacent_cells = []
-        if self.left:
-            adjacent_cells.append(self.left)
-        if self.right:
-            adjacent_cells.append(self.right)
-        if self.up:
-            adjacent_cells.append(self.up)
-        if self.down:
-            adjacent_cells.append(self.down)
-        return adjacent_cells
+    def set_left_coords(self, x, y):
+        self.left_coords = (x, y) if self.is_cell_coords_valid(x, y) else None
 
-    def set_left(self, x, y):
-        self.left = (x, y) if self.is_cell_valid(x, y) else None
+    def set_right_coords(self, x, y):
+        self.right_coords = (x, y) if self.is_cell_coords_valid(x, y) else None
 
-    def set_right(self, x, y):
-        self.right = (x, y) if self.is_cell_valid(x, y) else None
+    def set_up_coords(self, x, y):
+        self.up_coords = (x, y) if self.is_cell_coords_valid(x, y) else None
 
-    def set_up(self, x, y):
-        self.up = (x, y) if self.is_cell_valid(x, y) else None
-
-    def set_down(self, x, y):
-        self.down = (x, y) if self.is_cell_valid(x, y) else None
+    def set_down_coords(self, x, y):
+        self.down_coords = (x, y) if self.is_cell_coords_valid(x, y) else None
 
     def _init_adjacent_cells(self):
-        self.set_left(self.x, self.y-1)
-        self.set_right(self.x, self.y+1)
-        self.set_up(self.x-1, self.y)
-        self.set_down(self.x+1, self.y)
+        self.set_left_coords(self.x, self.y-1)
+        self.set_right_coords(self.x, self.y+1)
+        self.set_up_coords(self.x-1, self.y)
+        self.set_down_coords(self.x+1, self.y)
 
-    def is_cell_valid(self, x, y):
+    def is_cell_coords_valid(self, x, y):
         is_x_valid = (x >=0 and x < self.max_x)
         is_y_valid = (y >= 0 and y < self.max_y)
         return is_x_valid and is_y_valid
 
 
 class FloorMap:
-    def __init__(self, row_data, num_lines):
-        self.x_length = len(row_data[0])
-        self.y_length = num_lines
-        self.floor_map = [[None for x in range(self.x_length)] for x in range(self.y_length)]
-        self._populate_floor_map(row_data)
+    def __init__(self, list_data, num_lines):
+        single_row = list_data[0]
+        self.num_cols = len(single_row)
+        self.num_rows = num_lines
+        self.floor_map = [[None for x in range(self.num_cols)] for x in range(self.num_rows)]
+        self._populate_floor_map(list_data)
 
     def _populate_floor_map(self, data):
         for row, row_list in enumerate(data):
             for col, value in enumerate(row_list):
-                new_cell = Cell(value, row, col, self.x_length, self.y_length)
+                new_cell = Cell(value, row, col, self.num_rows, self.num_cols)
                 self.floor_map[row][col] = new_cell
+
+    def set_low_points(self):
+        for row in range(self.num_rows):
+            for col in range(self.num_cols):
+                current_cell = self.floor_map[row][col]
+                self._set_cells_low_point(current_cell)
+
+    def _set_cells_low_point(self, cell):
+        adjacent_cell_coords = cell.get_adjacent_cell_coords()
+        is_min = True
+        for adjacent_cell in adjacent_cell_coords:
+            if self._is_other_cell_lower(cell.height, adjacent_cell.height):
+                is_min = False
+        # is_left_lower = self._is_other_cell_lower(cell.height, cell.left)
+        # is_right_lower = self._is_other_cell_lower(cell.height, cell.right)
+        # is_up_lower = self._is_other_cell_lower(cell.height, cell.up)
+        # is_down_lower = self._is_other_cell_lower(cell.height, cell.down)
+        # is_min = (not is_left_lower and not is_right_lower and not is_up_lower and not is_down_lower)
+        if is_min:
+            print(cell)
+
+    def _is_other_cell_lower(self, height, cell_tuple):
+        if cell_tuple:
+            row = cell_tuple[0]
+            col = cell_tuple[1]
+            other_height = self.floor_map[row][col].height
+            if other_height < height:
+                return True
+        return False
 
     def __str__(self):
         to_string = ''
@@ -87,7 +115,7 @@ class FloorMap:
 class InputData:
     def __init__(self):
         self.raw_data = None
-        self.row_data = None
+        self.list_data = None
         self.num_lines = 0
         self.input_data = []
         self._parse_file()
@@ -96,16 +124,15 @@ class InputData:
         with open(INPUT_FILEPATH, 'r') as f:
             raw_data = f.readlines()
         self.raw_data = [x.strip() for x in raw_data]
-        self.row_data = [list(x) for x in self.raw_data]
-        for row in self.row_data:
+        self.list_data = [list(x) for x in self.raw_data]
+        for row in self.list_data:
             self.num_lines += 1
 
 
 def main():
     data = InputData()
-    floor_map = FloorMap(data.row_data, data.num_lines)
-    to_string = floor_map
-    print(to_string)
+    floor_map = FloorMap(data.list_data, data.num_lines)
+    floor_map.set_low_points()
 
 
 main()
