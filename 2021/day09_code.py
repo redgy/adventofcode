@@ -1,5 +1,4 @@
 INPUT_FILEPATH="day09_input.txt"
-# INPUT_FILEPATH="test_input.txt"
 class Cell:
     def __init__(self, height, x, y, max_x, max_y):
         self.height = int(height)
@@ -154,11 +153,9 @@ class FloorMap:
         product = 1
         for x in range(3):
             top = max(size_array)
-            print(top)
             product *= top
             size_array.remove(max(size_array))
         return product
-# 113, 107, 105, 1269555
 
 
 class Simple:
@@ -166,9 +163,11 @@ class Simple:
         single_row = list_data[0]
         self.num_cols = len(single_row)
         self.num_rows = num_lines
+        self.basin_size_list = []
+        self.risk_sum = 0
         self.floor_map = [[None for x in range(self.num_cols)] for x in range(self.num_rows)]
         self._populate_map(list_data)
-        self.risk_sum = self.calculate_low_points()
+        self.calculate_low_points()
 
     def _populate_map(self, data):
         for row, row_list in enumerate(data):
@@ -183,7 +182,18 @@ class Simple:
                 is_low_point = self._is_low_point(height, row, col)
                 if is_low_point:
                     risk_sum += height+1
-        return risk_sum
+                    basin_size = self._get_basin_size(height, row, col)
+                    self.basin_size_list.append(basin_size)
+        self.risk_sum = risk_sum
+
+    def calculate_basin_product(self):
+        all_basins = self.basin_size_list
+        product = 1
+        for x in range(3):
+            top_size = max(all_basins)
+            product *= top_size
+            all_basins.remove(top_size)
+        return product
 
     def _is_low_point(self, height, row, col):
         adjacent_row = row
@@ -226,6 +236,54 @@ class Simple:
     def _is_valid_row_range(self, index):
         return index >= 0 and index < self.num_rows
 
+    def _is_part_of_basin(self, height, adjacent_height):
+        return height < adjacent_height and adjacent_height != 9
+
+    def _get_basin_size(self, height, row, col):
+        initial_locations = set([(row, col)])
+        basin_locations = self._get_basin_locations(initial_locations, height, row, col)
+        return len(basin_locations)
+
+    def _get_basin_locations(self, basin_locations, height, row, col):
+        adjacent_row = row
+
+        # Check left
+        adjacent_col = col-1
+        if self._is_valid_col_range(adjacent_col):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if self._is_part_of_basin(height, adjacent_height):
+                basin_locations.add((adjacent_row, adjacent_col))
+                self._get_basin_locations(basin_locations, adjacent_height, adjacent_row, adjacent_col)
+
+        # Check right
+        adjacent_col = col+1
+        if self._is_valid_col_range(adjacent_col):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if self._is_part_of_basin(height, adjacent_height):
+                basin_locations.add((adjacent_row, adjacent_col))
+                self._get_basin_locations(basin_locations, adjacent_height, adjacent_row, adjacent_col)
+
+        adjacent_col = col
+
+        # Check up
+        adjacent_row = row-1
+        if self._is_valid_row_range(adjacent_row):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if self._is_part_of_basin(height, adjacent_height):
+                basin_locations.add((adjacent_row, adjacent_col))
+                self._get_basin_locations(basin_locations, adjacent_height, adjacent_row, adjacent_col)
+
+        # Check down
+        adjacent_row = row+1
+        if self._is_valid_row_range(adjacent_row):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if self._is_part_of_basin(height, adjacent_height):
+                basin_locations.add((adjacent_row, adjacent_col))
+                self._get_basin_locations(basin_locations, adjacent_height, adjacent_row, adjacent_col)
+
+        return basin_locations
+
+
 class InputData:
     def __init__(self):
         self.raw_data = None
@@ -250,8 +308,10 @@ def main():
     print('[!!] Sum of risk levels: \n'
           f'    |--simple-floor-map--> {simple_floor_map.risk_sum}\n'
           f'    |--object-floor-map--> {floor_map.get_sum_of_risk_levels()}')  # End part I
-    # product_of_top_three_basins = floor_map.get_product_of_top_three_basins()
-    # print(f'[!!] Product of basin sizes: {product_of_top_three_basins}')  # End part II
+    print('[!!] Product of basin sizes: \n'
+          f'    |--simple-floor-map--> {simple_floor_map.calculate_basin_product()}\n'
+          f'    |--object-floor-map--> {floor_map.get_product_of_top_three_basins()}')  # End part II
+          # ^^^ I never figured out the flaw in my logic for object-floor-map
 
 
 main()
