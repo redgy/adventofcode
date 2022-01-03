@@ -1,4 +1,5 @@
 INPUT_FILEPATH="day09_input.txt"
+# INPUT_FILEPATH="test_input.txt"
 class Cell:
     def __init__(self, height, x, y, max_x, max_y):
         self.height = int(height)
@@ -160,6 +161,71 @@ class FloorMap:
 # 113, 107, 105, 1269555
 
 
+class Simple:
+    def __init__(self, list_data, num_lines):
+        single_row = list_data[0]
+        self.num_cols = len(single_row)
+        self.num_rows = num_lines
+        self.floor_map = [[None for x in range(self.num_cols)] for x in range(self.num_rows)]
+        self._populate_map(list_data)
+        self.risk_sum = self.calculate_low_points()
+
+    def _populate_map(self, data):
+        for row, row_list in enumerate(data):
+            for col, value in enumerate(row_list):
+                self.floor_map[row][col] = int(value)
+
+    def calculate_low_points(self):
+        risk_sum = 0
+        for row in range(self.num_rows):
+            for col in range(self.num_cols):
+                height = self.floor_map[row][col]
+                is_low_point = self._is_low_point(height, row, col)
+                if is_low_point:
+                    risk_sum += height+1
+        return risk_sum
+
+    def _is_low_point(self, height, row, col):
+        adjacent_row = row
+
+        # Check left
+        adjacent_col = col-1
+        if self._is_valid_col_range(adjacent_col):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if adjacent_height <= height:
+                return False
+
+        # Check right
+        adjacent_col = col+1
+        if self._is_valid_col_range(adjacent_col):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if adjacent_height <= height:
+                return False
+
+        adjacent_col = col
+
+        # Check up
+        adjacent_row = row-1
+        if self._is_valid_row_range(adjacent_row):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if adjacent_height <= height:
+                return False
+
+        # Check down
+        adjacent_row = row+1
+        if self._is_valid_row_range(adjacent_row):
+            adjacent_height = self.floor_map[adjacent_row][adjacent_col]
+            if adjacent_height <= height:
+                return False
+
+        return True
+
+    def _is_valid_col_range(self, index):
+        return index >= 0 and index < self.num_cols
+
+    def _is_valid_row_range(self, index):
+        return index >= 0 and index < self.num_rows
+
 class InputData:
     def __init__(self):
         self.raw_data = None
@@ -179,11 +245,13 @@ class InputData:
 
 def main():
     data = InputData()
+    simple_floor_map = Simple(data.list_data, data.num_lines)
     floor_map = FloorMap(data.list_data, data.num_lines)
-    sum_of_risk_levels = floor_map.get_sum_of_risk_levels()
-    print(f'[!!] Sum of risk levels: {sum_of_risk_levels}')  # End part I
-    product_of_top_three_basins = floor_map.get_product_of_top_three_basins()
-    print(f'[!!] Product of basin sizes: {product_of_top_three_basins}')  # End part II
+    print('[!!] Sum of risk levels: \n'
+          f'    |--simple-floor-map--> {simple_floor_map.risk_sum}\n'
+          f'    |--object-floor-map--> {floor_map.get_sum_of_risk_levels()}')  # End part I
+    # product_of_top_three_basins = floor_map.get_product_of_top_three_basins()
+    # print(f'[!!] Product of basin sizes: {product_of_top_three_basins}')  # End part II
 
 
 main()
