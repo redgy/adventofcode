@@ -12,7 +12,7 @@ ENCODED_MAPPINGS_ONE = {  # Part I states encoding is shape
     'Z': 'scissors',
 }
 ENCODED_MAPPINGS_TWO = {  # Part II states encoding is outcome
-    'X': 'lose',
+    'X': 'loss',
     'Y': 'draw',
     'Z': 'win',
 }
@@ -24,9 +24,9 @@ SHAPE_MAPPINGS = {
 OUTCOME_MAPPINGS = {
     'win': {
         'score': 6,
-        'rock': 'scissors',
-        'paper': 'rock',
-        'scissors': 'paper',
+        'rock': 'paper',
+        'paper': 'scissors',
+        'scissors': 'rock',
     },
     'draw': {
         'score': 3,
@@ -36,21 +36,15 @@ OUTCOME_MAPPINGS = {
     },
     'loss': {
         'score': 0,
-        'rock': 'paper',
-        'paper': 'scissors',
-        'scissors': 'rock',
+        'rock': 'scissors',
+        'paper': 'rock',
+        'scissors': 'paper',
     },
 }
 
 
-def get_shape_one(encoded_input):
+def get_shape(encoded_input):
     """PART ONE: from encoded input (A,B,C/X,Y,Z), get value of shape used"""
-
-    return ENCODED_MAPPINGS_ONE[encoded_input]
-
-
-def get_shape_two(encoded_input, opponent_shape):
-    """PART TWO: from encoded input (X,Y,Z), determined which shape to use"""
 
     return ENCODED_MAPPINGS_ONE[encoded_input]
 
@@ -117,8 +111,8 @@ class RPS_Battle_One(RPS_Battle):
         """
 
         super().__init__(battle_input)
-        self.opponent = get_shape_one(self.encoded_opponent)
-        self.me = get_shape_one(self.encoded_me)
+        self.opponent = get_shape(self.encoded_opponent)
+        self.me = get_shape(self.encoded_me)
 
 
 class RPS_Battle_Two(RPS_Battle):
@@ -129,15 +123,12 @@ class RPS_Battle_Two(RPS_Battle):
         """
 
         super().__init__(battle_input)
-        self.opponent = get_shape_one(self.encoded_opponent)
-        self.me = get_shape_two(self.encoded_me, self.opponent)
+        self.opponent = get_shape(self.encoded_opponent)
+        self.me = self.determine_shape()
 
-    def battle(self):
-        """Perform RPS battle"""
-
-        outcome = self.get_outcome()
-        self.outcome_score = OUTCOME_MAPPINGS[outcome]
-        self.shape_score = get_shape_value(self.me)
+    def determine_shape(self):
+        outcome = ENCODED_MAPPINGS_TWO[self.encoded_me]
+        return OUTCOME_MAPPINGS[outcome][self.opponent]
 
 
 def get_data():
@@ -153,19 +144,26 @@ def do_battles(data):
     :returns: Int. Total score from all battles
     """
 
-    total_score = 0
+    total_score_one = 0
+    total_score_two = 0
     for entry in data:
         rps = RPS_Battle_One(entry)
         rps.battle()
         rps.calculate_total_score()
-        total_score += rps.total_score
-    return total_score
+        total_score_one += rps.total_score
+
+        rps = RPS_Battle_Two(entry)
+        rps.battle()
+        rps.calculate_total_score()
+        total_score_two += rps.total_score
+    return total_score_one, total_score_two
 
 
 def main():
     data = get_data()
-    total_score = do_battles(data)
-    print_results(total_score, blurb='PART ONE: RPS Score')
+    score1, score2 = do_battles(data)
+    print_results(score1, blurb='PART ONE: RPS Score')
+    print_results(score2, blurb='PART TWO: RPS Score')
 
 
 if __name__ == '__main__':
