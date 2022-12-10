@@ -12,9 +12,6 @@ ENCODED_MAPPINGS_ONE = {  # Part I states encoding is shape
     'Z': 'scissors',
 }
 ENCODED_MAPPINGS_TWO = {  # Part II states encoding is outcome
-    'A': 'rock',
-    'B': 'paper',
-    'C': 'scissors',
     'X': 'lose',
     'Y': 'draw',
     'Z': 'win',
@@ -25,14 +22,35 @@ SHAPE_MAPPINGS = {
     'scissors': 3,
 }
 OUTCOME_MAPPINGS = {
-    'win': 6,
-    'draw': 3,
-    'loss': 0,
+    'win': {
+        'score': 6,
+        'rock': 'scissors',
+        'paper': 'rock',
+        'scissors': 'paper',
+    },
+    'draw': {
+        'score': 3,
+        'rock': 'rock',
+        'paper': 'paper',
+        'scissors': 'scissors',
+    },
+    'loss': {
+        'score': 0,
+        'rock': 'paper',
+        'paper': 'scissors',
+        'scissors': 'rock',
+    },
 }
 
 
 def get_shape_one(encoded_input):
-    """From encoded input (A,B,C/X,Y,Z), get value of shape used"""
+    """PART ONE: from encoded input (A,B,C/X,Y,Z), get value of shape used"""
+
+    return ENCODED_MAPPINGS_ONE[encoded_input]
+
+
+def get_shape_two(encoded_input, opponent_shape):
+    """PART TWO: from encoded input (X,Y,Z), determined which shape to use"""
 
     return ENCODED_MAPPINGS_ONE[encoded_input]
 
@@ -82,7 +100,7 @@ class RPS_Battle:
         """Perform RPS battle"""
 
         outcome = self.get_outcome()
-        self.outcome_score = OUTCOME_MAPPINGS[outcome]
+        self.outcome_score = OUTCOME_MAPPINGS[outcome]['score']
         self.shape_score = get_shape_value(self.me)
 
     def calculate_total_score(self):
@@ -101,6 +119,18 @@ class RPS_Battle_One(RPS_Battle):
         super().__init__(battle_input)
         self.opponent = get_shape_one(self.encoded_opponent)
         self.me = get_shape_one(self.encoded_me)
+
+
+class RPS_Battle_Two(RPS_Battle):
+    def __init__(self, battle_input):
+        """Constructor for part 1
+
+        :param tuple battle_input: From input, "Opponent You" choices
+        """
+
+        super().__init__(battle_input)
+        self.opponent = get_shape_one(self.encoded_opponent)
+        self.me = get_shape_two(self.encoded_me, self.opponent)
 
     def battle(self):
         """Perform RPS battle"""
