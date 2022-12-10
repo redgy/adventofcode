@@ -23,10 +23,16 @@ OUTCOME_MAPPINGS = {
 }
 
 
-def get_shape_value(encoded_input):
+def get_shape(encoded_input):
     """From encoded input (A,B,C/X,Y,Z), get value of shape used"""
 
-    return SHAPE_MAPPINGS[ENCODED_MAPPINGS[encoded_input]]
+    return ENCODED_MAPPINGS[encoded_input]
+
+
+def get_shape_value(shape):
+    """Shape name to value"""
+
+    return SHAPE_MAPPINGS[shape]
 
 
 class RPS_Battle:
@@ -38,9 +44,13 @@ class RPS_Battle:
         :param tuple battle_input: From input, "Opponent You" choices
         """
 
-        self.opponent, self.me = battle_input.split(' ')
-        self.score = 0
+        encoded_opponent, encoded_me = battle_input.split(' ')
+        self.opponent = get_shape(encoded_opponent)
+        self.me = get_shape(encoded_me)
+        self.shape_score = 0
+        self.outcome_score = 0
         self.battle()
+        self.total_score = self.shape_score + self.outcome_score
 
     def get_outcome(self):
         """Get outcome of RPS battle
@@ -51,26 +61,24 @@ class RPS_Battle:
         if self.opponent == self.me:
             return 'draw'
         if self.me == 'rock':
+            if self.opponent == 'scissors':
+                return 'win'
+            return 'loss'
+        if self.me == 'paper':
+            if self.opponent == 'rock':
+                return 'win'
+            return 'loss'
+        if self.me == 'scissors':
             if self.opponent == 'paper':
-                return 'loss'
-            return 'win'
-        opponent_shape_value = get_shape_value(self.opponent)
-        my_shape_value = get_shape_value(self.me)
-        match my_shape_value - opponent_shape_value:
-            case -1:
-                outcome = 'loss'
-            case 1:
-                outcome = 'win'
-            case _:
-                outcome = 'draw'
-        return outcome
+                return 'win'
+            return 'loss'
 
     def battle(self):
         """Perform RPS battle"""
 
         outcome = self.get_outcome()
-        self.score += OUTCOME_MAPPINGS[outcome]
-        self.score += get_shape_value(self.me)
+        self.outcome_score = OUTCOME_MAPPINGS[outcome]
+        self.shape_score = get_shape_value(self.me)
 
 
 def get_data():
@@ -89,13 +97,14 @@ def do_battles(data):
     total_score = 0
     for entry in data:
         rps = RPS_Battle(entry)
-        total_score += rps.score
-    print_results(total_score, blurb='PART ONE: RPS Score')
+        total_score += rps.total_score
+    return total_score
 
 
 def main():
     data = get_data()
-    do_battles(data)
+    total_score = do_battles(data)
+    print_results(total_score, blurb='PART ONE: RPS Score')
 
 
 if __name__ == '__main__':
