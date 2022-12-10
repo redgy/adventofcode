@@ -2,12 +2,24 @@ from utils import get_input
 from utils import print_results
 
 FILENAME = 'day03_input_sample.txt'
-FILENAME = 'day03_input.txt'
+# FILENAME = 'day03_input.txt'
+
+
+def calculate_priority(item):
+    """Calculate priority based off of shared item
+        A = 65  Z = 90  --> subtract 38 to get 27-52
+        a = 97  Z = 122  --> subtract 96 to get 1-26
+    """
+
+    if item.islower():
+        return ord(item) - 96
+    return ord(item) - 38
 
 
 class Rucksack:
     def __init__(self, number, entry):
         self.number = number
+        self.contents = entry
         half_index = int(len(entry)/2)
         self.compartment_one = entry[:half_index]
         self.compartment_two = entry[-half_index:]
