@@ -33,6 +33,9 @@ class Elf:
             f"   Calorie sum: {self._calorie_sum}"
         )
 
+    def __eq__(self, other):
+        return self.number == other.number
+
     @property
     def number(self):
         return self._number
@@ -73,26 +76,41 @@ def initialize_elves(data):
     return elves
 
 
-def find_max_elf(elves):
-    """Part one is finding the elf holding the most calories
+def get_calorie_total(elves, how_many):
+    """Get total of max N(how many) elves from list
 
     :param list<Elf> elves: List of Elf objects
+    :param int how_many: How many elves you want for max (e.g. top 1, top 3)
     :returns: Elf. The elf holding the most calories
     """
 
-    max_elf = elves[0]
-    for elf in elves:
-        if elf.calorie_sum > max_elf.calorie_sum:
-            max_elf = elf
-    return max_elf
+    max_elves = []
+    while len(max_elves) < how_many:
+        max_elf = elves[0]
+        for elf in elves:
+            if elf in max_elves:
+                continue
+            if elf.calorie_sum > max_elf.calorie_sum:
+                max_elf = elf
+        max_elves.append(max_elf)
+    calorie_totals = [x.calorie_sum for x in max_elves]
+    return sum(calorie_totals)
+
+
+def print_results(blurb, results):
+    print(blurb)
+    print('-------')
+    pp.pprint(results)
+    print('')
 
 
 def main():
     data = get_data()
     elves = initialize_elves(data)
-    pp.pprint(elves)
-    max_elf = find_max_elf(elves)  # PART ONE
-    pp.pprint(max_elf)
+    max_elf = get_calorie_total(elves, 1)  # PART ONE
+    max_three_elves = get_calorie_total(elves, 3)  # PART TWO
+    print_results('PART ONE', max_elf)
+    print_results('PART TWO', max_three_elves)
 
 
 if __name__ == '__main__':
