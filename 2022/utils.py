@@ -19,7 +19,7 @@ def get_input(filename, input_type='basic'):
             raise ValueError(f'{input_type} not supported')
 
 
-def print_results(blurb, results):
+def print_results(results, blurb='look here'):
     print(blurb)
     print('-------')
     pp.pprint(results)
