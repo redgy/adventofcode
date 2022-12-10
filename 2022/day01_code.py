@@ -62,13 +62,14 @@ def initialize_elves(data):
     elves = []
     calorie_list = []
     elf_number = 1
-    for entry in data:
+    for index, entry in enumerate(data):
         if entry  == '':
             elves.append(Elf(elf_number, calorie_list))
             calorie_list = []
             elf_number += 1
             continue
         calorie_list.append(entry)
+    elves.append(Elf(elf_number, calorie_list))  # add last elf from list
     return elves
 
 
