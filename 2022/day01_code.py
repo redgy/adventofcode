@@ -73,7 +73,7 @@ def initialize_elves(data):
     return elves
 
 
-def part_one(elves):
+def find_max_elf(elves):
     """Part one is finding the elf holding the most calories
 
     :param list<Elf> elves: List of Elf objects
@@ -90,7 +90,8 @@ def part_one(elves):
 def main():
     data = get_data()
     elves = initialize_elves(data)
-    max_elf = part_one(elves)
+    pp.pprint(elves)
+    max_elf = find_max_elf(elves)  # PART ONE
     pp.pprint(max_elf)
 
 
