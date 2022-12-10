@@ -74,6 +74,18 @@ def initialize_rucksacks(data):
     return [Rucksack(index, x) for index, x in enumerate(data)]
 
 
+def initialize_group_rucksacks(data):
+    """Initialize rucksacks for part two"""
+
+    group_rucksacks = []
+    for index in range(0, len(data), 3):
+        rucksack1 = Rucksack(index+1, data[index])
+        rucksack2 = Rucksack(index+2, data[index+1])
+        rucksack3 = Rucksack(index+3, data[index+2])
+        group_rucksacks.append(GroupRucksack(rucksack1, rucksack2, rucksack3))
+    return group_rucksacks
+
+
 def get_total_priority(rucksacks):
     """Get total priority from all rucksacks
 
