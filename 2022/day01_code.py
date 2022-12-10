@@ -1,8 +1,8 @@
 from utils import get_input
-from utils import pp
+from utils import print_results
 
 FILENAME = 'day01_input_sample.txt'
-# FILENAME = 'day01_input.txt'
+FILENAME = 'day01_input.txt'
 
 
 class Elf:
@@ -95,13 +95,6 @@ def get_calorie_total(elves, how_many):
         max_elves.append(max_elf)
     calorie_totals = [x.calorie_sum for x in max_elves]
     return sum(calorie_totals)
-
-
-def print_results(blurb, results):
-    print(blurb)
-    print('-------')
-    pp.pprint(results)
-    print('')
 
 
 def main():

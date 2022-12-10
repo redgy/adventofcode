@@ -17,3 +17,10 @@ def get_input(filename, input_type='basic'):
             return get_basic_input(filename)
         case _:
             raise ValueError(f'{input_type} not supported')
+
+
+def print_results(blurb, results):
+    print(blurb)
+    print('-------')
+    pp.pprint(results)
+    print('')
