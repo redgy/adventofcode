@@ -2,11 +2,11 @@ from utils import get_input
 from utils import print_results
 
 FILENAME = 'day03_input_sample.txt'
-# FILENAME = 'day03_input.txt'
+FILENAME = 'day03_input.txt'
 
 
 def calculate_priority(item):
-    """Calculate priority based off of shared item
+    """Calculate priority and use ASCII to our advantage
         A = 65  Z = 90  --> subtract 38 to get 27-52
         a = 97  Z = 122  --> subtract 96 to get 1-26
     """
@@ -45,23 +45,67 @@ class Rucksack:
     def find_shared_item(self):
         """Find the shared item in the compartments"""
 
-        if self.shared_item is None:
-            for item in self.compartment_one:
-                if item in self.compartment_two:
-                    self.shared_item = item
+        for item in self.compartment_one:
+            if item in self.compartment_two:
+                self.shared_item = item
+                break  # assume only one
 
     def calculate_priority(self):
-        """Calculate priority based off of shared item
-            A = 65  Z = 90  --> subtract 38 to get 27-52
-            a = 97  Z = 122  --> subtract 96 to get 1-26
-        """
+        """Calculate priority based off of shared item"""
 
         if self.shared_item is None:
             self.find_shared_item()
-        if self.shared_item.islower():
-            self.priority = ord(self.shared_item) - 96
-        else:
-            self.priority = ord(self.shared_item) - 38
+        self.priority = calculate_priority(self.shared_item)
+
+
+class GroupRucksack:
+    def __init__(self, one, two, three):
+        """Constructor. one, two, three are Rucksack objects"""
+
+        self.one = one
+        self.two = two
+        self.three = three
+        self.shared_item = None
+        self.priority = 0
+
+    def __str__(self):
+        """To string method"""
+
+        return (
+            f"Rucksack #{self.one.number}\n"
+            f"    {self.one.contents}\n"
+            f"Rucksack #{self.two.number}\n"
+            f"    {self.two.contents}\n"
+            f"Rucksack #{self.three.number}\n"
+            f"    {self.three.contents}"
+        )
+
+    def __repr__(self):
+        return (
+            f"Rucksack #{self.one.number}\n"
+            f"    {self.one.contents}\n"
+            f"Rucksack #{self.two.number}\n"
+            f"    {self.two.contents}\n"
+            f"Rucksack #{self.three.number}\n"
+            f"    {self.three.contents}"
+        )
+
+    def find_shared_item(self):
+        """Find the shared item in the compartments"""
+
+        shared_with_one_and_two = set()
+        for item in self.one.contents:
+            if item in self.two.contents:
+                if item in self.three.contents:
+                    self.shared_item = item
+                    break  # assume only one
+
+    def calculate_priority(self):
+        """Calculate priority based off of shared item"""
+
+        if self.shared_item is None:
+            self.find_shared_item()
+        self.priority = calculate_priority(self.shared_item)
 
 
 def get_data():
@@ -71,6 +115,8 @@ def get_data():
 
 
 def initialize_rucksacks(data):
+    """Initialize rucksacks for part one"""
+
     return [Rucksack(index, x) for index, x in enumerate(data)]
 
 
@@ -103,8 +149,11 @@ def get_total_priority(rucksacks):
 def main():
     data = get_data()
     rucksacks = initialize_rucksacks(data)
+    group_rucksacks = initialize_group_rucksacks(data)
     total_priority = get_total_priority(rucksacks)
+    total_group_priority = get_total_priority(group_rucksacks)
     print_results(total_priority, 'PART ONE: Total Priority')
+    print_results(total_group_priority, 'PART TWO: Total Group Priority')
 
 
 if __name__ == '__main__':
