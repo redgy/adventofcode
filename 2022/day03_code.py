@@ -50,7 +50,6 @@ class Rucksack:
             self.priority = ord(self.shared_item) - 96
         else:
             self.priority = ord(self.shared_item) - 38
-        print_results(self.priority, self.shared_item)
 
 
 def get_data():
@@ -81,7 +80,7 @@ def main():
     data = get_data()
     rucksacks = initialize_rucksacks(data)
     total_priority = get_total_priority(rucksacks)
-    print_results(blurb='Total Priority', results=total_priority)
+    print_results(total_priority, 'PART ONE: Total Priority')
 
 
 if __name__ == '__main__':
