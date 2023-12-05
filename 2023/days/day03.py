@@ -5,7 +5,11 @@ INPUT_FILE = 'input/day02.txt'
 
 def create_matrix(raw_data: list) -> list:
     """Create a matrix (list of lists)"""
-    return list(list())
+    matrix = []
+    for row in raw_data:
+        characters = list(row)
+        matrix.append(characters)
+    return matrix
 
 
 def is_symbol(char: str) -> bool:

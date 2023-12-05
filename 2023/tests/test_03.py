@@ -4,7 +4,18 @@ from copy import deepcopy
 
 class TestCreateMatrix:
     def test_init(self):
-        pass
+        mock_data = [
+            'abc',
+            'def',
+            'ghi'
+        ]
+        expected = [
+            ['a', 'b', 'c'],
+            ['d', 'e', 'f'],
+            ['g', 'h', 'i']
+        ]
+        actual = create_matrix(mock_data)
+        assert actual == expected
 
 
 class TestIsSymbol:
