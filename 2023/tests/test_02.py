@@ -21,7 +21,7 @@ def create_game(red=None, blue=None, green=None):
 
 
 def create_record(id=17, games=[]):
-    game_id = f'Game ID {id}'
+    game_id = f'Game {id}'
     games_string = ';'.join(games)
     return f'{game_id}:{games_string}'
 
