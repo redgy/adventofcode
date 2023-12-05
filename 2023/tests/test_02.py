@@ -56,7 +56,7 @@ class TestGetMaxGameData:
     def test_returns_data__all_colors__2_games(self):
         mock_games = [
             create_game(red=self.red, blue=self.blue),
-            create_game(green=green)
+            create_game(green=self.green)
         ]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
@@ -72,8 +72,8 @@ class TestGetMaxGameData:
     def test_returns_data__all_colors__3_games(self):
         mock_games = [
             create_game(red=self.red),
-            create_game(blue=blue),
-            create_game(green=green)
+            create_game(blue=self.blue),
+            create_game(green=self.green)
         ]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
@@ -88,8 +88,8 @@ class TestGetMaxGameData:
 
     def test_returns_data__two_colors__no_red(self):
         mock_games = [
-            create_game(blue=blue),
-            create_game(green=green)
+            create_game(blue=self.blue),
+            create_game(green=self.green)
         ]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
@@ -104,8 +104,8 @@ class TestGetMaxGameData:
 
     def test_returns_data__two_colors__no_blue(self):
         mock_games = [
-            create_game(red=red),
-            create_game(green=green)
+            create_game(red=self.red),
+            create_game(green=self.green)
         ]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
@@ -120,8 +120,8 @@ class TestGetMaxGameData:
 
     def test_returns_data__two_colors__no_green(self):
         mock_games = [
-            create_game(red=red),
-            create_game(blue=blue)
+            create_game(red=self.red),
+            create_game(blue=self.blue)
         ]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
@@ -135,7 +135,7 @@ class TestGetMaxGameData:
         assert actual == expected
 
     def test_returns_data__one_color__red(self):
-        mock_games = [create_game(red=red)]
+        mock_games = [create_game(red=self.red)]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
         expected = {
@@ -148,7 +148,7 @@ class TestGetMaxGameData:
         assert actual == expected
 
     def test_returns_data__one_color__blue(self):
-        mock_games = [create_game(blue=blue)]
+        mock_games = [create_game(blue=self.blue)]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
         expected = {
@@ -161,7 +161,7 @@ class TestGetMaxGameData:
         assert actual == expected
 
     def test_returns_data__one_color__green(self):
-        mock_games = [create_game(green=green)]
+        mock_games = [create_game(green=self.green)]
         mock_data = create_record(id=self.game_id, games=mock_games)
         actual = get_max_game_data(mock_data)
         expected = {
