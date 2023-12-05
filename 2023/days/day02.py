@@ -1,7 +1,6 @@
 # TITLE: Cube Conundrum
 from utils import get_file_contents, plog
-import re
-INPUT_FILE = 'samples/day01.txt'
+INPUT_FILE = 'samples/day02.txt'
 
 
 def get_max_game_data(game_record: str) -> dict:
@@ -18,9 +17,10 @@ def puzzle_one(raw_data: list) -> int:
     """What is the sum of the IDs of possible games?"""
     game_records = [get_max_game_data(x) for x in raw_data]
     possible_games = []
-    for game_id, max_data in game_records.items():
-        if is_game_possible(max_data):
-            possible_games.append(game_id)
+    for record in game_records:
+        for game_id, max_data in record.items():
+            if is_game_possible(max_data):
+                possible_games.append(game_id)
     return sum(possible_games)
 
 
