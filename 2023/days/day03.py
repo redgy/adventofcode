@@ -1,7 +1,7 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
 import re
-INPUT_FILE = 'samples/day03.txt'
+INPUT_FILE = 'input/day03.txt'
 
 
 def create_matrix(raw_data: list) -> list:
