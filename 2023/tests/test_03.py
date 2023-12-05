@@ -19,8 +19,25 @@ class TestCreateMatrix:
 
 
 class TestIsSymbol:
-    def test_init(self):
-        pass
+    def test_false(self):
+        not_symbols = [
+            '.',  # period
+            'a',  # lowercase
+            'A',  # uppercase
+            '1',  # number
+            2  # digit
+        ]
+        expected = False
+        for character in not_symbols:
+            actual = is_symbol(character)
+            assert actual == expected
+
+    def test_true(self):
+        symbols = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '+', '-', '=', '_']
+        expected = True
+        for character in symbols:
+            actual = is_symbol(character)
+            assert actual == expected
 
 
 class TestIsAdjacentToSymbol:
