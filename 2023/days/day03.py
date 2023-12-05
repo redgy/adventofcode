@@ -1,5 +1,6 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
+import re
 INPUT_FILE = 'samples/day03.txt'
 
 
@@ -51,9 +52,10 @@ def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
     return is_adjacent
 
 
-def is_part_number(row: int, start: int, end: int) -> bool:
+def is_part_number(matrix: list, row: int, start: int, end: int) -> bool:
     """If adjacent to symbol, then it is a part number
 
+    :param matrix: Matrix to use
     :param row: Row number is on
     :param start: Starting index of number
     :param end: Ending index of number
@@ -64,16 +66,15 @@ def is_part_number(row: int, start: int, end: int) -> bool:
 def puzzle_one(raw_data: list) -> int:
     """What is the sum of all part numbers in schematic?"""
     matrix = create_matrix(raw_data)
-    # simply saving code from day 2 in case i can reuse this pattern
-    # game_records = [get_max_game_data(x) for x in raw_data]
-    # possible_games = []
-    # max_data = {'red': RED, 'blue': BLUE, 'green': GREEN}
-    # for record in game_records:
-    #     for game_id, game_data in record.items():
-    #         if is_game_possible(game_data, max_data):
-    #             possible_games.append(game_id)
-    # return sum(possible_games)
-    return -1
+    part_numbers = []
+    for row, line in enumerate(raw_data):
+        matches = re.findall(r'\d+', line)
+        for match in matches:
+            start_index = line.find(match)
+            end_index = start_index + len(match)
+            if is_part_number(matrix, row, start_index, end_index):
+                part_numbers.append(int(match))
+    return sum(part_numbers)
 
 
 def puzzle_two(raw_data: list) -> int:
