@@ -1,4 +1,5 @@
-from days.day03 import create_matrix, is_symbol, is_adjacent_to_symbol, is_part_number
+from days.day03 import create_matrix, is_symbol, is_out_of_bounds, \
+    is_adjacent_to_symbol, is_part_number
 from copy import deepcopy
 
 
@@ -37,6 +38,38 @@ class TestIsSymbol:
         for character in symbols:
             actual = is_symbol(character)
             assert actual == expected
+
+
+class TestIsOutOfBounds:
+    mock_matrix = create_mock_matrix([
+        'redgy',
+        'Redgy',
+        'REDGY'
+    ])
+
+    def test_true__less_than_zero(self):
+        row = -1
+        col = -1
+        mock_data = deepcopy(self.mock_matrix)
+        actual = is_out_of_bounds(row, col, mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__more_than_length(self):
+        row = 5
+        col = 5
+        mock_data = deepcopy(self.mock_matrix)
+        actual = is_out_of_bounds(row, col, mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_false__in_bounds(self):
+        row = 2
+        col = 2
+        mock_data = deepcopy(self.mock_matrix)
+        actual = is_out_of_bounds(row, col, mock_data)
+        expected = False
+        assert actual == expected
 
 
 class TestIsAdjacentToSymbol:

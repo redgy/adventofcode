@@ -1,6 +1,6 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
-INPUT_FILE = 'input/day02.txt'
+INPUT_FILE = 'samples/day03.txt'
 
 
 def create_matrix(raw_data: list) -> list:
@@ -15,6 +15,11 @@ def create_matrix(raw_data: list) -> list:
 def is_symbol(char: str) -> bool:
     """Checks if character is a symbol"""
     return not (char.isalnum() or char == '.')
+
+
+def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
+    """Checks if coordinates are out of bounds"""
+    return False
 
 
 def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
@@ -34,6 +39,7 @@ def is_part_number(row: int, start: int, end: int) -> bool:
 
 def puzzle_one(raw_data: list) -> int:
     """What is the sum of all part numbers in schematic?"""
+    matrix = create_matrix(raw_data)
     # simply saving code from day 2 in case i can reuse this pattern
     # game_records = [get_max_game_data(x) for x in raw_data]
     # possible_games = []
