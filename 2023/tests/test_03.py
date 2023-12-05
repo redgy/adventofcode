@@ -1,5 +1,4 @@
-from days.day03 import create_matrix, is_symbol, is_out_of_bounds, \
-    is_adjacent_to_symbol, is_part_number
+from days.day03 import create_matrix, is_symbol, is_out_of_bounds, is_adjacent_to_symbol
 from copy import deepcopy
 
 
