@@ -28,7 +28,8 @@ def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
 def _check_adjacent(row: int, col: int, matrix: list) -> bool:
     """Helper method to check the passed in adjacent 'cell' is a symbol"""
     if not is_out_of_bounds(row, col, matrix):
-        return is_symbol(matrix[col][row])
+        character = matrix[row][col]
+        return is_symbol(character)
     return False
 
 
@@ -43,7 +44,7 @@ def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
         is_adjacent = True
     if _check_adjacent(row, col-1, matrix):  # left
         is_adjacent = True
-    if _check_adjacent(row+1, col+1, matrix):  # right
+    if _check_adjacent(row, col+1, matrix):  # right
         is_adjacent = True
     if _check_adjacent(row+1, col-1, matrix):  # diagonal down left
         is_adjacent = True
@@ -60,7 +61,11 @@ def is_part_number(matrix: list, row: int, start: int, end: int) -> bool:
     :param start: Starting index of number
     :param end: Ending index of number
     """
-    return False
+    is_part_number = False
+    for x in range(end-start):
+        if is_adjacent_to_symbol(row, start+x, matrix):
+            is_part_number = True
+    return is_part_number
 
 
 def puzzle_one(raw_data: list) -> int:
