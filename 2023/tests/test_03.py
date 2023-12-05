@@ -45,7 +45,9 @@ class TestIsAdjacentToSymbol:
         '!bbb*',
         '!ccc*',
         '!ddd*',
-        '!@#$*'
+        '!@#$*',
+        'eeeee',
+        'fffff'
     ])
 
     def test_true__left(self):
@@ -102,6 +104,27 @@ class TestIsAdjacentToSymbol:
         col = 3
         actual = is_adjacent_to_symbol(row, col, self.mock_data)
         expected = True
+        assert actual == expected
+
+    def test_false__surrounded_by_non_symbols(self):
+        row = 2
+        col = 2
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = False
+        assert actual == expected
+
+    def test_false__row_does_not_exist(self):
+        row = 6
+        col = 2
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = False
+        assert actual == expected
+
+    def test_false__col_does_not_exist(self):
+        row = 6
+        col = 0
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = False
         assert actual == expected
 
 
