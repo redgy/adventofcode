@@ -1,4 +1,4 @@
-INPUT_FILEPATH="day02_input.txt"
+INPUT_FILEPATH = "day02_input.txt"
 # INPUT_FILEPATH="test_input.txt"
 
 
@@ -34,13 +34,14 @@ class Submarine:
     def calculate_product(self):
         self.perform_directives()
         print(f'( {self.horizontal}, '
-                f'{self.depth}, '
-                f'{self.aim} )')
+              f'{self.depth}, '
+              f'{self.aim} )')
         return self.horizontal * self.depth
 
 
 def main():
     submarine = Submarine()
     return submarine.calculate_product()
+
 
 print(main())

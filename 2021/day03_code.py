@@ -1,4 +1,6 @@
-INPUT_FILEPATH="day03_input.txt"
+INPUT_FILEPATH = "day03_input.txt"
+
+
 class Submarine:
     def __init__(self):
         self.raw_data = self._parse_file()
@@ -16,7 +18,7 @@ class Submarine:
 
     def populate_dict(self, data):
         binary_length = len(data[0])
-        binary_dict = {x:[] for x in range(binary_length)}
+        binary_dict = {x: [] for x in range(binary_length)}
         for entry in data:
             binary_array = [x for x in entry]
             for index, digit in enumerate(binary_array):
@@ -37,7 +39,7 @@ class Submarine:
             if x == 0:
                 sum_zero += 1
             else:
-                sum_one +=1
+                sum_one += 1
         return 0 if sum_zero > sum_one else 1
 
     def _flip_bit(self, num):

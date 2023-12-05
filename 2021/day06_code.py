@@ -1,7 +1,9 @@
 import collections
 
 
-INPUT_FILEPATH="day06_input.txt"
+INPUT_FILEPATH = "day06_input.txt"
+
+
 class Lantern:
     def __init__(self, timer=6, is_new=False):
         self.is_new = is_new

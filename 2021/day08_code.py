@@ -1,11 +1,13 @@
-INPUT_FILEPATH="day08_input.txt"
-INPUT_FILEPATH="test_input.txt"
-MAP_PATTERNS= {
+INPUT_FILEPATH = "day08_input.txt"
+INPUT_FILEPATH = "test_input.txt"
+MAP_PATTERNS = {
     1: 2,
     4: 4,
     7: 3,
     8: 7
 }
+
+
 class SignalPattern:
     def __init__(self, signal_pattern_str):
         pattern_as_list = list(signal_pattern_str)

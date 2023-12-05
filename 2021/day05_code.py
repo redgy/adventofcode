@@ -1,4 +1,6 @@
-INPUT_FILEPATH="day05_input.txt"
+INPUT_FILEPATH = "day05_input.txt"
+
+
 class Point:
     def __init__(self, x, y):
         self.x = int(x)
@@ -8,12 +10,12 @@ class Point:
         return f'({self.x}, {self.y})'
 
     def __eq__(self, other_point):
-        if(isinstance(other_point, Point)):
+        if (isinstance(other_point, Point)):
             return (self.x, self.y) == (other_point.x, other_point.y)
         raise ValueError('Not a Point object')
 
     def __lt__(self, other_point):
-        if(isinstance(other_point, Point)):
+        if (isinstance(other_point, Point)):
             return (self.x, self.y) < (other_point.x, other_point.y)
         raise ValueError('Not a Point object')
 
@@ -134,7 +136,7 @@ class Grid:
         """
 
         cell_value = self.grid[x][y]
-        cell_value = 1 if cell_value == '.' else cell_value +1
+        cell_value = 1 if cell_value == '.' else cell_value + 1
         self.grid[x][y] = cell_value
 
     def get_quantity(self, number):

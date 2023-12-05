@@ -66,7 +66,7 @@ def initialize_elves(data):
     calorie_list = []
     elf_number = 1
     for index, entry in enumerate(data):
-        if entry  == '':
+        if entry == '':
             elves.append(Elf(elf_number, calorie_list))
             calorie_list = []
             elf_number += 1

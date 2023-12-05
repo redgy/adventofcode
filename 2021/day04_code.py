@@ -1,4 +1,6 @@
-INPUT_FILEPATH="day04_input.txt"
+INPUT_FILEPATH = "day04_input.txt"
+
+
 class MarkedCard:
     def __init__(self):
         for x in range(5):
@@ -22,14 +24,14 @@ class MarkedCard:
         number_of_marked_cells = 0
         for column in range(5):
             if self.grid[row][column]:
-                number_of_marked_cells +=1
+                number_of_marked_cells += 1
         return number_of_marked_cells == 5
 
     def is_column_complete(self, column):
         number_of_marked_cells = 0
         for row in range(5):
             if self.grid[row][column]:
-                number_of_marked_cells +=1
+                number_of_marked_cells += 1
         return number_of_marked_cells == 5
 
     def has_bingo(self):
@@ -94,7 +96,7 @@ class SimulateBingo:
         self.cards = []
         for card_number, card_data in enumerate(cards_data):
             self.cards.append(BingoCard(card_number, card_data))
-        self.win_log = {x:{} for x in range(len(self.cards))}
+        self.win_log = {x: {} for x in range(len(self.cards))}
 
     def call_numbers(self):
         recent_win = -1
@@ -156,5 +158,6 @@ def main():
     print(f'>>> BINGO ON {winning_card.winning_number}')
     print(f' -- Card Number: {winning_card.card_number}')
     print(f' -- Product: {winning_card.winning_product}')
+
 
 main()

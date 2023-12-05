@@ -1,4 +1,6 @@
-INPUT_FILEPATH="day09_input.txt"
+INPUT_FILEPATH = "day09_input.txt"
+
+
 class Cell:
     def __init__(self, height, x, y, max_x, max_y):
         self.height = int(height)
@@ -51,7 +53,7 @@ class Cell:
         self.set_down_coords(self.x+1, self.y)
 
     def is_cell_coords_valid(self, x, y):
-        is_x_valid = (x >=0 and x < self.max_x)
+        is_x_valid = (x >= 0 and x < self.max_x)
         is_y_valid = (y >= 0 and y < self.max_y)
         return is_x_valid and is_y_valid
 
@@ -67,6 +69,7 @@ class Basin:
         for location in self.location_list:
             to_str += f'({location.x}, {location.y}) '
         return to_str
+
 
 class FloorMap:
     def __init__(self, list_data, num_lines):
@@ -311,7 +314,7 @@ def main():
     print('[!!] Product of basin sizes: \n'
           f'    |--simple-floor-map--> {simple_floor_map.calculate_basin_product()}\n'
           f'    |--object-floor-map--> {floor_map.get_product_of_top_three_basins()}')  # End part II
-          # ^^^ I never figured out the flaw in my logic for object-floor-map
+    # ^^^ I never figured out the flaw in my logic for object-floor-map
 
 
 main()

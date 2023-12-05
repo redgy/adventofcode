@@ -1,4 +1,6 @@
-INPUT_FILEPATH="day07_input.txt"
+INPUT_FILEPATH = "day07_input.txt"
+
+
 class Crab:
     def __init__(self, position):
         self.starting_position = position
