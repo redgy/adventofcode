@@ -1,6 +1,6 @@
 # TITLE: Cube Conundrum
 from utils import get_file_contents, plog
-INPUT_FILE = 'samples/day02.txt'
+INPUT_FILE = 'input/day02.txt'
 RED = 12
 BLUE = 14
 GREEN = 13
