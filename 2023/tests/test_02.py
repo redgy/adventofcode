@@ -191,7 +191,7 @@ class TestIsGamePossible:
     red = 99
     blue = 88
     green = 77
-    max_data = create_game_dict(red=self.red, blue=self.blue, green=self.green)
+    max_data = create_game_dict(red=red, blue=blue, green=green)
 
     def test_true__same_max(self):
         mock_data = create_game_dict(red=self.red, blue=self.blue, green=self.green)
