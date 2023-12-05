@@ -14,7 +14,7 @@ def create_matrix(raw_data: list) -> list:
 
 def is_symbol(char: str) -> bool:
     """Checks if character is a symbol"""
-    return False
+    return not (char.isalnum() or char == '.')
 
 
 def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:

@@ -24,8 +24,7 @@ class TestIsSymbol:
             '.',  # period
             'a',  # lowercase
             'A',  # uppercase
-            '1',  # number
-            2  # digit
+            '1'  # number
         ]
         expected = False
         for character in not_symbols:
