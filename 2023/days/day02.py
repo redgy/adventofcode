@@ -18,7 +18,11 @@ def get_max_game_data(game_record: str) -> dict:
     pull_list = strip_list(all_pulls_string.split(';'))
     for cubes_pulled in pull_list:
         single_cubes = strip_list(cubes_pulled.split(','))
-        print(single_cubes)
+        for cube in single_cubes:
+            count, color = strip_list(cube.split(' '))
+            count = int(count)  # convert string to integer
+            if max_data[color] < count:
+                max_data[color] = count
     return {game_id: max_data}
 
 
