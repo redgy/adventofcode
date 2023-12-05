@@ -6,18 +6,22 @@ INPUT_FILE = 'samples/day01.txt'
 
 def get_max_game_data(game_record: str) -> dict:
     """From game record, create max game data"""
-    return -1
+    return {}
 
 
 def is_game_possible(max_game_data: dict, starting_cubes: dict) -> bool:
     """Determine if game is possible"""
-    return -1
+    return False
 
 
 def puzzle_one(raw_data: list) -> int:
     """What is the sum of the IDs of possible games?"""
-    values = [is_game_possible(x) for x in raw_data]
-    return sum(values)
+    game_records = [get_max_game_data(x) for x in raw_data]
+    possible_games = []
+    for game_id, max_data in game_records.items():
+        if is_game_possible(max_data):
+            possible_games.append(game_id)
+    return sum(possible_games)
 
 
 def puzzle_two():
