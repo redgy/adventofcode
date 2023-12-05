@@ -2,13 +2,13 @@ from days.day03 import create_matrix, is_symbol, is_adjacent_to_symbol, is_part_
 from copy import deepcopy
 
 
+def create_mock_matrix(string_list):
+    return [list(x) for x in string_list]
+
+
 class TestCreateMatrix:
     def test_init(self):
-        mock_data = [
-            'abc',
-            'def',
-            'ghi'
-        ]
+        mock_data = create_mock_matrix(['abc', 'def', 'ghi'])
         expected = [
             ['a', 'b', 'c'],
             ['d', 'e', 'f'],
@@ -40,8 +40,69 @@ class TestIsSymbol:
 
 
 class TestIsAdjacentToSymbol:
-    def test_init(self):
-        pass
+    mock_data = create_mock_matrix([
+        '!%^&*',
+        '!bbb*',
+        '!ccc*',
+        '!ddd*',
+        '!@#$*'
+    ])
+
+    def test_true__left(self):
+        row = 1
+        col = 1
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__up(self):
+        row = 1
+        col = 2
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__right(self):
+        row = 1
+        col = 3
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__down(self):
+        row = 3
+        col = 2
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__diagonal__up_left(self):
+        row = 1
+        col = 1
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__diagonal__up_right(self):
+        row = 1
+        col = 3
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__diagonal__down_left(self):
+        row = 3
+        col = 1
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
+
+    def test_true__diagonal__down_right(self):
+        row = 3
+        col = 3
+        actual = is_adjacent_to_symbol(row, col, self.mock_data)
+        expected = True
+        assert actual == expected
 
 
 class TestIsPartNumber:
