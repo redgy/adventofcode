@@ -58,7 +58,7 @@ def calculate_power(game_data: dict) -> int:
 
 
 def puzzle_two(raw_data: list) -> int:
-    """What is the sum of the IDs of possible games?"""
+    """What is the sum of the powers of games?"""
     game_records = [get_max_game_data(x) for x in raw_data]
     power = []
     for record in game_records:
