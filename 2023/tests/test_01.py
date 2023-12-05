@@ -112,6 +112,60 @@ class TestCalibrateAdjusted:
         actual = calibrate_adjusted(mock_string)
         assert actual == expected
 
+    def test_num_str_overlaps__oneight(self):
+        expected = 18
+        mock_string = 'oneight'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__threeight(self):
+        expected = 38
+        mock_string = 'threeight'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__fiveight(self):
+        expected = 58
+        mock_string = 'fiveight'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__nineight(self):
+        expected = 98
+        mock_string = 'nineight'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__twone(self):
+        expected = 21
+        mock_string = 'twone'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__sevenine(self):
+        expected = 79
+        mock_string = 'sevenine'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__eightwo(self):
+        expected = 82
+        mock_string = 'eightwo'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__eighthree(self):
+        expected = 83
+        mock_string = 'eighthree'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
+    def test_num_str_overlaps__starts_with_digit(self):
+        expected = 13
+        mock_string = '1eighthree'
+        actual = calibrate_adjusted(mock_string)
+        assert actual == expected
+
     def test_num_str_and_digit(self):
         expected = 14
         mock_string = 'zoneight234'

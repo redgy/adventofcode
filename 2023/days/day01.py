@@ -4,6 +4,14 @@ import re
 INPUT_FILE = 'input/day01.txt'
 VALID_DIGIT_MAPPING = {
     # "zero": 0  # zero is not included in valid digit list
+    "oneight": "18",
+    "threeight": "38",
+    "fiveight": "58",
+    "nineight": "98",
+    "twone": "21",
+    "sevenine": "79",
+    "eighthree": "83",
+    "eightwo": "82",
     "one": "1",
     "two": "2",
     "three": "3",
@@ -37,14 +45,16 @@ def puzzle_one(raw_data: list) -> int:
 
 def replace_words_with_digits(line: str) -> str:
     """Numbers written out from 1-9 should be replaced with its digit counterpart"""
-    matches = re.findall(r"(one)|(two)|(three)|(four)|(five)|(six)|(seven)|(eight)|(nine)", line)
+    pattern = "|".join(list(VALID_DIGIT_MAPPING.keys()))
+    matches = re.findall(pattern, line)
     if not matches:
         return line
-    for tuple_match in matches:
-        for word in tuple_match:
+    while matches:
+        for word in matches:
             if not word:
                 continue
             line = line.replace(word, VALID_DIGIT_MAPPING[word], 1)
+            matches = re.findall(pattern, line)
     return line
 
 
