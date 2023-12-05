@@ -19,7 +19,9 @@ def is_symbol(char: str) -> bool:
 
 def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
     """Checks if coordinates are out of bounds"""
-    return False
+    is_negative = row < 0 or col < 0
+    is_longer_than_length = row >= len(matrix) or col >= len(matrix[row])
+    return (is_negative or is_longer_than_length)
 
 
 def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
