@@ -1,4 +1,4 @@
-from days.day02 import get_max_game_data, is_game_possible
+from days.day02 import get_max_game_data, is_game_possible, calculate_power
 from copy import deepcopy
 
 
@@ -222,4 +222,24 @@ class TestIsGamePossible:
         max_data['green'] = 0
         expected = False
         actual = is_game_possible(mock_data, max_data)
+        assert actual == expected
+
+
+class TestCalculatePower:
+    def test_returns_non_zero(self):
+        red = 10
+        blue = 20
+        green = 30
+        mock_data = create_game_dict(red=red, blue=blue, green=green)
+        actual = calculate_power(mock_data)
+        expected = red * blue * green
+        assert actual == expected
+
+    def test_returns_zero(self):
+        red = 0
+        blue = 20
+        green = 30
+        mock_data = create_game_dict(red=red, blue=blue, green=green)
+        actual = calculate_power(mock_data)
+        expected = 0
         assert actual == expected

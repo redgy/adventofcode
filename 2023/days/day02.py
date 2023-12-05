@@ -54,27 +54,25 @@ def puzzle_one(raw_data: list) -> int:
 
 def calculate_power(game_data: dict) -> int:
     """Multiply max number of each cube color"""
-    return -1
+    return game_data['red'] * game_data['blue'] * game_data['green']
 
 
 def puzzle_two(raw_data: list) -> int:
     """What is the sum of the IDs of possible games?"""
     game_records = [get_max_game_data(x) for x in raw_data]
-    possible_games = []
-    max_data = {'red': RED, 'blue': BLUE, 'green': GREEN}
+    power = []
     for record in game_records:
-        for game_id, game_data in record.items():
-            if is_game_possible(game_data, max_data):
-                possible_games.append(game_id)
-    return sum(possible_games)
-
-
-def puzzle_two():
-    pass
+        for game_data in record.values():
+            game_power = calculate_power(game_data)
+            power.append(game_power)
+    return sum(power)
 
 
 if __name__ == "__main__":
     raw_data = get_file_contents(INPUT_FILE)
 
     result = puzzle_one(raw_data)
+    plog(result)
+
+    result = puzzle_two(raw_data)
     plog(result)
