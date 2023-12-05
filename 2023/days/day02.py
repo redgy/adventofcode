@@ -4,7 +4,13 @@ import re
 INPUT_FILE = 'samples/day01.txt'
 
 
-def is_game_possible(game_record: str) -> bool:
+def get_max_game_data(game_record: str) -> dict:
+    """From game record, create max game data"""
+    return -1
+
+
+def is_game_possible(max_game_data: dict, starting_cubes: dict) -> bool:
+    """Determine if game is possible"""
     return -1
 
 
