@@ -26,9 +26,18 @@ def get_max_game_data(game_record: str) -> dict:
     return {game_id: max_data}
 
 
-def is_game_possible(max_game_data: dict, starting_cubes: dict) -> bool:
+def _is_color_possible(color: str, game_data: dict, starting_cubes: dict) -> bool:
+    """Compare color counts and make sure does not exceed starting number"""
+    return game_data[color] <= starting_cubes[color]
+
+
+def is_game_possible(game_data: dict, starting_cubes: dict) -> bool:
     """Determine if game is possible"""
-    return False
+    colors = ['red', 'blue', 'green']
+    for color in colors:
+        if not _is_color_possible(color, game_data, starting_cubes):
+            return False
+    return True
 
 
 def puzzle_one(raw_data: list) -> int:
