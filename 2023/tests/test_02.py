@@ -1,179 +1,197 @@
-from days.day01 import calibrate, calibrate_adjusted
+from days.day02 import get_max_game_data, is_game_possible
+from copy import deepcopy
 
 
-class TestCalibrate:
-    def test_digits_on_ends(self):
-        expected = 12
-        mock_string = '1abc2'
-        actual = calibrate(mock_string)
+def create_game(red=None, blue=None, green=None):
+    if not red and not blue and not green:
+        return ''
+    if not blue and not green:
+        return f'red {red}'
+    if not red and not green:
+        return f'blue {blue}'
+    if not red and not blue:
+        return f'green {green}'
+    if not red:
+        return f'blue {blue}, green {green}'
+    if not blue:
+        return f'red {red}, green {green}'
+    if not green:
+        return f'red {red}, blue {blue}'
+    return f'red {red}, blue {blue}, green {green}'
+
+
+def create_record(id=17, games=[]):
+    game_id = f'Game ID {id}'
+    games_string = ';'.join(games)
+    return f'{game_id}:{games_string}'
+
+
+class TestGetMaxGameData:
+    game_id = 333
+    red = 10
+    blue = 20
+    green = 30
+
+    def test_returns_data__all_colors__1_game(self):
+        mock_games = [create_game(self.red=self.red, blue=self.blue, green=self.green)]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': self.blue,
+                'green': self.green,
+            }
+        }
         assert actual == expected
 
-    def test_no_digits(self):
-        expected = 0
-        mock_string = 'abc'
-        actual = calibrate(mock_string)
+    def test_returns_data__all_colors__2_games(self):
+        mock_games = [
+            create_game(red=self.red, blue=self.blue),
+            create_game(green=green)
+        ]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': self.blue,
+                'green': self.green,
+            }
+        }
         assert actual == expected
 
-    def test_two_digits_in_between(self):
-        expected = 34
-        mock_string = 'a3b4c'
-        actual = calibrate(mock_string)
+    def test_returns_data__all_colors__3_games(self):
+        mock_games = [
+            create_game(red=self.red),
+            create_game(blue=blue),
+            create_game(green=green)
+        ]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': self.blue,
+                'green': self.green,
+            }
+        }
         assert actual == expected
 
-    def test_three_digits_in_between(self):
-        expected = 35
-        mock_string = 'a3b4c5d'
-        actual = calibrate(mock_string)
+    def test_returns_data__two_colors__no_red(self):
+        mock_games = [
+            create_game(blue=blue),
+            create_game(green=green)
+        ]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': 0,
+                'blue': self.blue,
+                'green': self.green,
+            }
+        }
         assert actual == expected
 
-    def test_one_digit(self):
-        expected = 99
-        mock_string = 'abc9def'
-        actual = calibrate(mock_string)
+    def test_returns_data__two_colors__no_blue(self):
+        mock_games = [
+            create_game(red=red),
+            create_game(green=green)
+        ]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': 0,
+                'green': self.green,
+            }
+        }
         assert actual == expected
 
-    def test_one_digit_is_zero__first(self):
-        expected = 1
-        mock_string = '0abc1'
-        actual = calibrate(mock_string)
+    def test_returns_data__two_colors__no_green(self):
+        mock_games = [
+            create_game(red=red),
+            create_game(blue=blue)
+        ]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': self.blue,
+                'green': 0,
+            }
+        }
         assert actual == expected
 
-    def test_one_digit_is_zero__last(self):
-        expected = 80
-        mock_string = '8abc0'
-        actual = calibrate(mock_string)
+    def test_returns_data__one_color__red(self):
+        mock_games = [create_game(red=red)]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': self.red,
+                'blue': 0,
+                'green': 0,
+            }
+        }
+        assert actual == expected
+
+    def test_returns_data__one_color__blue(self):
+        mock_games = [create_game(blue=blue)]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': 0,
+                'blue': self.blue,
+                'green': 0,
+            }
+        }
+        assert actual == expected
+
+    def test_returns_data__one_color__green(self):
+        mock_games = [create_game(green=green)]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': 0,
+                'blue': 0,
+                'green': self.green,
+            }
+        }
+        assert actual == expected
+
+    def test_returns_data__no_colors(self):
+        mock_games = [create_game()]
+        mock_data = create_record(id=self.game_id, games=mock_games)
+        actual = get_max_game_data(mock_data)
+        expected = {
+            self.game_id: {
+                'red': 0,
+                'blue': 0,
+                'green': 0,
+            }
+        }
         assert actual == expected
 
 
-class TestCalibrateAdjusted:
-    def test_digits_on_ends(self):
-        expected = 12
-        mock_string = '1abc2'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
+class TestIsGamePossible:
+    max_data = {
+        'red': 12,
+        'blue': 14,
+        'green': 13,
+    }
 
-    def test_no_digits(self):
-        expected = 0
-        mock_string = 'abc'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_two_digits_in_between(self):
-        expected = 34
-        mock_string = 'a3b4c'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_three_digits_in_between(self):
-        expected = 35
-        mock_string = 'a3b4c5d'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_one_digit(self):
-        expected = 99
-        mock_string = 'abc9def'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_one_digit_is_zero__first(self):
-        expected = 1
-        mock_string = '0abc1'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_one_digit_is_zero__last(self):
-        expected = 80
-        mock_string = '8abc0'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_on_both_ends__digit_between(self):
-        expected = 29
-        mock_string = 'two1nine'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_on_both_ends__num_str_between(self):
-        expected = 83
-        mock_string = 'eighttwothree'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_in_between(self):
-        expected = 13
-        mock_string = 'abcone2threexyz'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_bleeds_into_other_number(self):
-        expected = 24
-        mock_string = 'xtwone3four'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__oneight(self):
-        expected = 18
-        mock_string = 'oneight'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__threeight(self):
-        expected = 38
-        mock_string = 'threeight'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__fiveight(self):
-        expected = 58
-        mock_string = 'fiveight'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__nineight(self):
-        expected = 98
-        mock_string = 'nineight'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__twone(self):
-        expected = 21
-        mock_string = 'twone'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__sevenine(self):
-        expected = 79
-        mock_string = 'sevenine'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__eightwo(self):
-        expected = 82
-        mock_string = 'eightwo'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__eighthree(self):
-        expected = 83
-        mock_string = 'eighthree'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_overlaps__starts_with_digit(self):
-        expected = 13
-        mock_string = '1eighthree'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_num_str_and_digit(self):
-        expected = 14
-        mock_string = 'zoneight234'
-        actual = calibrate_adjusted(mock_string)
-        assert actual == expected
-
-    def test_digit_and_num_str(self):
-        expected = 76
-        mock_string = '7pqrstsixteen'
-        actual = calibrate_adjusted(mock_string)
+    def test_true(self):
+        mock_data = {
+            'red': 12,
+            'blue': 14,
+            'green': 13,
+        }
+        expected = True
+        actual = is_game_possible(mock_data, self.max_data)
         assert actual == expected
