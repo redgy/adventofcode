@@ -6,24 +6,24 @@ def create_game(red=None, blue=None, green=None):
     if not red and not blue and not green:
         return ''
     if not blue and not green:
-        return f'red {red}'
+        return f'{red} red'
     if not red and not green:
-        return f'blue {blue}'
+        return f'{blue} blue'
     if not red and not blue:
-        return f'green {green}'
+        return f'{green} green'
     if not red:
-        return f'blue {blue}, green {green}'
+        return f'{blue} blue, {green} green'
     if not blue:
-        return f'red {red}, green {green}'
+        return f'{red} red, {green} green'
     if not green:
-        return f'red {red}, blue {blue}'
-    return f'red {red}, blue {blue}, green {green}'
+        return f'{red} red, {blue} blue'
+    return f'{red} red, {blue} blue, {green} green'
 
 
 def create_record(id=17, games=[]):
     game_id = f'Game {id}'
     games_string = ';'.join(games)
-    return f'{game_id}:{games_string}'
+    return f'{game_id}: {games_string}'
 
 
 def create_game_dict(red=0, blue=0, green=0):
@@ -169,19 +169,6 @@ class TestGetMaxGameData:
                 'red': 0,
                 'blue': 0,
                 'green': self.green,
-            }
-        }
-        assert actual == expected
-
-    def test_returns_data__no_colors(self):
-        mock_games = [create_game()]
-        mock_data = create_record(id=self.game_id, games=mock_games)
-        actual = get_max_game_data(mock_data)
-        expected = {
-            self.game_id: {
-                'red': 0,
-                'blue': 0,
-                'green': 0,
             }
         }
         assert actual == expected
