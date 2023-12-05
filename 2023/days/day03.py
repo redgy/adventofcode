@@ -20,13 +20,35 @@ def is_symbol(char: str) -> bool:
 def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
     """Checks if coordinates are out of bounds"""
     is_negative = row < 0 or col < 0
-    is_longer_than_length = row >= len(matrix) or col >= len(matrix[row])
+    is_longer_than_length = col >= len(matrix) or row >= len(matrix[col])
     return (is_negative or is_longer_than_length)
+
+
+def _check_adjacent(row: int, col: int, matrix: list) -> bool:
+    """Helper method to check the passed in adjacent 'cell' is a symbol"""
+    if not is_out_of_bounds(row, col, matrix):
+        return is_symbol(matrix[col][row])
+    return False
 
 
 def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
     """Note: periods (.) are not symbols"""
-    return False
+    is_adjacent = False
+    if _check_adjacent(row-1, col-1, matrix):  # diagonal up left
+        is_adjacent = True
+    if _check_adjacent(row-1, col, matrix):  # up
+        is_adjacent = True
+    if _check_adjacent(row-1, col+1, matrix):  # diagonal up right
+        is_adjacent = True
+    if _check_adjacent(row, col-1, matrix):  # left
+        is_adjacent = True
+    if _check_adjacent(row+1, col+1, matrix):  # right
+        is_adjacent = True
+    if _check_adjacent(row+1, col-1, matrix):  # diagonal down left
+        is_adjacent = True
+    if _check_adjacent(row+1, col+1, matrix):  # diagonal down right
+        is_adjacent = True
+    return is_adjacent
 
 
 def is_part_number(row: int, start: int, end: int) -> bool:
