@@ -21,7 +21,7 @@ def is_symbol(char: str) -> bool:
 def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
     """Checks if coordinates are out of bounds"""
     is_negative = row < 0 or col < 0
-    is_longer_than_length = col >= len(matrix) or row >= len(matrix[col])
+    is_longer_than_length = row >= len(matrix) or col >= len(matrix[row])
     return (is_negative or is_longer_than_length)
 
 
@@ -48,6 +48,8 @@ def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
         is_adjacent = True
     if _check_adjacent(row+1, col-1, matrix):  # diagonal down left
         is_adjacent = True
+    if _check_adjacent(row+1, col, matrix):  # down
+        is_adjacent = True
     if _check_adjacent(row+1, col+1, matrix):  # diagonal down right
         is_adjacent = True
     return is_adjacent
@@ -61,11 +63,10 @@ def is_part_number(matrix: list, row: int, start: int, end: int) -> bool:
     :param start: Starting index of number
     :param end: Ending index of number
     """
-    is_part_number = False
     for x in range(end-start):
         if is_adjacent_to_symbol(row, start+x, matrix):
-            is_part_number = True
-    return is_part_number
+            return True
+    return False
 
 
 def puzzle_one(raw_data: list) -> int:
@@ -74,8 +75,9 @@ def puzzle_one(raw_data: list) -> int:
     part_numbers = []
     for row, line in enumerate(raw_data):
         matches = re.findall(r'\d+', line)
+        end_index = 0
         for match in matches:
-            start_index = line.find(match)
+            start_index = line.find(match, end_index)
             end_index = start_index + len(match)
             if is_part_number(matrix, row, start_index, end_index):
                 part_numbers.append(int(match))
