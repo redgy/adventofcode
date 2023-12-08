@@ -25,11 +25,24 @@ def is_out_of_bounds(row: int, col: int, matrix: list) -> bool:
     return (is_negative or is_longer_than_length)
 
 
-def _check_adjacent(row: int, col: int, matrix: list) -> bool:
-    """Helper method to check the passed in adjacent 'cell' is a symbol"""
+def _check_adjacent(row: int, col: int, matrix: list, check_symbol=True) -> bool:
+    """Helper method to check the passed in adjacent 'cell'
+
+    :param row: Row the cell is on
+    :param col: Columng the cell is on
+    :param matrix: List of lists, the matrix
+    :param check_symbol: True == checks if symbol; False == checks if digit
+    """
     if not is_out_of_bounds(row, col, matrix):
         character = matrix[row][col]
-        return is_symbol(character)
+        if check_symbol:
+            return is_symbol(character)
+        else:
+            try:
+                int(character)
+            except ValueError:
+                return False
+            return True
     return False
 
 
@@ -51,6 +64,27 @@ def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
     if _check_adjacent(row+1, col, matrix):  # down
         is_adjacent = True
     if _check_adjacent(row+1, col+1, matrix):  # diagonal down right
+        is_adjacent = True
+    return is_adjacent
+
+
+def is_adjacent_to_digit(row: int, col: int, matrix: list) -> bool:
+    is_adjacent = False
+    if _check_adjacent(row-1, col-1, matrix, check_symbol=False):  # diagonal up left
+        is_adjacent = True
+    if _check_adjacent(row-1, col, matrix, check_symbol=False):  # up
+        is_adjacent = True
+    if _check_adjacent(row-1, col+1, matrix, check_symbol=False):  # diagonal up right
+        is_adjacent = True
+    if _check_adjacent(row, col-1, matrix, check_symbol=False):  # left
+        is_adjacent = True
+    if _check_adjacent(row, col+1, matrix, check_symbol=False):  # right
+        is_adjacent = True
+    if _check_adjacent(row+1, col-1, matrix, check_symbol=False):  # diagonal down left
+        is_adjacent = True
+    if _check_adjacent(row+1, col, matrix, check_symbol=False):  # down
+        is_adjacent = True
+    if _check_adjacent(row+1, col+1, matrix, check_symbol=False):  # diagonal down right
         is_adjacent = True
     return is_adjacent
 
