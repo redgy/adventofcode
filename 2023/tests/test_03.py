@@ -1,5 +1,5 @@
 from days.day03 import create_matrix, is_symbol, is_out_of_bounds, is_adjacent_to_symbol, \
-    is_adjacent_to_digit
+    get_adjacent_part_numbers
 from copy import deepcopy
 
 
@@ -161,92 +161,94 @@ class TestIsAdjacentToSymbol:
         assert actual == expected
 
 
-class TestIsAdjacentToDigit:
+class TestGetAdjacentPartNumbers:
     mock_data = create_mock_matrix([
-        '14...',
-        '.....',
-        '...7.',
-        '...52',
+        '14***',
+        '*****',
+        '***7*',
+        '**152',
+        '*****',
+        '***9*',
+        '*****',
     ])
 
-    def test_true__left(self):
+    def test_zero__edge(self):
+        row = 3
+        col = 0
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = []
+        assert actual == expected
+
+    def test_zero__center(self):
+        row = 2
+        col = 1
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = []
+        assert actual == expected
+
+    def test_one__up__double_digit(self):
+        row = 1
+        col = 0
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [14]
+        assert actual == expected
+        row = 1
+        col = 1
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        assert actual == expected
+
+    def test_one__down_single_digit(self):
+        row = 1
+        col = 3
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [14]
+        assert actual == expected
+
+    def test_one__right(self):
+        row = 3
+        col = 1
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [152]
+        assert actual == expected
+
+    def test_one__left(self):
         row = 0
         col = 2
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [14]
         assert actual == expected
 
-    def test_true__up(self):
-        row = 1
-        col = 1
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
+    def test_one__diagonal__left_up(self):
+        row = 6
+        col = 4
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [14]
         assert actual == expected
 
-    def test_true__right(self):
-        row = 3
-        col = 3
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
-        assert actual == expected
-
-    def test_true__down(self):
-        row = 2
-        col = 3
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
-        assert actual == expected
-
-    def test_true__diagonal__up_left(self):
-        row = 1
+    def test_one__diagonal__right_up(self):
+        row = 4
         col = 2
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [152]
         assert actual == expected
 
-    def test_true__diagonal__up_right(self):
-        row = 3
-        col = 2
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
-        assert actual == expected
-
-    def test_true__diagonal__down_left(self):
+    def test_one__diagonal__left_down(self):
         row = 1
         col = 4
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [7]
         assert actual == expected
 
-    def test_true__diagonal__down_right(self):
-        row = 1
-        col = 2
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = True
-        assert actual == expected
-
-    def test_false__surrounded_by_non_digits(self):
+    def test_one__diagonal__right_down(self):
         row = 2
         col = 1
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = False
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [152]
         assert actual == expected
 
-    def test_false__row_does_not_exist(self):
-        row = 6
+    def test_two(self):
+        row = 2
         col = 2
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = False
+        actual = get_adjacent_part_numbers(row, col, self.mock_data)
+        expected = [14]
         assert actual == expected
-
-    def test_false__col_does_not_exist(self):
-        row = 6
-        col = 8
-        actual = is_adjacent_to_digit(row, col, self.mock_data)
-        expected = False
-        assert actual == expected
-
-
-class TestIsPartNumber:
-    def test_init(self):
-        pass
