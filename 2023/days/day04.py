@@ -46,13 +46,40 @@ def puzzle_one(raw_data: list) -> int:
     total = 0
     for line in raw_data:
         your_numbers, winning_numbers = parse_numbers(line)
-        matching_points = get_matching_winning_numbers(your_numbers, winning_numbers)
-        total += calculate_points(matching_points)
+        matching_numbers = get_matching_winning_numbers(your_numbers, winning_numbers)
+        total += calculate_points(matching_numbers)
     return total
 
 
+def get_card_count(scratchcards: dict, current_cards: list, cards_gained:list) -> list:
+    """Recursively get card count for matching winning cards"""
+    if not cards_gained:
+        return current_cards
+    new_cards = []
+    for num in cards_gained:
+        matching_cards = scratchcards[num]
+        if matching_cards:
+            for add_num, _ in enumerate(matching_cards, start=1):
+                new_card_num = num + add_num
+                new_cards.append(new_card_num)
+                current_cards.append(new_card_num)
+    return get_card_count(scratchcards, current_cards, new_cards)
+
+
 def puzzle_two(raw_data: list) -> int:
-    pass
+    """How many total scratchcards do you end up with?"""
+    scratchcards = {k: {} for k, _ in enumerate(raw_data)}
+    current_cards = []
+    cards_gained = []
+    for index, line in enumerate(raw_data):
+        your_numbers, winning_numbers = parse_numbers(line)
+        matching_numbers = get_matching_winning_numbers(your_numbers, winning_numbers)
+        scratchcards[index] = matching_numbers
+        current_cards.append(index)
+        if matching_numbers:
+            cards_gained.append(index)
+    result = get_card_count(scratchcards, current_cards, cards_gained)
+    return len(result)
 
 
 if __name__ == "__main__":
@@ -61,5 +88,5 @@ if __name__ == "__main__":
     result = puzzle_one(raw_data)
     plog(result)
 
-    # result = puzzle_two(raw_data)
-    # plog(result)
+    result = puzzle_two(raw_data)
+    plog(result)
