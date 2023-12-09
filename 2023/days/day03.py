@@ -1,7 +1,7 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
 import re
-INPUT_FILE = 'samples/day03.txt'
+INPUT_FILE = 'input/day03.txt'
 
 
 def create_matrix(raw_data: list) -> list:
@@ -159,19 +159,20 @@ def puzzle_one(raw_data: list) -> int:
 def puzzle_two(raw_data: list) -> int:
     """What is the sum of all the gear ratios in the engine schematic?"""
     matrix = create_matrix(raw_data)
-    part_numbers = []
+    gears = []
     for row, line in enumerate(raw_data):
         matches = re.finditer(r'\*', line)
         if matches:
             for match in matches:
                 col = match.start()
                 part_numbers = get_adjacent_part_numbers(row, col, matrix)
-                # if len(part_numbers) != 2:
-                #     continue
-                plog(part_numbers)
+                if len(part_numbers) != 2:
+                    continue
+                product = part_numbers[0] * part_numbers[1]
+                gears.append(product)
         else:
             print('SKIPPING')
-    return sum(part_numbers)
+    return sum(gears)
 
 
 if __name__ == "__main__":
