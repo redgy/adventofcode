@@ -1,7 +1,7 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
 import re
-INPUT_FILE = 'input/day03.txt'
+INPUT_FILE = 'samples/day03.txt'
 
 
 def create_matrix(raw_data: list) -> list:
@@ -68,25 +68,62 @@ def is_adjacent_to_symbol(row: int, col: int, matrix: list) -> bool:
     return is_adjacent
 
 
-def is_adjacent_to_digit(row: int, col: int, matrix: list) -> bool:
-    is_adjacent = False
+def get_number(row: list, index: int) -> int:
+    """From row in matrix, get the number found around the index
+
+    :param row: List of characters in a row in the matrix
+    :param index: Index where adjacent digit was found
+    :returns: The number
+    """
+    row_string = "".join(row)
+    number_string = f'{row_string[index]}'
+    moving_index = index
+    # go left
+    while moving_index > 0:
+        moving_index -= 1
+        character = row_string[moving_index]
+        if character.isdigit():
+            number_string = f'{character}{number_string}'
+        else:
+            moving_index = -1
+    # go right
+    moving_index = index
+    while moving_index < len(row_string):
+        moving_index += 1
+        character = row_string[moving_index]
+        if character.isdigit():
+            number_string = f'{number_string}{character}'
+        else:
+            moving_index = len(row_string)+1
+    return int(number_string)
+
+
+def get_adjacent_part_numbers(row: int, col: int, matrix: list) -> list:
+    """Get adjacent part numbers
+
+    :param row: Row the potential gear is on
+    :param col: Column the potential gear is on
+    :param matrix: The matrix
+    :returns: List of part numbers the potential gear has
+    """
+    part_numbers = []
     if _check_adjacent(row-1, col-1, matrix, check_symbol=False):  # diagonal up left
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row-1], col-1))
     if _check_adjacent(row-1, col, matrix, check_symbol=False):  # up
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row-1], col))
     if _check_adjacent(row-1, col+1, matrix, check_symbol=False):  # diagonal up right
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row-1], col+1))
     if _check_adjacent(row, col-1, matrix, check_symbol=False):  # left
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row], col-1))
     if _check_adjacent(row, col+1, matrix, check_symbol=False):  # right
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row], col+1))
     if _check_adjacent(row+1, col-1, matrix, check_symbol=False):  # diagonal down left
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row+1], col-1))
     if _check_adjacent(row+1, col, matrix, check_symbol=False):  # down
-        is_adjacent = True
+        part_numbers.append(get_number(matrix[row+1], col))
     if _check_adjacent(row+1, col+1, matrix, check_symbol=False):  # diagonal down right
-        is_adjacent = True
-    return is_adjacent
+        part_numbers.append(get_number(matrix[row+1], col+1))
+    return list(set(part_numbers))  # unique
 
 
 def is_part_number(matrix: list, row: int, start: int, end: int) -> bool:
@@ -119,8 +156,21 @@ def puzzle_one(raw_data: list) -> int:
 
 
 def puzzle_two(raw_data: list) -> int:
-    """TODO: wait"""
-    return -1
+    """What is the sum of all the gear ratios in the engine schematic?"""
+    matrix = create_matrix(raw_data)
+    part_numbers = []
+    for row, line in enumerate(raw_data):
+        matches = re.finditer(r'\*', line)
+        if matches:
+            for match in matches:
+                col = match.start()
+                part_numbers = get_adjacent_part_numbers(row, col, matrix)
+                # if len(part_numbers) != 2:
+                #     continue
+                plog(part_numbers)
+        else:
+            print('SKIPPING')
+    return sum(part_numbers)
 
 
 if __name__ == "__main__":
