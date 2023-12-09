@@ -1,7 +1,7 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
 import re
-INPUT_FILE = 'input/day03.txt'
+INPUT_FILE = 'samples/day03_reddit.txt'
 
 
 def create_matrix(raw_data: list) -> list:
@@ -162,16 +162,15 @@ def puzzle_two(raw_data: list) -> int:
     gears = []
     for row, line in enumerate(raw_data):
         matches = re.finditer(r'\*', line)
-        if matches:
-            for match in matches:
-                col = match.start()
-                part_numbers = get_adjacent_part_numbers(row, col, matrix)
-                if len(part_numbers) != 2:
-                    continue
-                product = part_numbers[0] * part_numbers[1]
-                gears.append(product)
-        else:
-            print('SKIPPING')
+        if not matches:
+            continue
+        for match in matches:
+            col = match.start()
+            part_numbers = get_adjacent_part_numbers(row, col, matrix)
+            if len(part_numbers) != 2:
+                continue
+            product = part_numbers[0] * part_numbers[1]
+            gears.append(product)
     return sum(gears)
 
 
