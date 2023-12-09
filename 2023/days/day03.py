@@ -1,7 +1,7 @@
 # TITLE: Gear Ratios
 from utils import get_file_contents, plog
 import re
-INPUT_FILE = 'samples/day03_reddit.txt'
+INPUT_FILE = 'input/day03.txt'
 
 
 def create_matrix(raw_data: list) -> list:
@@ -107,24 +107,31 @@ def get_adjacent_part_numbers(row: int, col: int, matrix: list) -> list:
     :param matrix: The matrix
     :returns: List of part numbers the potential gear has
     """
-    part_numbers = []
+    up_numbers = []
+    down_numbers = []
+    left_numbers = []
+    right_numbers = []
     if _check_adjacent(row-1, col-1, matrix, check_symbol=False):  # diagonal up left
-        part_numbers.append(get_number(matrix[row-1], col-1))
+        up_numbers.append(get_number(matrix[row-1], col-1))
     if _check_adjacent(row-1, col, matrix, check_symbol=False):  # up
-        part_numbers.append(get_number(matrix[row-1], col))
+        up_numbers.append(get_number(matrix[row-1], col))
     if _check_adjacent(row-1, col+1, matrix, check_symbol=False):  # diagonal up right
-        part_numbers.append(get_number(matrix[row-1], col+1))
+        up_numbers.append(get_number(matrix[row-1], col+1))
     if _check_adjacent(row, col-1, matrix, check_symbol=False):  # left
-        part_numbers.append(get_number(matrix[row], col-1))
+        left_numbers.append(get_number(matrix[row], col-1))
     if _check_adjacent(row, col+1, matrix, check_symbol=False):  # right
-        part_numbers.append(get_number(matrix[row], col+1))
+        right_numbers.append(get_number(matrix[row], col+1))
     if _check_adjacent(row+1, col-1, matrix, check_symbol=False):  # diagonal down left
-        part_numbers.append(get_number(matrix[row+1], col-1))
+        down_numbers.append(get_number(matrix[row+1], col-1))
     if _check_adjacent(row+1, col, matrix, check_symbol=False):  # down
-        part_numbers.append(get_number(matrix[row+1], col))
+        down_numbers.append(get_number(matrix[row+1], col))
     if _check_adjacent(row+1, col+1, matrix, check_symbol=False):  # diagonal down right
-        part_numbers.append(get_number(matrix[row+1], col+1))
-    return list(set(part_numbers))  # unique
+        down_numbers.append(get_number(matrix[row+1], col+1))
+
+    up_numbers = list(set(up_numbers))  # account for same number
+    down_numbers = list(set(down_numbers))  # account for same number
+    part_numbers = left_numbers + right_numbers + up_numbers + down_numbers
+    return part_numbers
 
 
 def is_part_number(matrix: list, row: int, start: int, end: int) -> bool:

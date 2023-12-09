@@ -332,9 +332,32 @@ class TestGetAdjacentPartNumbers:
         expected = [152]
         assert actual == expected
 
+    def test_one__same_number(self):
+        mock_data = create_mock_matrix([
+            '14***',
+            '*****',
+        ])
+        row = 1
+        col = 0
+        actual = get_adjacent_part_numbers(row, col, mock_data)
+        expected = [14]
+        assert actual == expected
+
     def test_two(self):
         row = 2
         col = 2
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
         expected = [7, 152]
         assert set(actual) == set(expected)
+
+    def test_two__same_number(self):
+        mock_data = create_mock_matrix([
+            '14***',
+            '*****',
+            '*14**',
+        ])
+        row = 1
+        col = 0
+        actual = get_adjacent_part_numbers(row, col, mock_data)
+        expected = [14, 14]
+        assert actual == expected
