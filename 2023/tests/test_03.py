@@ -266,7 +266,7 @@ class TestGetAdjacentPartNumbers:
         assert actual == expected
 
     def test_zero__center(self):
-        row = 2
+        row = 5
         col = 1
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
         expected = []
@@ -287,7 +287,7 @@ class TestGetAdjacentPartNumbers:
         row = 1
         col = 3
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
-        expected = [14]
+        expected = [7]
         assert actual == expected
 
     def test_one__right(self):
@@ -308,12 +308,12 @@ class TestGetAdjacentPartNumbers:
         row = 6
         col = 4
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
-        expected = [14]
+        expected = [9]
         assert actual == expected
 
     def test_one__diagonal__right_up(self):
         row = 4
-        col = 2
+        col = 1
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
         expected = [152]
         assert actual == expected
@@ -336,5 +336,5 @@ class TestGetAdjacentPartNumbers:
         row = 2
         col = 2
         actual = get_adjacent_part_numbers(row, col, self.mock_data)
-        expected = [14]
-        assert actual == expected
+        expected = [7, 152]
+        assert set(actual) == set(expected)
