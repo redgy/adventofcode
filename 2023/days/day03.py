@@ -76,25 +76,26 @@ def get_number(row: list, index: int) -> int:
     :returns: The number
     """
     row_string = "".join(row)
-    number_string = f'{row_string[index]}'
-    moving_index = index
+    character = row_string[index]
+    number_string = f'{character}' if character.isdigit() else ''
     # go left
-    while moving_index > 0:
-        moving_index -= 1
+    moving_index = index-1
+    while moving_index >= 0:
         character = row_string[moving_index]
         if character.isdigit():
             number_string = f'{character}{number_string}'
+            moving_index -= 1
         else:
             moving_index = -1
     # go right
-    moving_index = index
+    moving_index = index+1
     while moving_index < len(row_string):
-        moving_index += 1
         character = row_string[moving_index]
         if character.isdigit():
             number_string = f'{number_string}{character}'
+            moving_index += 1
         else:
-            moving_index = len(row_string)+1
+            moving_index = len(row_string)
     return int(number_string)
 
 
