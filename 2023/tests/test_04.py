@@ -27,13 +27,13 @@ class TestMatchingWinningNumbers:
         expected = self.mock_winning_numbers[:2]
         mock_data = expected + [x for x in range(len(self.mock_winning_numbers) - len(expected))]
         actual = get_matching_winning_numbers(mock_data, self.mock_winning_numbers)
-        assert actual == expected
+        assert set(actual) == set(expected)
 
     def test_matches__all(self):
         expected = self.mock_winning_numbers
         mock_data = expected
         actual = get_matching_winning_numbers(mock_data, self.mock_winning_numbers)
-        assert actual == expected
+        assert set(actual) == set(expected)
 
 
 class TestCalculatePoints:

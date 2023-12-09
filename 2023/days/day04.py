@@ -11,12 +11,20 @@ def get_matching_winning_numbers(your_numbers: list, winning_numbers: list) -> l
     :param winning_numbers: List of winning numbers
     :returns: List of matching winning numbers
     """
-    return []
+    return list(set(your_numbers).intersection(set(winning_numbers)))
 
 
 def calculate_points(winning_numbers: list) -> int:
     """From a list of matching winning numbers, calculate the points"""
-    return -1
+    # challenge to self: can you do this without multiplying?
+    if not winning_numbers:
+        return 0
+    if len(winning_numbers) == 1:
+        return 1
+    points = 1
+    for num in winning_numbers[1:]:
+        points += points
+    return points
 
 
 def puzzle_one(raw_data: list) -> int:
