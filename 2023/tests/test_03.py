@@ -1,5 +1,5 @@
 from days.day03 import create_matrix, is_symbol, is_out_of_bounds, is_adjacent_to_symbol, \
-    get_adjacent_part_numbers
+    get_number, get_adjacent_part_numbers
 from copy import deepcopy
 
 
@@ -158,6 +158,92 @@ class TestIsAdjacentToSymbol:
         col = -1
         actual = is_adjacent_to_symbol(row, col, self.mock_data)
         expected = False
+        assert actual == expected
+
+
+class TestGetNumber:
+    def test_before_index(self):
+        mock_data = '123...'
+        mock_index = 3
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_on_index__beginning(self):
+        mock_data = '123...'
+        mock_index = 0
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_on_index__end(self):
+        mock_data = '123...'
+        mock_index = 2
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_on_index__between(self):
+        mock_data = '123...'
+        mock_index = 1
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_after_index(self):
+        mock_data = '....123...'
+        mock_index = 3
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__first_number__beginning(self):
+        mock_data = '123...456...'
+        mock_index = 0
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__first_number__middle(self):
+        mock_data = '123...456...'
+        mock_index = 1
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__first_number__end(self):
+        mock_data = '123...456...'
+        mock_index = 2
+        expected = 123
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__second_number__before(self):
+        mock_data = '123...456...'
+        mock_index = 5
+        expected = 456
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__second_number__beginning(self):
+        mock_data = '123...456...'
+        mock_index = 6
+        expected = 456
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__second_number__middle(self):
+        mock_data = '123...456...'
+        mock_index = 7
+        expected = 456
+        actual = get_number(list(mock_data), mock_index)
+        assert actual == expected
+
+    def test_two_numbers__second_number__end(self):
+        mock_data = '123...456...'
+        mock_index = 8
+        expected = 456
+        actual = get_number(list(mock_data), mock_index)
         assert actual == expected
 
 
