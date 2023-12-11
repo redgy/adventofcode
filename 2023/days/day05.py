@@ -1,12 +1,18 @@
 # TITLE: If You Give A Seed A Fertilizer
 from utils import get_file_contents, clean_list, convert_str_to_int, plog
 import re
-INPUT_FILE = 'samples/day04.txt'
+INPUT_FILE = 'samples/day05.txt'
 
 
-def create_map(destination_start, source_start, range_length):
-    """Source -> Destination map"""
+def parse_data(raw_data: list) -> dict:
+    seed_list = raw_data[0]
+    plog(clean_list(raw_data[2:]))
     return {}
+
+
+def create_map(destination_start: int, source_start: int, range_length: int) -> dict:
+    """Source -> Destination map"""
+    return {source_start+x: destination_start+x for x in range(range_length)}
 
 
 def puzzle_one(raw_data: list) -> int:

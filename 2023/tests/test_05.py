@@ -1,4 +1,23 @@
-from days.day05 import create_map
+from days.day05 import parse_data, create_map
+from utils import get_file_contents
+
+
+class TestParseData:
+    raw_data = get_file_contents('samples/day05.txt')
+    def test_keys(self):
+        expected = [
+            'seeds',
+            'seed-to-soil',
+            'soil-to-fertilizer',
+            'fertilizer-to-water',
+            'water-to-light',
+            'light-to-temperature',
+            'temperature-to-humidity',
+            'humidity-to-location',
+        ]
+        actual = parse_data(self.raw_data)
+        assert actual == expected
+
 
 class TestCreateMap:
     def test_map(self):
