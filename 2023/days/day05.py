@@ -4,6 +4,11 @@ import re
 INPUT_FILE = 'samples/day04.txt'
 
 
+def create_map(destination_start, source_start, range_length):
+    """Source -> Destination map"""
+    return {}
+
+
 def puzzle_one(raw_data: list) -> int:
     """TODO"""
     pass
