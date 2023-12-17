@@ -6,8 +6,20 @@ INPUT_FILE = 'samples/day05.txt'
 
 def parse_data(raw_data: list) -> dict:
     seed_list = raw_data[0]
-    plog(clean_list(raw_data[2:]))
-    return {}
+    parsed_map = {'seeds': seed_list}
+    raw_map_data = clean_list(raw_data[2:])
+    raw_map_data.reverse()  # go backwards
+    numbers_list = []
+    for row in raw_map_data:
+        is_not_map_title = row.find('map:') == -1
+        if is_not_map_title:
+            convert_numbers = row.split(' ')
+            numbers_list.extend(convert_numbers)
+        else:
+            map_title = row.split(' ')[0]
+            parsed_map[map_title] = numbers_list
+            numbers_list = []
+    return parsed_map
 
 
 def create_map(destination_start: int, source_start: int, range_length: int) -> dict:

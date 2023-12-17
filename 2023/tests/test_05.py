@@ -16,7 +16,7 @@ class TestParseData:
             'humidity-to-location',
         ]
         actual = parse_data(self.raw_data)
-        assert actual == expected
+        assert set(actual) == set(expected)
 
 
 class TestCreateMap:
