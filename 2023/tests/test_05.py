@@ -1,4 +1,4 @@
-from days.day05 import parse_data, create_map
+from days.day05 import parse_data, create_map, get_location
 from utils import get_file_contents
 
 
@@ -30,4 +30,12 @@ class TestCreateMap:
             source_start+2: destination_start+2,
         }
         actual = create_map(destination_start, source_start, range_length)
+        assert actual == expected
+
+
+class TestGetLocation:
+    def test_has_set_number(self):
+        mock_seed = 12
+        expected = 34
+        actual = get_location(mock_seed)
         assert actual == expected

@@ -27,6 +27,11 @@ def create_map(destination_start: int, source_start: int, range_length: int) -> 
     return {source_start+x: destination_start+x for x in range(range_length)}
 
 
+def get_location(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return location number"""
+    return -1
+
+
 def puzzle_one(raw_data: list) -> int:
     """TODO"""
     pass
