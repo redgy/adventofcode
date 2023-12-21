@@ -4,6 +4,7 @@ from utils import get_file_contents
 
 class TestParseData:
     raw_data = get_file_contents('samples/day05.txt')
+
     def test_keys(self):
         expected = [
             'seeds',
@@ -39,13 +40,13 @@ class TestGetLocation:
         expected = 34
         mock_almanac = {
             'seeds': mock_seed,
-            'seed-to-soil': {1:2},
-            'soil-to-fertilizer': {2:3},
-            'fertilizer-to-water': {3:4},
-            'water-to-light': {4:5},
-            'light-to-temperature': {5:6},
-            'temperature-to-humidity': {6:7},
-            'humidity-to-location': {7:expected},
+            'seed-to-soil': {1: 2},
+            'soil-to-fertilizer': {2: 3},
+            'fertilizer-to-water': {3: 4},
+            'water-to-light': {4: 5},
+            'light-to-temperature': {5: 6},
+            'temperature-to-humidity': {6: 7},
+            'humidity-to-location': {7: expected},
         }
         actual = get_location(mock_seed, mock_almanac)
         assert actual == expected

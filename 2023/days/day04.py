@@ -51,7 +51,7 @@ def puzzle_one(raw_data: list) -> int:
     return total
 
 
-def get_card_count(scratchcards: dict, current_cards: list, cards_gained:list) -> list:
+def get_card_count(scratchcards: dict, current_cards: list, cards_gained: list) -> list:
     """Recursively get card count for matching winning cards"""
     if not cards_gained:
         return current_cards

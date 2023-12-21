@@ -15,7 +15,7 @@ def convert_str_to_int(character: str) -> int:
     try:
         number = int(character)
     except ValueError as e:
-        raise(e)
+        raise (e)
     return number
 
 
