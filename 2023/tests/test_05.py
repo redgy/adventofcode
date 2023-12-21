@@ -37,5 +37,15 @@ class TestGetLocation:
     def test_has_set_number(self):
         mock_seed = 12
         expected = 34
-        actual = get_location(mock_seed)
+        mock_almanac = {
+            'seeds': mock_seed,
+            'seed-to-soil': {1:2},
+            'soil-to-fertilizer': {2:3},
+            'fertilizer-to-water': {3:4},
+            'water-to-light': {4:5},
+            'light-to-temperature': {5:6},
+            'temperature-to-humidity': {6:7},
+            'humidity-to-location': {7:expected},
+        }
+        actual = get_location(mock_seed, mock_almanac)
         assert actual == expected
