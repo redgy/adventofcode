@@ -27,9 +27,56 @@ def create_map(destination_start: int, source_start: int, range_length: int) -> 
     return {source_start+x: destination_start+x for x in range(range_length)}
 
 
+def get_from_almanac(almanac_key: str, dict_key: int, almanac: dict):
+    """Get value from almanac given a key (e.g. seed-to-soil) and dict key (e.g. 12)"""
+    return almanac[almanac_key].get(dict_key)
+
+
+def get_soil(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return fertilizer number"""
+    return get_from_almanac('seed-to-soil', starting_seed, almanac)
+
+
+def get_fertilizer(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return fertilizer number"""
+    soil = get_soil(starting_seed, almanac)
+    fertilizer = get_from_almanac('soil-to-fertilizer', soil, almanac)
+    return fertilizer
+
+
+def get_water(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return water number"""
+    fertilizer = get_fertilizer(starting_seed, almanac)
+    water = get_from_almanac('fertilizer-to-water', fertilizer, almanac)
+    return water
+
+
+def get_light(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return light number"""
+    water = get_water(starting_seed, almanac)
+    light = get_from_almanac('water-to-light', water, almanac)
+    return light
+
+
+def get_temperature(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return temperature number"""
+    light = get_light(starting_seed, almanac)
+    temperature = get_from_almanac('light-to-temperature', light, almanac)
+    return temperature
+
+
+def get_humidity(starting_seed: int, almanac: dict):
+    """From starting seed, go through all of almanac and return humidity number"""
+    temperature = get_temperature(starting_seed, almanac)
+    humidity = get_from_almanac('temperature-to-humidity', temperature, almanac)
+    return humidity
+
+
 def get_location(starting_seed: int, almanac: dict):
     """From starting seed, go through all of almanac and return location number"""
-    return -1
+    humidity = get_humidity(starting_seed, almanac)
+    location = get_from_almanac('humidity-to-location', humidity, almanac)
+    return location
 
 
 def puzzle_one(raw_data: list) -> int:

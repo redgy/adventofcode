@@ -40,7 +40,7 @@ class TestGetLocation:
         expected = 34
         mock_almanac = {
             'seeds': mock_seed,
-            'seed-to-soil': {1: 2},
+            'seed-to-soil': {mock_seed: 2},
             'soil-to-fertilizer': {2: 3},
             'fertilizer-to-water': {3: 4},
             'water-to-light': {4: 5},
