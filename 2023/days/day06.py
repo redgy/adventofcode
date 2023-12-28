@@ -32,9 +32,22 @@ def puzzle_one(raw_data: list) -> int:
     return product
 
 
+def _get_time(raw_line: str):
+    parsed_line = raw_line.split(':')[1:][0]
+    int_str = parsed_line.replace(' ', '')
+    return int(int_str)
+
+
 def puzzle_two(raw_data: list) -> int:
-    """TODO"""
-    return
+    """How many ways can you beat the record in this one much longer race?"""
+    race_time = _get_time(raw_data[0])
+    record_to_beat = _get_time(raw_data[1])
+    winning_races = []
+    for hold_time in range(race_time):
+        distance = calculate_distance(hold_time, race_time)
+        if distance > record_to_beat:
+            winning_races.append(distance)
+    return len(winning_races)
 
 
 if __name__ == "__main__":
