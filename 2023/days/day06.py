@@ -1,7 +1,7 @@
 # TITLE: Wait For It
-from utils import get_file_contents, clean_list, convert_str_to_int, plog
+from utils import get_file_contents, clean_list, plog
 import re
-INPUT_FILE = 'samples/day06.txt'
+INPUT_FILE = 'input/day06.txt'
 
 
 def calculate_distance(time_held: int, race_time: int):
@@ -14,8 +14,22 @@ def calculate_distance(time_held: int, race_time: int):
 
 
 def puzzle_one(raw_data: list) -> int:
-    """TODO"""
-    return
+    """What do you get if you multiply these numbers together?"""
+    race_times = [int(x) for x in clean_list(raw_data[0].split(' '))[1:]]
+    record_distances = [int(x) for x in clean_list(raw_data[1].split(' '))[1:]]
+    ways_to_win = []
+    for race_num, race_time in enumerate(race_times):
+        record_to_beat = record_distances[race_num]
+        winning_races = []
+        for hold_time in range(race_time):
+            distance = calculate_distance(hold_time, race_time)
+            if distance > record_to_beat:
+                winning_races.append(distance)
+        ways_to_win.append(len(winning_races))
+    product = 1
+    for p in ways_to_win:
+        product *= p
+    return product
 
 
 def puzzle_two(raw_data: list) -> int:
