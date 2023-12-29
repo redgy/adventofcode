@@ -1,6 +1,8 @@
 # TITLE: Camel Cards
 from utils import get_file_contents, clean_list, plog
 import re
+
+
 INPUT_FILE = 'input/day07.txt'
 LETTER_MAP = {
     'T': 10,
