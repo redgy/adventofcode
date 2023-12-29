@@ -50,33 +50,33 @@ class TestCompareHands:
         mock_one = '53343'
         mock_two = '72228'
         actual = compare_hands(mock_one, mock_two)
-        expected = mock_one
+        expected = mock_two
         assert actual == expected
 
     def test_second_card(self):
         mock_one = 'A9999'
         mock_two = 'AA876'
         actual = compare_hands(mock_one, mock_two)
-        expected = mock_one
+        expected = mock_two
         assert actual == expected
 
     def test_third_card(self):
         mock_one = '435JT'
         mock_two = '43TTJ'
         actual = compare_hands(mock_one, mock_two)
-        expected = mock_one
+        expected = mock_two
         assert actual == expected
 
     def test_fourth_card(self):
         mock_one = '992QK'
         mock_two = '992K7'
         actual = compare_hands(mock_one, mock_two)
-        expected = mock_one
+        expected = mock_two
         assert actual == expected
 
     def test_fifth_card(self):
         mock_one = '34567'
         mock_two = '34568'
         actual = compare_hands(mock_one, mock_two)
-        expected = mock_one
+        expected = mock_two
         assert actual == expected
