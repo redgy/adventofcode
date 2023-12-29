@@ -55,6 +55,7 @@ def _convert_letter(char: str):
 
 
 def compare_hands(hand_one: str, hand_two: str):
+    """Compare hands and return the stronger hand"""
     for index in range(5):
         hand_one_char = _convert_letter(hand_one[index])
         hand_two_char = _convert_letter(hand_two[index])
