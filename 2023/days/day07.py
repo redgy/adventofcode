@@ -2,6 +2,13 @@
 from utils import get_file_contents, clean_list, plog
 import re
 INPUT_FILE = 'input/day07.txt'
+LETTER_MAP = {
+    'T': 10,
+    'J': 11,
+    'Q': 12,
+    'K': 13,
+    'A': 14,
+}
 
 
 def get_hand_type(cards: str):
@@ -18,8 +25,24 @@ def get_hand_type(cards: str):
     pass
 
 
+def _convert_letter(char: str):
+    try:
+        int_repr = int(char)
+    except ValueError:
+        int_repr = LETTER_MAP.get(char)
+    return int_repr
+
+
 def compare_hands(hand_one: str, hand_two: str):
-    pass
+    for index in range(5):
+        hand_one_char = _convert_letter(hand_one[index])
+        hand_two_char = _convert_letter(hand_two[index])
+        if hand_one_char == hand_two_char:
+            continue
+        if hand_one_char > hand_two_char:
+            return hand_one
+        return hand_two
+    raise ValueError('both hands are the same')
 
 
 def puzzle_one(raw_data: list) -> int:
