@@ -46,7 +46,7 @@ def get_hand_type(cards: str):
             hand_type = 5
     elif len(unique_cards) == 2:
         highest_count = _get_highest_count(unique_cards, cards)
-        if highest_count == 4:  # 4-of-a-kind: 22229
+        if highest_count == 4:  # Four of a kind: 22229
             hand_type = 2
         else:  # highest count == 3  Full house: 77755
             hand_type = 3
