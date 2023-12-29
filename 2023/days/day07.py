@@ -11,18 +11,46 @@ LETTER_MAP = {
 }
 
 
+def _get_highest_count(unique_cards, cards):
+    """Helper method to get highest count of each unique card"""
+    unique_cards = {k: 0 for k in unique_cards}
+    for card in cards:
+        unique_cards[card] += 1
+    unique_counts = [x for x in list(unique_cards.values())]
+    return max(unique_counts)
+
+
 def get_hand_type(cards: str):
     """From cards, get hand type
 
-    Five of a kind, where all five cards have the same label: AAAAA
-    Four of a kind, where four cards have the same label and one card has a different label: AA8AA
-    Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
-    Three of a kind, where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
-    Two pair, where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
-    One pair, where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
-    High card, where all cards' labels are distinct: 23456
+    1: Five of a kind, where all five cards have the same label: AAAAA
+    2: Four of a kind, where four cards have the same label and one card has a different label: AA8AA
+    3: Full house, where three cards have the same label, and the remaining two cards share a different label: 23332
+    4: Three of a kind, where three cards have the same label, and the remaining two cards are each different from any other card in the hand: TTT98
+    5: Two pair, where two cards share one label, two other cards share a second label, and the remaining card has a third label: 23432
+    6: One pair, where two cards share one label, and the other three cards have a different label from the pair and each other: A23A4
+    7: High card, where all cards' labels are distinct: 23456
     """
-    pass
+    unique_cards = set(cards)
+    if len(unique_cards) == 5:  # High card: 56789
+        hand_type = 7
+    elif len(unique_cards) == 4:  # One pair: 88AKJ
+        hand_type = 6
+    elif len(unique_cards) == 3:
+        highest_count = _get_highest_count(unique_cards, cards)
+        if highest_count == 3:  # Three of a kind: 333T8
+            hand_type = 4
+        else:  # highest count == 2  Two pair: QQ445
+            hand_type = 5
+    elif len(unique_cards) == 2:
+        highest_count = _get_highest_count(unique_cards, cards)
+        if highest_count == 4:  # 4-of-a-kind: 22229
+            hand_type = 2
+        else:  # highest count == 3  Full house: 77755
+            hand_type = 3
+    else:  # len(unique_cards) == 1  Five of a kind: JJJJJ
+        hand_type = 1
+    return hand_type
 
 
 def _convert_letter(char: str):
