@@ -3,7 +3,7 @@ from utils import get_file_contents, clean_list, plog
 import re
 
 
-INPUT_FILE = 'input/day07.txt'
+INPUT_FILE = 'samples/day07.txt'
 LETTER_MAP = {
     'T': 10,
     'J': 11,
@@ -64,12 +64,30 @@ def compare_hands(hand_one: str, hand_two: str):
         if hand_one_char > hand_two_char:
             return hand_one
         return hand_two
-    raise ValueError('both hands are the same')
+    # raise ValueError('both hands are the same')
+
+
+def _quick_sort(arr):
+    if len(arr) <= 1:
+        return arr
+    pivot = arr[len(arr) // 2]
+    left = [x for x in arr if compare_hands(x, pivot) == pivot]
+    middle = [x for x in arr if x == pivot]
+    right = [x for x in arr if compare_hands(x, pivot) == x]
+    return _quick_sort(left) + middle + _quick_sort(right)
 
 
 def puzzle_one(raw_data: list) -> int:
     """What are the total winnings?"""
-    pass
+    bid_map = {}
+    hands = []
+    for row in raw_data:
+        hand, bid = row.split(' ')
+        hands.append(hand)
+        bid_map[hand] = int(bid)
+    #  Challenge: can I write the quicksort algorithm?
+    sorted_hands = _quick_sort(hands)
+    plog(sorted_hands)
 
 
 def puzzle_two(raw_data: list) -> int:
