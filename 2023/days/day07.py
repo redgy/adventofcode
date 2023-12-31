@@ -1,9 +1,9 @@
 # TITLE: Camel Cards
-from utils import get_file_contents, clean_list, plog
+from utils import get_file_contents, plog
 import re
 
 
-INPUT_FILE = 'samples/day07.txt'
+INPUT_FILE = 'input/day07.txt'
 LETTER_MAP = {
     'T': 10,
     'J': 11,
@@ -56,6 +56,7 @@ def _convert_letter(char: str):
 
 def compare_cards(hand_one: str, hand_two: str):
     """Compare each individual card in hand return stronger hand"""
+    stronger_hand = None
     for index in range(5):
         hand_one_char = _convert_letter(hand_one[index])
         hand_two_char = _convert_letter(hand_two[index])
@@ -101,11 +102,11 @@ def puzzle_one(raw_data: list) -> int:
         hand, bid = row.split(' ')
         hands.append(hand)
         bid_map[hand] = int(bid)
-    #  Challenge: can I write the quicksort algorithm?
     sorted_hands = _quick_sort(hands)
-    plog(sorted_hands)
+    total = 0
     for rank, hand in enumerate(sorted_hands, start=1):
-        print(hand, bid_map.get(hand), rank)
+        total += rank * bid_map.get(hand)
+    return total
 
 
 def puzzle_two(raw_data: list) -> int:
