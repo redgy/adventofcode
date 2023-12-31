@@ -54,17 +54,26 @@ def _convert_letter(char: str):
     return int_repr
 
 
-def compare_hands(hand_one: str, hand_two: str):
-    """Compare hands and return the stronger hand"""
+def compare_cards(hand_one: str, hand_two: str):
+    """Compare each individual card in hand return stronger hand"""
     for index in range(5):
         hand_one_char = _convert_letter(hand_one[index])
         hand_two_char = _convert_letter(hand_two[index])
         if hand_one_char == hand_two_char:
             continue
         if hand_one_char > hand_two_char:
-            return hand_one
-        return hand_two
-    # raise ValueError('both hands are the same')
+            stronger_hand = hand_one
+        else:
+            stronger_hand = hand_two
+        break
+    return stronger_hand
+
+
+def compare_hands(hand_one: str, hand_two: str):
+    """Compare hands and return the stronger hand"""
+    stronger_hand = None
+    print(f'{hand_one} vs {hand_two} ==> {stronger_hand}')
+    return stronger_hand
 
 
 def _quick_sort(arr):
@@ -88,6 +97,8 @@ def puzzle_one(raw_data: list) -> int:
     #  Challenge: can I write the quicksort algorithm?
     sorted_hands = _quick_sort(hands)
     plog(sorted_hands)
+    for rank, hand in enumerate(sorted_hands, start=1):
+        print(hand, bid_map.get(hand), rank)
 
 
 def puzzle_two(raw_data: list) -> int:
