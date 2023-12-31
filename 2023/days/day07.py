@@ -72,7 +72,14 @@ def compare_cards(hand_one: str, hand_two: str):
 def compare_hands(hand_one: str, hand_two: str):
     """Compare hands and return the stronger hand"""
     stronger_hand = None
-    print(f'{hand_one} vs {hand_two} ==> {stronger_hand}')
+    hand_one_rank = get_hand_type(hand_one)
+    hand_two_rank = get_hand_type(hand_two)
+    if hand_one_rank == hand_two_rank:
+        stronger_hand = compare_cards(hand_one, hand_two)
+    elif hand_one_rank > hand_two_rank:
+        stronger_hand = hand_one
+    else:
+        stronger_hand = hand_two
     return stronger_hand
 
 

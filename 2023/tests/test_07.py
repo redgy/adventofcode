@@ -80,3 +80,28 @@ class TestCompareCards:
         actual = compare_cards(mock_one, mock_two)
         expected = mock_two
         assert actual == expected
+
+
+class TestCompareHands:
+    mock_hands = {
+        1: 'A9832',
+        2: '72347',
+        3: 'J9J92',
+        4: 'Q9995',
+        5: '75757',
+        6: '33338',
+        7: '44444',
+    }
+
+    def test_different_hand_types(self):
+        assert compare_hands(self.mock_hands[1], self.mock_hands[2]) == self.mock_hands[2]
+        assert compare_hands(self.mock_hands[1], self.mock_hands[3]) == self.mock_hands[3]
+        assert compare_hands(self.mock_hands[1], self.mock_hands[4]) == self.mock_hands[4]
+        assert compare_hands(self.mock_hands[1], self.mock_hands[5]) == self.mock_hands[5]
+        assert compare_hands(self.mock_hands[1], self.mock_hands[6]) == self.mock_hands[6]
+        assert compare_hands(self.mock_hands[1], self.mock_hands[7]) == self.mock_hands[7]
+
+    def test_same_hand_types(self):
+        mock_one = '3232A'
+        mock_two = '33A22'
+        assert compare_hands(mock_one, mock_two) == mock_two
