@@ -11,9 +11,16 @@ LETTER_MAP = {
     'K': 13,
     'A': 14,
 }
+LETTER_MAP_JOKER = {
+    'T': 10,
+    'J': 1,
+    'Q': 12,
+    'K': 13,
+    'A': 14,
+}
 
 
-def _get_highest_count(unique_cards, cards):
+def _get_highest_count(unique_cards, cards, use_joker=False):
     """Helper method to get highest count of each unique card"""
     unique_cards = {k: 0 for k in unique_cards}
     for card in cards:
@@ -22,7 +29,7 @@ def _get_highest_count(unique_cards, cards):
     return max(unique_counts)
 
 
-def get_hand_type(cards: str):
+def get_hand_type(cards: str, use_joker=False):
     """From cards, get hand type. Weakest hand type will have lowest rank"""
     unique_cards = set(cards)
     if len(unique_cards) == 5:  # High card: 56789
@@ -46,7 +53,7 @@ def get_hand_type(cards: str):
     return hand_type
 
 
-def _convert_letter(char: str):
+def _convert_letter(char: str, use_joker=False):
     try:
         int_repr = int(char)
     except ValueError:
@@ -54,12 +61,12 @@ def _convert_letter(char: str):
     return int_repr
 
 
-def compare_cards(hand_one: str, hand_two: str):
+def compare_cards(hand_one: str, hand_two: str, use_joker=False):
     """Compare each individual card in hand return stronger hand"""
     stronger_hand = None
     for index in range(5):
-        hand_one_char = _convert_letter(hand_one[index])
-        hand_two_char = _convert_letter(hand_two[index])
+        hand_one_char = _convert_letter(hand_one[index], use_joker=use_joker)
+        hand_two_char = _convert_letter(hand_two[index], use_joker=use_joker)
         if hand_one_char == hand_two_char:
             continue
         if hand_one_char > hand_two_char:
@@ -70,13 +77,13 @@ def compare_cards(hand_one: str, hand_two: str):
     return stronger_hand
 
 
-def compare_hands(hand_one: str, hand_two: str):
+def compare_hands(hand_one: str, hand_two: str, use_joker=False):
     """Compare hands and return the stronger hand"""
     stronger_hand = None
-    hand_one_rank = get_hand_type(hand_one)
-    hand_two_rank = get_hand_type(hand_two)
+    hand_one_rank = get_hand_type(hand_one, use_joker=use_joker)
+    hand_two_rank = get_hand_type(hand_two, use_joker=use_joker)
     if hand_one_rank == hand_two_rank:
-        stronger_hand = compare_cards(hand_one, hand_two)
+        stronger_hand = compare_cards(hand_one, hand_two, use_joker=use_joker)
     elif hand_one_rank > hand_two_rank:
         stronger_hand = hand_one
     else:

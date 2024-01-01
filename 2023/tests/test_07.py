@@ -105,3 +105,13 @@ class TestCompareHands:
         mock_one = '3232A'
         mock_two = '33A22'
         assert compare_hands(mock_one, mock_two) == mock_two
+
+    def test_different_hand_types_before_joker__becomes_same_hand_type(self):
+        mock_one = 'A33A3'
+        mock_two = 'J33A3'
+        assert compare_hands(mock_one, mock_two, use_joker=True) == mock_two
+
+    def test_same_hand_types_before_joker__becomes_stronger_hand_type(self):
+        mock_one = 'K9977'
+        mock_two = 'T55JJ'
+        assert compare_hands(mock_one, mock_two, use_joker=True) == mock_two
