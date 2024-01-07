@@ -11,39 +11,53 @@ LETTER_MAP = {
     'K': 13,
     'A': 14,
 }
-LETTER_MAP_JOKER = {
-    'T': 10,
-    'J': 1,
-    'Q': 12,
-    'K': 13,
-    'A': 14,
-}
 
 
-def _get_highest_count(unique_cards, cards, use_joker=False):
-    """Helper method to get highest count of each unique card"""
+def _get_unique_count(cards):
+    """Helper method to get unique count of each card"""
+    unique_cards = set(cards)
     unique_cards = {k: 0 for k in unique_cards}
     for card in cards:
         unique_cards[card] += 1
+    return unique_cards
+
+
+def _get_highest_count(cards):
+    """Helper method to get highest count of each unique card"""
+    unique_cards = _get_unique_count(cards)
     unique_counts = [x for x in list(unique_cards.values())]
     return max(unique_counts)
 
 
+def _convert_jokers(cards: str) -> str:
+    """From cards, convert joker to best card"""
+    unique_counts = _get_unique_count(cards)
+    max_key = None
+    max_count = 0
+    for key, count in unique_counts.items():
+        if count > max_count and key != 'J':
+            max_count = count
+            max_key = key
+    return cards.replace('J', max_key)
+
+
 def get_hand_type(cards: str, use_joker=False):
     """From cards, get hand type. Weakest hand type will have lowest rank"""
+    if use_joker:
+        cards = _convert_jokers(cards)
     unique_cards = set(cards)
     if len(unique_cards) == 5:  # High card: 56789
         hand_type = 1
     elif len(unique_cards) == 4:  # One pair: 88AKJ
         hand_type = 2
     elif len(unique_cards) == 3:
-        highest_count = _get_highest_count(unique_cards, cards)
+        highest_count = _get_highest_count(cards)
         if highest_count == 3:  # Three of a kind: 333T8
             hand_type = 4
         else:  # highest count == 2  Two pair: QQ445
             hand_type = 3
     elif len(unique_cards) == 2:
-        highest_count = _get_highest_count(unique_cards, cards)
+        highest_count = _get_highest_count(cards)
         if highest_count == 4:  # Four of a kind: 22229
             hand_type = 6
         else:  # highest count == 3  Full house: 77755
@@ -58,6 +72,8 @@ def _convert_letter(char: str, use_joker=False):
         int_repr = int(char)
     except ValueError:
         int_repr = LETTER_MAP.get(char)
+        if use_joker and int_repr == 11:  # J is now Joker which has a lower value
+            int_repr = -1
     return int_repr
 
 
