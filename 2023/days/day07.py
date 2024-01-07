@@ -38,6 +38,8 @@ def _convert_jokers(cards: str) -> str:
         if count > max_count and key != 'J':
             max_count = count
             max_key = key
+    if not max_key:  # implies the card set is JJJJJ
+        return cards
     return cards.replace('J', max_key)
 
 
@@ -107,17 +109,17 @@ def compare_hands(hand_one: str, hand_two: str, use_joker=False):
     return stronger_hand
 
 
-def _quick_sort(arr):
+def _quick_sort(arr, use_joker=False):
     if len(arr) <= 1:
         return arr
     pivot = arr[len(arr) // 2]
-    left = [x for x in arr if compare_hands(x, pivot) == pivot]
+    left = [x for x in arr if compare_hands(x, pivot, use_joker=use_joker) == pivot]
     middle = [x for x in arr if x == pivot]
-    right = [x for x in arr if compare_hands(x, pivot) == x]
-    return _quick_sort(left) + middle + _quick_sort(right)
+    right = [x for x in arr if compare_hands(x, pivot, use_joker=use_joker) == x]
+    return _quick_sort(left, use_joker=use_joker) + middle + _quick_sort(right, use_joker=use_joker)
 
 
-def puzzle_one(raw_data: list) -> int:
+def puzzle_one(raw_data: list, use_joker=False) -> int:
     """What are the total winnings?"""
     bid_map = {}
     hands = []
@@ -125,7 +127,7 @@ def puzzle_one(raw_data: list) -> int:
         hand, bid = row.split(' ')
         hands.append(hand)
         bid_map[hand] = int(bid)
-    sorted_hands = _quick_sort(hands)
+    sorted_hands = _quick_sort(hands, use_joker=use_joker)
     total = 0
     for rank, hand in enumerate(sorted_hands, start=1):
         total += rank * bid_map.get(hand)
@@ -133,8 +135,8 @@ def puzzle_one(raw_data: list) -> int:
 
 
 def puzzle_two(raw_data: list) -> int:
-    """TODO"""
-    pass
+    """Using the new joker rule, find the rank of every hand in your set. What are the new total winnings?"""
+    return puzzle_one(raw_data, use_joker=True)
 
 
 if __name__ == "__main__":
