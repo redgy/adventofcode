@@ -6,26 +6,30 @@ INPUT_FILE = 'samples/day08-1.txt'
 
 
 class Node:
-    def __init__(self, name: str, left: str, right: str):
-        self.name = name
-        self.left = left
-        self. right = right
+    def __init__(self, node_data):
+        node_data = node_data.replace('(', '')
+        node_data = node_data.replace(')', '')
+        left, right = node_data.split(',')
+        self.left = left.strip()
+        self. right = right.strip()
 
+    def __str__(self) -> str:
+        return f'({self.left}, {self.right})'
 
-class Network:
-    def __init__(self, map={}):
-        if map:
-            self.map = map
-        else:
-            self.map = {}
-
-    def add(self, node: Node):
-        self.map[node.name] = node
+    def __repr__(self) -> str:
+        return f'({self.left}, {self.right})'
 
 
 def puzzle_one(raw_data: list) -> int:
     """TODO"""
-    pass
+    directions = raw_data[0]
+    raw_data = raw_data[2:]
+    network = {}
+    for row in raw_data:
+        key, node_data = row.split('=')
+        key = key.strip()
+        network[key] = Node(node_data)
+    plog(network)
 
 
 def puzzle_two(raw_data: list) -> int:
