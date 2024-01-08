@@ -37,10 +37,11 @@ class TestNetwork:
             actual = mock_network.map
             actual == expected
 
-        def test_dict(self, mock_network):
-            expected = {'AAA': mock_node()}
-            actual = mock_network.map
-            assert actual == expected
+        def test_dict(self, mock_node, mock_network):
+            expected = mock_node
+            actual = mock_network.map['AAA']
+            assert actual.left == expected.left
+            assert actual.right == expected.right
 
     class TestAddNode:
         def test_new_node(self, mock_network):
@@ -51,7 +52,7 @@ class TestNetwork:
             actual = mock_network.map
             assert actual == expected
 
-        def test_existing_node(self, mock_node):
+        def test_existing_node(self, mock_node, mock_network):
             another_mock_node = Node(mock_node.name, 'anotherword', 'andanother')
             mock_network.add(mock_node)
             expected = get_mock_map()
