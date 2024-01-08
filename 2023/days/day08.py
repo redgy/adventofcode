@@ -6,14 +6,21 @@ INPUT_FILE = 'samples/day08-1.txt'
 
 
 class Node:
-    def __init__(self, left: str, right: str):
+    def __init__(self, name: str, left: str, right: str):
+        self.name = name
         self.left = left
         self. right = right
 
 
 class Network:
-    def __init__(self):
-        pass
+    def __init__(self, map={}):
+        if map:
+            self.map = map
+        else:
+            self.map = {}
+
+    def add(self, node: Node):
+        self.map[node.name] = node
 
 
 def puzzle_one(raw_data: list) -> int:
