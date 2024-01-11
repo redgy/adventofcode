@@ -20,15 +20,24 @@ class Node:
         return f'({self.left}, {self.right})'
 
 
-def puzzle_one(raw_data: list) -> int:
-    """How many steps are required to reach ZZZ?"""
-    directions = raw_data[0]
+def _get_directions(raw_data: list):
+    return raw_data[0]
+
+
+def _get_network(raw_data: list):
     raw_data = raw_data[2:]
     network = {}
     for row in raw_data:
         key, node_data = row.split('=')
         key = key.strip()
         network[key] = Node(node_data)
+    return network
+
+
+def puzzle_one(raw_data: list) -> int:
+    """How many steps are required to reach ZZZ?"""
+    directions = _get_directions(raw_data)
+    network = _get_network(raw_data)
     count = 0
     key = 'AAA'
     while key != 'ZZZ':
@@ -44,7 +53,7 @@ def puzzle_one(raw_data: list) -> int:
 
 
 def puzzle_two(raw_data: list) -> int:
-    """TODO"""
+    """How many steps does it take before you're only on nodes that end with Z?"""
     pass
 
 
