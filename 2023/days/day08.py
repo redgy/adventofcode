@@ -43,7 +43,10 @@ def is_end(node: str) -> bool:
 
 
 def is_all_end(dictionary: dict) -> bool:
-    return
+    for v in dictionary.values():
+        if not is_end(v):
+            return False
+    return True
 
 
 def get_starting_list(network: dict) -> list:
