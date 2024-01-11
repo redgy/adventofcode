@@ -24,7 +24,7 @@ def _get_directions(raw_data: list):
     return raw_data[0]
 
 
-def _get_network(raw_data: list):
+def _get_network(raw_data: list) -> dict:
     raw_data = raw_data[2:]
     network = {}
     for row in raw_data:
@@ -32,6 +32,10 @@ def _get_network(raw_data: list):
         key = key.strip()
         network[key] = Node(node_data)
     return network
+
+
+def get_starting_list(network: dict) -> list:
+    return []
 
 
 def puzzle_one(raw_data: list) -> int:
