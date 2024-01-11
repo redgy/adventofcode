@@ -1,4 +1,4 @@
-from days.day08 import Node, get_starting_list, is_start, is_end
+from days.day08 import Node, get_starting_list, is_start, is_end, is_all_end
 
 
 class TestNode:
@@ -25,6 +25,24 @@ class TestIsEnd:
 
     def test_false(self):
         assert not is_end('IEKDJSIKA')
+
+
+class TestIsAllEnd:
+    def test_true(self):
+        mock_data = {
+            'a': 'AAZ',
+            'b': 'BBZ',
+            'c': 'ZZZ',
+        }
+        assert is_all_end(mock_data)
+
+    def test_false(self):
+        mock_data = {
+            'a': 'AAZ',
+            'b': 'BBB',
+            'c': 'ZZZ',
+        }
+        assert not is_all_end(mock_data)
 
 
 class TestGetStartingList:

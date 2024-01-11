@@ -42,6 +42,10 @@ def is_end(node: str) -> bool:
     return node[-1] == 'Z'
 
 
+def is_all_end(dictionary: dict) -> bool:
+    return
+
+
 def get_starting_list(network: dict) -> list:
     return [x for x in network if is_start(x)]
 
