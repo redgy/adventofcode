@@ -35,15 +35,15 @@ def _get_network(raw_data: list) -> dict:
 
 
 def is_start(node: str) -> bool:
-    return
+    return node[-1] == 'A'
 
 
 def is_end(node: str) -> bool:
-    return
+    return node[-1] == 'Z'
 
 
 def get_starting_list(network: dict) -> list:
-    return []
+    return [x for x in network if is_start(x)]
 
 
 def puzzle_one(raw_data: list) -> int:
