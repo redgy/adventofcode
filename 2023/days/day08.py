@@ -34,6 +34,14 @@ def _get_network(raw_data: list) -> dict:
     return network
 
 
+def is_start(node: str) -> bool:
+    return
+
+
+def is_end(node: str) -> bool:
+    return
+
+
 def get_starting_list(network: dict) -> list:
     return []
 

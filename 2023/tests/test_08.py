@@ -1,4 +1,4 @@
-from days.day08 import Node, get_starting_list
+from days.day08 import Node, get_starting_list, is_start, is_end
 
 
 class TestNode:
@@ -9,6 +9,22 @@ class TestNode:
         mock_node = Node(mock_node_data)
         assert mock_node.left == mock_left
         assert mock_node.right == mock_right
+
+
+class TestIsStart:
+    def test_true(self):
+        assert is_start('IEKDJSIKA')
+
+    def test_false(self):
+        assert not is_start('IEKDJSIKAZ')
+
+
+class TestIsEnd:
+    def test_true(self):
+        assert is_end('IEKDJSIKAZ')
+
+    def test_false(self):
+        assert not is_end('IEKDJSIKA')
 
 
 class TestGetStartingList:
