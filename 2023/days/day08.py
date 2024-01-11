@@ -2,7 +2,7 @@
 from utils import get_file_contents, plog
 
 
-INPUT_FILE = 'samples/day08-1.txt'
+INPUT_FILE = 'input/day08.txt'
 
 
 class Node:
@@ -21,7 +21,7 @@ class Node:
 
 
 def puzzle_one(raw_data: list) -> int:
-    """TODO"""
+    """How many steps are required to reach ZZZ?"""
     directions = raw_data[0]
     raw_data = raw_data[2:]
     network = {}
@@ -29,7 +29,18 @@ def puzzle_one(raw_data: list) -> int:
         key, node_data = row.split('=')
         key = key.strip()
         network[key] = Node(node_data)
-    plog(network)
+    count = 0
+    key = 'AAA'
+    while key != 'ZZZ':
+        for d in directions:
+            if d == 'L':
+                key = network[key].left
+            else:
+                key = network[key].right
+            count += 1
+            if key == 'ZZZ':
+                break
+    return count
 
 
 def puzzle_two(raw_data: list) -> int:
