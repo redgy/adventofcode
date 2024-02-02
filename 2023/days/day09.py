@@ -2,7 +2,25 @@
 from utils import get_file_contents, plog
 
 
-INPUT_FILE = 'input/day08.txt'
+INPUT_FILE = 'input/day09.txt'
+
+
+def get_extrapolated_values(arr_map: list) -> list:
+    """After extrapolated values are filled, strictly get those values"""
+    pass
+
+
+def fill_extrapolated_values(arr_map: list) -> list:
+    """Fills extrapolated values in list of lists"""
+    pass
+
+
+def get_step_array(arr: list) -> list:
+    pass
+
+
+def calculate_step(num1: int, num2: int) -> int:
+    pass
 
 
 def puzzle_one(raw_data: list) -> int:
