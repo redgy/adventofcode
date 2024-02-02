@@ -27,7 +27,7 @@ class TestCalculateStep:
 class TestGetStepArray:
     def test_nonzero(self):
         expected = [1 for x in range(4)]
-        mock_data = [x for x in range(5)].reverse()
+        mock_data = [x for x in range(5)]
         actual = get_step_array(mock_data)
         assert actual == expected
 
@@ -61,9 +61,10 @@ class TestFillExtrapolatedValues:
             [0, 0, 0]
         ]
         expected = [
-            [0, 3, 6, 9, 12, 15, 18],
-            [3, 3, 3, 3, 3, 3],
-            [0, 0, 0, 0, 0]
+            [1, 3, 6, 10, 15, 21, 28],
+            [2, 3, 4, 5, 6, 7],
+            [1, 1, 1, 1, 1],
+            [0, 0, 0, 0]
         ]
         actual = fill_extrapolated_values(mock_data)
         assert actual == expected
@@ -72,12 +73,14 @@ class TestFillExtrapolatedValues:
         mock_data = [
             [10, 13, 16, 21, 30, 45],
             [3, 3, 5, 9, 15],
+            [0, 2, 4, 6],
             [2, 2, 2],
             [0, 0]
         ]
         expected = [
             [10, 13, 16, 21, 30, 45, 68],
             [3, 3, 5, 9, 15, 23],
+            [0, 2, 4, 6, 8],
             [2, 2, 2, 2],
             [0, 0, 0]
         ]
