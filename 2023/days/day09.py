@@ -5,12 +5,12 @@ from utils import get_file_contents, plog
 INPUT_FILE = 'input/day09.txt'
 
 
-def get_extrapolated_values(arr_map: list) -> list:
+def get_last_extrapolated_value(arr_map: list) -> list:
     """After extrapolated values are filled, strictly get those values"""
     extrapolated_values = []
     for arr in arr_map:
         extrapolated_values.append(arr[-1])
-    return extrapolated_values
+    return extrapolated_values[0]
 
 
 def fill_extrapolated_values(arr_map: list) -> list:
@@ -46,7 +46,24 @@ def calculate_step(num1: int, num2: int) -> int:
 
 def puzzle_one(raw_data: list) -> int:
     """What is the sum of extrapolated values?"""
-    pass
+    puzzle_one = []
+    extrapolated_values = []
+    for row in raw_data:
+        new_row = row.split(' ')
+        new_row = [int(x) for x in new_row]
+        puzzle_one.append(new_row)
+    for arr in puzzle_one:
+        arr_map = [arr]
+        arr_conditional = [x == 0 for x in arr]
+        while not all(arr_conditional):
+            step_array = get_step_array(arr)
+            arr_map.append(step_array)
+            arr_conditional = [x == 0 for x in step_array]
+            arr = step_array
+        arr_map = fill_extrapolated_values(arr_map)
+        last_extrapolated_value = get_last_extrapolated_value(arr_map)
+        extrapolated_values.append(last_extrapolated_value)
+    return sum(extrapolated_values)
 
 
 def puzzle_two(raw_data: list) -> int:

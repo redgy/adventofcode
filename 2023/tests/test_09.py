@@ -1,4 +1,4 @@
-from days.day09 import calculate_step, get_step_array, fill_extrapolated_values, get_extrapolated_values
+from days.day09 import calculate_step, get_step_array, fill_extrapolated_values, get_last_extrapolated_value
 
 
 class TestCalculateStep:
@@ -88,7 +88,7 @@ class TestFillExtrapolatedValues:
         assert actual == expected
 
 
-class TestGetExtrapolatedValues:
+class TestGetLastExtrapolatedValue:
     def test_get_values(self):
         mock_data = [
             [10, 13, 16, 21, 30, 45, 68],
@@ -96,6 +96,6 @@ class TestGetExtrapolatedValues:
             [2, 2, 2, 2],
             [0, 0, 0]
         ]
-        expected = [68, 23, 2, 0]
-        actual = get_extrapolated_values(mock_data)
+        expected = 68
+        actual = get_last_extrapolated_value(mock_data)
         assert actual == expected
