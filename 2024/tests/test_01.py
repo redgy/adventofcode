@@ -1,4 +1,8 @@
-from days.day01 import calculate_distance, get_min_pair
+from days.day01 import (
+    calculate_distance,
+    get_min_pair,
+    count_frequency
+)
 import pytest
 
 
@@ -53,3 +57,26 @@ class TestGetMinPair:
         expected_error = 'list lengths are different'
         with pytest.raises(ValueError, match=expected_error):
             get_min_pair(mock_one, mock_two)
+
+
+class TestCountFrequency:
+    def test_zero_times(self):
+        mock_num = 2
+        mock_list = [1, 3, 4]
+        expected = 0
+        actual = count_frequency(mock_num, mock_list)
+        assert actual == expected
+
+    def test_one_time(self):
+        mock_num = 1
+        mock_list = [1, 3, 4]
+        expected = 1
+        actual = count_frequency(mock_num, mock_list)
+        assert actual == expected
+
+    def test_multiple_times(self):
+        mock_num = 1
+        mock_list = [1, 1, 1]
+        expected = 3
+        actual = count_frequency(mock_num, mock_list)
+        assert actual == expected
