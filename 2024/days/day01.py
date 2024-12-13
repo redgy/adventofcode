@@ -1,3 +1,4 @@
+# DAY 01 -- HISTORIAN HYSTERIA
 from read_file import read_txt
 SAMPLE = 'samples/day01.txt'
 INPUT = 'input/day01.txt'
