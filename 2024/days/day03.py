@@ -38,7 +38,14 @@ def parse_instruction(line: str) -> tuple[int, int] | None:
 
 
 def part_one(data):
-    pass
+    results = []
+    for line in data:
+        start_paren_matches = get_all_mul_start_paren_indexes(line)
+        for index in start_paren_matches:
+            one, two = parse_instruction(line[index:])
+            if one and two:
+                results.append(one*two)
+    return sum(results)
 
 
 def part_two(data):
@@ -54,10 +61,10 @@ def main():
     input_result = part_one(input_raw_data)
     print(f'Input result part one: {input_result}')
 
-    sample_result = part_two(sample_raw_data)
-    print(f'Sample result part two: {sample_result}')
-    input_result = part_two(input_raw_data)
-    print(f'Input result part two: {input_result}')
+    # sample_result = part_two(sample_raw_data)
+    # print(f'Sample result part two: {sample_result}')
+    # input_result = part_two(input_raw_data)
+    # print(f'Input result part two: {input_result}')
 
 
 if __name__ == '__main__':
