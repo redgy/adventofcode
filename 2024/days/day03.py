@@ -25,16 +25,16 @@ def is_valid_instruction(line: str) -> bool:
 def parse_instruction(line: str) -> tuple[int, int] | None:
     """Parses the string to get the instruction
 
-    :param str line: Should be "mul(andwhatever is after the parentheses"
+    :param str line: Should be the text after the first parentheses
     :returns: If valid instruction, releases tuple of ints
               Else None
     """
-    start_paren_index = 4
     end_paren_index = line.find(')')
-    instruction = line[start_paren_index:end_paren_index]
+    instruction = line[:end_paren_index]
     if is_valid_instruction(instruction):
         one, two = instruction.split(',')
         return int(one), int(two)
+    return None, None
 
 
 def part_one(data):

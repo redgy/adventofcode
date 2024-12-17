@@ -65,31 +65,31 @@ class TestIsValidInstruction:
 
 class TestParseInstruction:
     def test_valid(self):
-        mock_input = 'mul(1,2)'
+        mock_input = '1,2)'
         expected = (1, 2)
         actual = parse_instruction(mock_input)
         assert actual == expected
 
     def test_invalid__no_paren(self):
-        mock_input = 'mul(1,2'
-        expected = None
+        mock_input = '1,2'
+        expected = (None, None)
         actual = parse_instruction(mock_input)
         assert actual == expected
 
     def test_invalid__not_numbers(self):
-        mock_input = 'mul(a,b)'
-        expected = None
+        mock_input = 'a,b)'
+        expected = (None, None)
         actual = parse_instruction(mock_input)
         assert actual == expected
 
     def test_invalid__trash(self):
-        mock_input = 'mul(dumpster fire'
-        expected = None
+        mock_input = 'dumpster fire'
+        expected = (None, None)
         actual = parse_instruction(mock_input)
         assert actual == expected
 
     def test_invalid__spaces(self):
-        mock_input = 'mul( 1 , 2 )'
-        expected = None
+        mock_input = ' 1 , 2 )'
+        expected = (None, None)
         actual = parse_instruction(mock_input)
         assert actual == expected
