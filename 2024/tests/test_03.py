@@ -1,5 +1,5 @@
 from days.day03 import (
-    get_all_mul_indexes,
+    get_all_mul_start_paren_indexes,
     is_valid_instruction,
     parse_instruction
 )
@@ -9,31 +9,31 @@ class TestGetAllMulIndexes:
     def test_no_mul__empty(self):
         mock_input = ''
         expected = []
-        actual = get_all_mul_indexes(mock_input)
+        actual = get_all_mul_start_paren_indexes(mock_input)
         assert actual == expected
 
     def test_no_mul__does_not_exist(self):
         mock_input = 'no m u l ()'
         expected = []
-        actual = get_all_mul_indexes(mock_input)
+        actual = get_all_mul_start_paren_indexes(mock_input)
         assert actual == expected
 
     def test_one_mul(self):
         mock_input = 'mul()'
-        expected = [0]
-        actual = get_all_mul_indexes(mock_input)
+        expected = [4]
+        actual = get_all_mul_start_paren_indexes(mock_input)
         assert actual == expected
 
     def test_multiple__back_to_back(self):
         mock_input = 'mul()mul()'
-        expected = [0, 5]
-        actual = get_all_mul_indexes(mock_input)
+        expected = [4, 9]
+        actual = get_all_mul_start_paren_indexes(mock_input)
         assert actual == expected
 
     def test_multiple__with_trash(self):
         mock_input = 'mul()thisbetrashmul()'
-        expected = [0, 16]
-        actual = get_all_mul_indexes(mock_input)
+        expected = [4, 20]
+        actual = get_all_mul_start_paren_indexes(mock_input)
         assert actual == expected
 
 

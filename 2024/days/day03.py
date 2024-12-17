@@ -1,20 +1,22 @@
 # DAY 03 -- MULL IT OVER
 from read_file import read_txt
+import re
 
 
 SAMPLE = 'samples/day03.txt'
 INPUT = 'input/day03.txt'
 
 
-def get_all_mul_indexes(line: str) -> list[int]:
-    """From line, get all starting indexes of "mul("""
-    pass
+def get_all_mul_start_paren_indexes(line: str) -> list[int]:
+    """From line, get all indexes of beginning paren of 'mul(' """
+    matches = re.finditer(r'mul\(', line)
+    return [match_obj.end() for match_obj in matches]
 
 
 def is_valid_instruction(line: str) -> bool:
     """Checks instruction that lives between parentheses is valid
 
-    e.g. Input will be `mul(THIS_INSTRUCTION_BETWEEN_PARENTHESES)`
+    e.g. Input will be what exists between parentheses `mul(THIS_INSTRUCTION_BETWEEN_PARENTHESES)`
     """
     pass
 
@@ -22,7 +24,7 @@ def is_valid_instruction(line: str) -> bool:
 def parse_instruction(line: str) -> tuple[int, int] | None:
     """Parses the string to get the instruction
 
-    :param str line: Should be everything that follows `mul(`
+    :param str line: Should be "mul(andwhatever is after the parentheses"
     :returns: If valid instruction, releases tuple of ints
               Else None
     """
