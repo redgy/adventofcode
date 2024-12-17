@@ -15,7 +15,7 @@ def get_all_mul_start_paren_indexes(line: str) -> list[int]:
 
 def get_all_dont_indexes(line: str) -> list[int]:
     """Get all starting indexes of dont()"""
-    matches = re.finditer(r'dont\(\)', line)
+    matches = re.finditer(r'don\'t\(\)', line)
     return [match_obj.start() for match_obj in matches]
 
 
