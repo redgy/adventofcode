@@ -15,12 +15,14 @@ def get_all_mul_start_paren_indexes(line: str) -> list[int]:
 
 def get_all_dont_indexes(line: str) -> list[int]:
     """Get all starting indexes of dont()"""
-    pass
+    matches = re.finditer(r'dont\(\)', line)
+    return [match_obj.start() for match_obj in matches]
 
 
 def get_all_do_indexes(line: str) -> list[int]:
     """Get all starting indexes of do()"""
-    pass
+    matches = re.finditer(r'do\(\)', line)
+    return [match_obj.start() for match_obj in matches]
 
 
 def is_valid_instruction(line: str) -> bool:
