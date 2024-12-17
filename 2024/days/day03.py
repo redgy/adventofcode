@@ -25,6 +25,10 @@ def get_all_do_indexes(line: str) -> list[int]:
     return [match_obj.start() for match_obj in matches]
 
 
+def get_starting_index(mul_index: int, dont_index: int, do_index: int):
+    pass
+
+
 def is_valid_instruction(line: str) -> bool:
     """Checks instruction that lives between parentheses is valid
 

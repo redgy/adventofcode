@@ -2,6 +2,7 @@ from days.day03 import (
     get_all_mul_start_paren_indexes,
     get_all_dont_indexes,
     get_all_do_indexes,
+    get_starting_index,
     is_valid_instruction,
     parse_instruction
 )
@@ -136,6 +137,64 @@ class TestGetAllDoIndexes:
         mock_input = 'do();somerthing;asdfdo()'
         expected = [0, 20]
         actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+
+class TestGetStartingIndex:
+    def test_first(self):
+        mock_mul_index = 0
+        mock_dont_index = 5
+        mock_do_index = 10
+        expected = mock_mul_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_second(self):
+        mock_mul_index = 7
+        mock_dont_index = 5
+        mock_do_index = 10
+        expected = mock_dont_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_last(self):
+        mock_mul_index = 7
+        mock_dont_index = 15
+        mock_do_index = 10
+        expected = mock_do_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_missing_mul(self):
+        mock_mul_index = -1
+        mock_dont_index = 5
+        mock_do_index = 10
+        expected = mock_dont_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_missing_dont(self):
+        mock_mul_index = 7
+        mock_dont_index = -1
+        mock_do_index = 10
+        expected = mock_mul_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_missing_do(self):
+        mock_mul_index = 7
+        mock_dont_index = 11
+        mock_do_index = -1
+        expected = mock_mul_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
+        assert actual == expected
+
+    def test_missing_dont_and_do(self):
+        mock_mul_index = 7
+        mock_dont_index = -1
+        mock_do_index = -1
+        expected = mock_mul_index
+        actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
 
