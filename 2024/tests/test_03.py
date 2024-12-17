@@ -1,5 +1,7 @@
 from days.day03 import (
     get_all_mul_start_paren_indexes,
+    get_all_dont_indexes,
+    get_all_do_indexes,
     is_valid_instruction,
     parse_instruction
 )
@@ -34,6 +36,106 @@ class TestGetAllMulIndexes:
         mock_input = 'mul()thisbetrashmul()'
         expected = [4, 20]
         actual = get_all_mul_start_paren_indexes(mock_input)
+        assert actual == expected
+
+
+class TestGetAllDontIndexes:
+    def test_no_donts__empty(self):
+        mock_input = ''
+        expected = []
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_no_donts__non_empty(self):
+        mock_input = 'i am not empty'
+        expected = []
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_parens(self):
+        mock_input = 'dont'
+        expected = []
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_open_parens(self):
+        mock_input = 'dont)'
+        expected = []
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_closing_parens(self):
+        mock_input = 'dont('
+        expected = []
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__one(self):
+        mock_input = 'dont()'
+        expected = [0]
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__two__back_to_back(self):
+        mock_input = 'dont()dont()'
+        expected = [0, 6]
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__two__in_between(self):
+        mock_input = 'dont();somerthing;asdfdont()'
+        expected = [0, 22]
+        actual = get_all_dont_indexes(mock_input)
+        assert actual == expected
+
+
+class TestGetAllDoIndexes:
+    def test_no_dos__empty(self):
+        mock_input = ''
+        expected = []
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_no_dos__non_empty(self):
+        mock_input = 'i am not empty'
+        expected = []
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_parens(self):
+        mock_input = 'do'
+        expected = []
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_open_parens(self):
+        mock_input = 'do)'
+        expected = []
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_missing_closing_parens(self):
+        mock_input = 'do('
+        expected = []
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__one(self):
+        mock_input = 'do()'
+        expected = [0]
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__two__back_to_back(self):
+        mock_input = 'do()do()'
+        expected = [0, 4]
+        actual = get_all_do_indexes(mock_input)
+        assert actual == expected
+
+    def test_found__two__in_between(self):
+        mock_input = 'do();somerthing;asdfdo()'
+        expected = [0, 20]
+        actual = get_all_do_indexes(mock_input)
         assert actual == expected
 
 
