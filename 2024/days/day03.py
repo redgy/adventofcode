@@ -29,8 +29,12 @@ def parse_instruction(line: str) -> tuple[int, int] | None:
     :returns: If valid instruction, releases tuple of ints
               Else None
     """
-    end_paren = line.find(')')
-    print(end_paren)
+    start_paren_index = 4
+    end_paren_index = line.find(')')
+    instruction = line[start_paren_index:end_paren_index]
+    if is_valid_instruction(instruction):
+        one, two = instruction.split(',')
+        return int(one), int(two)
 
 
 def part_one(data):
