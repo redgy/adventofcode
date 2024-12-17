@@ -18,7 +18,8 @@ def is_valid_instruction(line: str) -> bool:
 
     e.g. Input will be what exists between parentheses `mul(THIS_INSTRUCTION_BETWEEN_PARENTHESES)`
     """
-    pass
+    result = re.fullmatch(r'\d+,\d+', line)
+    return result is not None
 
 
 def parse_instruction(line: str) -> tuple[int, int] | None:
@@ -28,7 +29,8 @@ def parse_instruction(line: str) -> tuple[int, int] | None:
     :returns: If valid instruction, releases tuple of ints
               Else None
     """
-    pass
+    end_paren = line.find(')')
+    print(end_paren)
 
 
 def part_one(data):
