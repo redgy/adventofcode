@@ -145,7 +145,7 @@ class TestGetStartingIndex:
         mock_mul_index = 0
         mock_dont_index = 5
         mock_do_index = 10
-        expected = mock_mul_index
+        expected = 0, mock_mul_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -153,7 +153,7 @@ class TestGetStartingIndex:
         mock_mul_index = 7
         mock_dont_index = 5
         mock_do_index = 10
-        expected = mock_dont_index
+        expected = 1, mock_dont_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -161,7 +161,7 @@ class TestGetStartingIndex:
         mock_mul_index = 7
         mock_dont_index = 15
         mock_do_index = 10
-        expected = mock_do_index
+        expected = 0, mock_mul_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -169,7 +169,7 @@ class TestGetStartingIndex:
         mock_mul_index = -1
         mock_dont_index = 5
         mock_do_index = 10
-        expected = mock_dont_index
+        expected = 1, mock_dont_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -177,7 +177,7 @@ class TestGetStartingIndex:
         mock_mul_index = 7
         mock_dont_index = -1
         mock_do_index = 10
-        expected = mock_mul_index
+        expected = 0, mock_mul_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -185,7 +185,7 @@ class TestGetStartingIndex:
         mock_mul_index = 7
         mock_dont_index = 11
         mock_do_index = -1
-        expected = mock_mul_index
+        expected = 0, mock_mul_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
@@ -193,7 +193,7 @@ class TestGetStartingIndex:
         mock_mul_index = 7
         mock_dont_index = -1
         mock_do_index = -1
-        expected = mock_mul_index
+        expected = 0, mock_mul_index
         actual = get_starting_index(mock_mul_index, mock_dont_index, mock_do_index)
         assert actual == expected
 
